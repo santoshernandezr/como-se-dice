@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './css/index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import NormalGameMode from './pages/NormalGameMode';
 import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
