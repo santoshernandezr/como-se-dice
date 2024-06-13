@@ -4,11 +4,11 @@
  * user the option of choosing 'Normal mode' or 'Timed mode'. The user is then redirected to the 
  * appropriate game mode chosen by the user.
  * 
- * @param { title } - title of the link card that will be used.
- * @param { body } - body of link card.
+ * @param { title } - Title of the button card that will be used.
+ * @param { body } - Body of the button.
  * @returns 
  */
-export default function CardWithGameMode(props) {
+export default function SinglePlayerCard(props) {
 
     let title = props.title;
     let body = props.body;
@@ -20,7 +20,7 @@ export default function CardWithGameMode(props) {
                 <button className="flex items-center justify-center h-full w-full" data-modal-target="select-modal" data-modal-toggle="select-modal">
                     <h2>
                         {title}
-                        <span>&rarr;</span>
+                        <span> &rarr;</span>
                     
                         <p>
                             {body}
