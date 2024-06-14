@@ -1,3 +1,5 @@
+import React from 'react'
+
 /**
  * Component that handles the creation of the single player card in the ComoSeDiceMenu page.
  * The single player card is composed of a button that in turn calls a modal that will give the 

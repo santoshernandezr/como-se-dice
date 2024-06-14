@@ -15,44 +15,27 @@ function ComoSeDiceMenu() {
     <div>
 
       {/* Navigatin bar */}
-      <HomeNavigationBar></HomeNavigationBar>
+      <HomeNavigationBar />
 
       {/* All four game modes. */}
-      <div className='flex justify-center'>
+      <div className='flex justify-center '>
         <div className='w-5/6'>
           <div className='grid gap-8 grid-cols-2'>
 
             <div>
-              <SinglePlayer
-                title="Start Singleplayer" 
-                body="Play Cómo Se Dice Alone">
-              </SinglePlayer>
+              <SinglePlayer title="Start Singleplayer" body="Play cómo se dice alone" />
             </div>
 
             <div>
-              <div>
-                <DailyChallenge
-                  destination="placeHolderForWhenMultiplayerPageIsCreated"
-                  title="Multiplayer"
-                  body="Start a room to play against friends!">
-                  </DailyChallenge>
-              </div>
+                <DailyChallenge destination="placeHolderForWhenMultiplayerPageIsCreated" title="Multiplayer" body="Start a room to play against friends!" />
             </div>
 
             <div>
-              <DailyChallenge
-                destination="placeHolderForWhenDailyChallengePageIsCreated"
-                title="Start Daily Challenge"
-                body="Get as many words right in the shortest time and see where you stack up against the world 🌐!">
-              </DailyChallenge>
+              <DailyChallenge destination="placeHolderForWhenDailyChallengePageIsCreated"  title="Start Daily Challenge" body="Get as many words right in the shortest time and see where you stack up against the world 🌐! " />
             </div>
 
             <div>
-              <DailyChallenge
-                destination="placeHolderForWhenDailyChallengePageIsCreated"
-                title="Join Multiplayer Room"
-                body="Room code">
-              </DailyChallenge>
+              <DailyChallenge destination="placeHolderForWhenDailyChallengePageIsCreated" title="Join Multiplayer Room" body="Room code" />
             </div>
 
           </div>
