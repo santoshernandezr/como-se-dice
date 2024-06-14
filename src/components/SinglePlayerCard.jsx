@@ -16,11 +16,11 @@ export default function SinglePlayerCard(props) {
     let body = props.body;
 
     return (
-        <div>
+        <div className="h-[23vh] border-solid border border-sky-500 rounded-lg hover:border-dotted shadow-2xl">
             {/* The button that will trigger the modal. */}
-            <div className="flex items-center justify-center">
+            <div className="h-full flex items-center justify-center">
                 <button className="flex items-center justify-center h-full w-full" data-modal-target="select-modal" data-modal-toggle="select-modal">
-                    <h2>
+                    <h2 className='text-xl'>
                         {title}
                         <span> &rarr;</span>
                     

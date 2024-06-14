@@ -17,11 +17,11 @@ export default function CardWithGameMode(props) {
     let body = props.body;
 
     return (
-        <div>
+        <div className="h-[23vh] border-solid border border-sky-500 rounded-lg hover:border-dotted shadow-2xl">
             {/* The 'a' tag that will redirect the user to appropriate gamemode */}
             <div className="flex items-center justify-center h-full w-full">
                 <a href={destination} className="flex items-center justify-center h-full w-full text-center">
-                    <h2>
+                    <h2 className='text-xl'>
                         {title}
                         <span> &rarr;</span>
                     
