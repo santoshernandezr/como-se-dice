@@ -8,7 +8,7 @@ import React from 'react'
  * @param { destination } - Name of the page in which the user will be redirected when they click the button.
  * @param { title } - Title of the card that will be used.
  * @param { body } - Body of the card.
- * @returns 
+ * @returns Daily challenge card component.
  */
 export default function CardWithGameMode(props) {
 

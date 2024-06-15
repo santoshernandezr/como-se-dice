@@ -2,6 +2,7 @@ import '../css/App.css';
 import HomeNavigationBar from '../components/NavigationBar.jsx'
 import SinglePlayer from '../components/SinglePlayerCard.jsx'
 import DailyChallenge from '../components/DailyChallengeCard.jsx'
+import Footer from '../components/Footer.jsx';
 
 /**
  * Como se dice menu page.
@@ -34,6 +35,8 @@ function ComoSeDiceMenu() {
         </div>
       </div>
       
+      {/* Footer of the page */}
+      <Footer />
     </div>
   );
 }

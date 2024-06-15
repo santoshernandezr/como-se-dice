@@ -2,7 +2,9 @@ import '../css/App.css';
 import mario from '../images/mario.png';
 
 /**
- * This component is the Navigation bar that will be used in ALL pages of the game.
+ * Component that handles the creation of the navigation bar. The navigation bar consists of the title of the game,
+ * a home button that will take the user to the como se dice menu, a leadboard button that will take them to the leaderboard
+ * page, and a user avatar dropdown that contains the users info and a sign out button.
  * 
  * @returns the navigation bar that will be used in ALL pages of the pages.
  */

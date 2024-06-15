@@ -8,7 +8,7 @@ import React from 'react'
  * 
  * @param { title } - Title of the button card that will be used.
  * @param { body } - Body of the button.
- * @returns 
+ * @returns Single player card.
  */
 export default function SinglePlayerCard(props) {
 
