@@ -54,15 +54,17 @@ export default function SinglePlayerCard(props) {
                         {/* Modal body */}
                         <div className="p-4 md:p-5">                            
                             <ul className="space-y-4 mb-4">
+
                                 <li>
                                     {/* Normal game mode option. When clicked user should be redirected to the normal game page. */}
-                                    <a href="placeholder" className="inline-flex items-center justify-center w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">                           
+                                    <a href="/normalgamemode" className="inline-flex items-center justify-center w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">                           
                                         <div className="block">
                                             <p className="w-full text-lg font-semibold">Normal mode</p>
                                             <p className="w-full text-xs text-gray-500 dark:text-gray-400">Get 10 word correct without running out of lives!</p>
                                         </div>
                                     </a>
                                 </li>
+
                                 <li>
                                     {/* Timed game mode option. When clicked user should be redirected to the timed game page. */}
                                     <a href="placeholder" className="inline-flex items-center justify-center w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
@@ -72,6 +74,7 @@ export default function SinglePlayerCard(props) {
                                         </div>
                                     </a>
                                 </li>
+                                
                             </ul>
                         </div>
 
