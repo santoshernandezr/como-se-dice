@@ -26,7 +26,7 @@ function determineOutcome(container, guessField, guessButton, message) {
  * @param { List } words object containing all words available.
  */
 function updateWord(index, container, guessField, words) {
-    container.innerHTML = "Cómo Se Dice &nbsp; "  + words[index].spanish.bold() + " &nbsp; (" + words[index].type.italics() + ")" + "?";
+    container.innerHTML = "Cómo Se Dice &nbsp; "  + words[index].spanish.bold() + " &nbsp; (" + words[index].type.italics() + ")?";
     guessField.value = '';
 }
 
