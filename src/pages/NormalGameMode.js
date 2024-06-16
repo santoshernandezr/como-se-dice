@@ -3,6 +3,7 @@ import Mario from '../images/mario.png';
 
 import HomeNavigationBar from '../components/NavigationBar.jsx';
 import Footer from '../components/Footer.jsx';
+import GuessWord from '../components/GuessWord.jsx';
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their 
@@ -33,6 +34,9 @@ function NormalGameMode() {
                 </div>
             </div>
         </main>
+
+        {/* The area in which the user will be asked the word to guess and the input where they'll input their answer. */}
+        <GuessWord />
       
         {/* Footer of the page */}
         <Footer />
