@@ -3,14 +3,15 @@ import Mario from '../images/mario.png';
 
 import HomeNavigationBar from '../components/NavigationBar.jsx';
 import Footer from '../components/Footer.jsx';
-import GuessWord from '../components/GuessWord.jsx';
+import GuessWord from '../components/TimedGuessWord.jsx';
+import Counter from '../components/TimedModeCounter.jsx';
 
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their 
- * avatar image, score and lives count, the word they have to guess, and a text box in which they can
- * input their guess.
+ * avatar image, score and best score, the word they have to guess, the 1 minute count down timer, and 
+ * a text box in which they can input their guess.
  * 
- * @returns Normal game mode page.
+ * @returns Timed game mode page.
  */
 function TimedGameMode() {
   return (
@@ -26,9 +27,13 @@ function TimedGameMode() {
                     <div className="flex flex-col items-center pb-10">
                         <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={ Mario }></img>
                         <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
+
+                        {/* The count down timer. */}
+                        <Counter />
+
                         <div className="flex mt-2">
-                            <p id="score" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: 0</p>
-                            <p id="numberOfLives" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Lives: 3</p>
+                            <p id="timedModeScore" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: 0</p>
+                            <p id="timedModeBestScore" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Best score: 2</p>
                         </div>
                     </div>
                 </div>

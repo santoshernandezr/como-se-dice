@@ -3,7 +3,7 @@ import Mario from '../images/mario.png';
 
 import HomeNavigationBar from '../components/NavigationBar.jsx';
 import Footer from '../components/Footer.jsx';
-import GuessWord from '../components/GuessWord.jsx';
+import GuessWord from '../components/NormalGuessWord.jsx';
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their 

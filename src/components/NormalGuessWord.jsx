@@ -26,7 +26,7 @@ function determineOutcome(container, guessField, guessButton, message) {
  * @param { List } words object containing all words available.
  */
 function updateWord(index, container, guessField, words) {
-    container.innerHTML = "Cómo Se Dice &nbsp; "  + words[index].spanish.bold() + " &nbsp; (" + words[index].type.italics() + ")?";
+    container.innerHTML = "Cómo Se Dice &nbsp;"  + words[index].spanish.bold() + "&nbsp; (" + words[index].type.italics() + ")?";
     guessField.value = '';
 }
 
@@ -133,23 +133,25 @@ function GuessWord() {
             </h2>
         </div>
 
-        <div className="flex justify-center">
-            <form onSubmit={determineInput}>
-                {/* Input field for the users guess. */}
-                <div className="flex justify-center">
-                    <input autoComplete="one-time-code" type="text" id="guessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
-                </div>
+        {/* 
+            This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
+            For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
+        */}
+        <form onSubmit={determineInput}>
+            {/* Input field for the users guess. */}
+            <div className="flex justify-center">
+                <input autoComplete="one-time-code" type="text" id="guessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
+            </div>
+            
+            
+            {/* Buttons that handle the submittion of the users guess. */}
+            <div className="flex justify-center">
+                <button style={{ display: 'inline' }} onClick={determineInput} id="guessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
                 
-                
-                {/* Buttons that handle the submittion of the users guess. */}
-                <div className="flex justify-center">
-                    <button style={{ display: 'inline' }} onClick={determineInput} id="guessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
-                    
-                    <button style={{ display: 'none' }} onClick={() => window.location.reload(false)} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
-                </div>
-                
-            </form>
-        </div>
+                <button style={{ display: 'none' }} onClick={() => window.location.reload(false)} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
+            </div>
+            
+        </form>
     </div>
   )
 }
