@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import MainMenu from './MainMenu';
 import ComoSeDiceMenu from './ComoSeDiceMenu';
 import NormalGameMode from './NormalGameMode';
+import TimedGameMode from './TimedGameMode';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
            <Route path="/" element={<MainMenu />} />
            <Route path="/comosedice" element={<ComoSeDiceMenu />} />
            <Route path="/normalgamemode" element={<NormalGameMode/>} />
+           <Route path="/timedgamemode" element={<TimedGameMode />} />
         </Routes>
      </>
   );

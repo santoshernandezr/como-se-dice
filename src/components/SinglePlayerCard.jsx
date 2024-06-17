@@ -67,7 +67,7 @@ export default function SinglePlayerCard(props) {
 
                                 <li>
                                     {/* Timed game mode option. When clicked user should be redirected to the timed game page. */}
-                                    <a href="placeholder" className="inline-flex items-center justify-center w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                    <a href="/timedgamemode" className="inline-flex items-center justify-center w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
                                         <div className="block">
                                             <p className="w-full text-lg font-semibold">Timed mode</p>
                                             <p className="w-full text-xs text-gray-500 dark:text-gray-400">How many words can you get in 60 seconds?</p>
