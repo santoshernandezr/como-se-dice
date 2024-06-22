@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PlayerInfo from './PlayerInfo';
 import confetti from "canvas-confetti"
 
 /**
@@ -8,11 +9,13 @@ import confetti from "canvas-confetti"
  * @param { InputHTMLAttributes } guessField HTML input attribute.
  * @param { ButtonHTMLAttributes } guessButton HTML button attribute.
  * @param { String } message that will be posted in the container.
+ * @param { ButtonHTMLAttributes } playAgainButton HTML button attribute.
  */
-function determineOutcome(container, guessField, guessButton, message) {
+function determineOutcome(container, guessField, guessButton, message, playAgainButton) {
     container.innerHTML = message;
     guessField.style.display = 'none';
     guessButton.style.display = 'none';
+    playAgainButton.style.display = "inline";
 }
 
 /**
@@ -50,11 +53,7 @@ function playAgainReset(words) {
     let playAgainButton = document.getElementById('playAgainButton');
     let guessField = document.getElementById('guessField');
     let nextWordContainer = document.getElementById('nextWordContainer');
-    let scoreID = document.getElementById("score");
-    let numberOfLives = document.getElementById('numberOfLives');
 
-    scoreID.innerText = "Score: 0"
-    numberOfLives.innerText = "Lives: 3"
     playAgainButton.style.display = 'none';
     guessButton.style.display = 'inline'
     guessField.style.display = 'inline';
@@ -71,26 +70,97 @@ function playAgainReset(words) {
  */
 function GuessWord() {
 
-    // words already come randomized so we can start with the first index. i.e. 0
-    let currentWordIndex = 0;
-    let currentNumberOfLives = 3;
-    let correctNumberOfGuesses = 0;
+     /* 
+      Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
+      words to use for the new game and reset the board.
+      */
+     async function playAgain() {
+         fetchWords();
+         playAgainReset(words)
+ 
+         setIndex(0)
+         setLives(3)
+         setScore(0)
+     }
+ 
+     // Asyn method that calls server to get random words for the game.
+     async function fetchWords() {
+         console.log("In async function")
+         const result = await fetch("/api/getWords");
+         const body = await result.json();
+         setWords(body);
+     }
+ 
+     useEffect(() => {
+         fetchWords()
+     }, [])
 
-    const determineInput = (e) => {
+     /*
+     'words' is the value of our current state, meaning the current array of random words the current game is using.
+     'setWords' is the value that helps us set the 'words' state after we want to get a new array of random words for the next game.
+     */
+     const [words, setWords] = useState("loading")
+
+     const [score, setScore] = useState(0)
+     function incrementScore() {
+        setScore(prevCount =>  prevCount + 1)
+     }
+
+     const [lives, setLives] = useState(3)
+     function decrementLives() {
+        setLives(prevCount => prevCount - 1)
+     }
+     
+     const [index, setIndex] = useState(0)
+     function incrementIndex() {
+        setIndex(prevCount => prevCount + 1)
+     }
+
+     useEffect(() => {
+        console.log("My index changed: " + index);
+        let nextWordContainer = document.getElementById('nextWordContainer');
+        let guessField = document.getElementById('guessField');
+
+        if (index < words.length) {
+            nextWordContainer.innerHTML = "Cómo Se Dice&nbsp;"  + words[index].spanish + "(" + words[index].type + ")?";
+            guessField.value = '';
+        }
+
+     }, [index, words.length, words])
+
+     useEffect(() => {
+        console.log("My score changed: " + score);
+        let nextWordContainer = document.getElementById('nextWordContainer');
+        let guessField = document.getElementById('guessField');
+        let guessButton = document.getElementById("guessButton");
+        let playAgainButton = document.getElementById("playAgainButton");
+
+        if (score == 10) {
+            determineOutcome(nextWordContainer, guessField, guessButton, "You Win!", playAgainButton);
+        }
+
+     }, [score])
+
+     useEffect(() => {
+        let nextWordContainer = document.getElementById('nextWordContainer');
+        let guessField = document.getElementById('guessField');
+        let guessButton = document.getElementById("guessButton");
+        let playAgainButton = document.getElementById("playAgainButton");
+
+        if (lives == 0) {
+            determineOutcome(nextWordContainer, guessField, guessButton, "You ran out of lives, try again.", playAgainButton);
+        }
+
+     }, [lives])
+
+    async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
 
-        console.log("I'm being pressed")
-
-        let nextWordContainer = document.getElementById('nextWordContainer');
         let guessField = document.getElementById('guessField');
-        let scoreID = document.getElementById("score");
-        let numberOfLives = document.getElementById('numberOfLives');
-        let playAgainButton = document.getElementById("playAgainButton");
-        let guessButton = document.getElementById("guessButton");
 
         const userGuess = guessField.value.toLowerCase().trim();
-        const currentWord = words[currentWordIndex];
+        const currentWord = words[index];
 
         if(isAlphanumeric(userGuess)) {
             /* 
@@ -99,91 +169,27 @@ function GuessWord() {
             */
             if (userGuess === currentWord.english.toLowerCase()) {
                 confetti();
-                
-                correctNumberOfGuesses++
-                console.log("Correct number of guesses: " + correctNumberOfGuesses)
-
-                scoreID.innerHTML = "Score: " + correctNumberOfGuesses.toString();
-
-                /* 
-                The user got 10 correct words with remaining lives. Meaning we tell them they won and we display the 'play again'
-                button so they can play play again
-                */
-                if (correctNumberOfGuesses == 10) {
-                    determineOutcome(nextWordContainer, guessField, guessButton, 'You Win!');
-                    playAgainButton.style.display = "inline";
-                }
-                /*
-                The user got the correct answer, they haven't reached the 10 points to win and there are still words in the words map to guess.
-                Meaning the 'nextWordContainer' will be updated with the new word and the guessfield will be emptied so the user can guess again. 
-                */
-                else if (currentWordIndex < words.length) {
-                    currentWordIndex++;
-                    updateWord(currentWordIndex, nextWordContainer, guessField, words);
-                }
-            /*
-            The user got the wrong answer, meaning we will decrease the currentNumberOfLives by one.
-            */
+                incrementScore()
+                incrementIndex()
             } else {
-                currentNumberOfLives--;
-                numberOfLives.innerText = "Lives: " + currentNumberOfLives.toString();
-
-                /* 
-                The user got the wrong answer and if the user has 0 lives, then they lose the game and the play again button will be
-                displayed so they can play again.
-                */
-                if (currentNumberOfLives == 0) {
-                    determineOutcome(nextWordContainer, guessField, guessButton, 'You ran out of lives, try again.');
-                    playAgainButton.style.display = "inline";
-                /* 
-                The user got the wrong answer and if the user has lives left, then we move on to the next word meaning we will increase 
-                the 'currentWordIndex' by one.
-                */
-                } else {
-                    currentWordIndex++;
-                    updateWord(currentWordIndex, nextWordContainer, guessField, words);
-                }
+                decrementLives()
+                incrementIndex()
             }
         }
     }
 
-    /*
-     'words' is the value of our current state, meaning the current array of random words the current game is using.
-     'setWords' is the value that helps us set the 'words' state after we want to get a new array of random words for the next game.
-     */
-    const [words, setWords] = useState("loading")
-
-    /* 
-     Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
-     words to use for the new game and reset the board.
-     */
-    async function playAgain(wordIndex, lives, guesses) {
-        fetchWords();
-        playAgainReset(words)
-
-        wordIndex = 0
-        lives = 3
-        guesses = 0
-    }
-
-    // Asyn method that calls server to get random words for the game.
-    async function fetchWords() {
-        console.log("In async function")
-        const result = await fetch("/api/getWords");
-        const body = await result.json();
-        setWords(body);
-    }
-
-    useEffect(() => {
-        fetchWords()
-    }, [])
-
   return (
     <div>
+
+        <PlayerInfo 
+            score={score}
+            lives={lives} 
+        />
+
         {/* Asking the user the word to guess. */}
         <div className="flex justify-center" >
             <h2 id="nextWordContainer" className="w-1/4 flex justify-center">
-                ¿Cómo Se Dice&nbsp;<b>{words[currentWordIndex].spanish}</b>(<i>{words[currentWordIndex].type}</i>)?
+                ¿Cómo Se Dice&nbsp;<b>{words[index].spanish}</b>(<i>{words[index].type}</i>)?
             </h2>
         </div>
 
@@ -203,7 +209,7 @@ function GuessWord() {
                 <button style={{ display: 'inline' }} onClick={determineInput} id="guessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
                 
                 {/* <button style={{ display: 'none' }} onClick={() => window.location.reload(true)} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button> */}
-                <button style={{ display: 'none' }} onClick={() => {playAgain(currentWordIndex, currentNumberOfLives, correctNumberOfGuesses)}} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
+                <button style={{ display: 'none' }} onClick={() => {playAgain()}} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
 
             </div>
             

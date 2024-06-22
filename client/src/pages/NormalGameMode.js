@@ -20,22 +20,6 @@ function NormalGameMode() {
         {/* Navigatin bar */}
         <HomeNavigationBar />
 
-        <main>
-            {/* The users information. Users avatar, username, lives and score count. */}
-            <div className="flex flex-col items-center">
-                <div className="w-full max-w-sm ">
-                    <div className="flex flex-col items-center pb-10">
-                        <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={ Mario }></img>
-                        <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
-                        <div className="flex mt-2">
-                            <p id="score" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: 0</p>
-                            <p id="numberOfLives" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Lives: 3</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
         {/* The area in which the user will be asked the word to guess and the input where they'll input their answer. */}
         <GuessWord />
       
