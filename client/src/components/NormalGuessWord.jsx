@@ -3,7 +3,9 @@ import PlayerInfo from './PlayerInfo';
 import confetti from "canvas-confetti"
 
 /**
- * Determines the message that will be posted to the client. Whether they won or lost and they have to try again. 
+ * Determines the message that the will go in the 'decidingContainer' which the user will see, either that they
+ * won or they lost. Hides the 'wordContainer', 'guessField', and 'guessButton', and shows the 'decidingContainer,
+ * and 'playButton'. 
  * 
  * @param { innerHTML } container in which the win or lose message will be set.
  * @param { innerHTML } container in which the word is in.
@@ -14,17 +16,19 @@ import confetti from "canvas-confetti"
  */
 function determineOutcome(decidingContainer, wordContainer, guessField, guessButton, message, playAgainButton) {
     decidingContainer.innerHTML = message;
-    decidingContainer.style.display = 'inline'
+    // Hide the following elements.
     wordContainer.style.display = 'none'
     guessField.style.display = 'none';
     guessButton.style.display = 'none';
+    // Show the following elements.
+    decidingContainer.style.display = 'inline'
     playAgainButton.style.display = "inline";
 }
 
 /**
  * Validate strings are alphanumeric.
  * 
- * @param { str } string which is being validated.
+ * @param { String } string which is being validated.
  * @returns true or false whether or not the string is alphanumeric.
  */
 function isAlphanumeric(str) {
@@ -32,25 +36,24 @@ function isAlphanumeric(str) {
 }
 
 /**
- * Resets the game when the 'play again' button is pressed. This will make the guess button, guess field,
- * the field in which the user is asked what the word they need to guess, and the score and lives fields 
- * are shown again. 
- * 
- * @param { words } words that are shuffled after a new game is intantiated.
+ * Resets the game after the 'play again' button is pressed. This will show the 'decidingContainer' and 'playAgainButton' and hide the 'guessButton', 'guessField',
+ * 'nextWordContainer', and clear the 'guessField'.
  */
-function playAgainReset(words) {
+function playAgainReset() {
     let guessButton = document.getElementById('guessButton');
     let playAgainButton = document.getElementById('playAgainButton');
     let guessField = document.getElementById('guessField');
     let nextWordContainer = document.getElementById('nextWordContainer');
     let decidingContainer = document.getElementById('decidingContainer');
 
+    // Hide the following elements.
+    decidingContainer.style.display = 'none'
     playAgainButton.style.display = 'none';
+    // Show the following elements.
     guessButton.style.display = 'inline'
     guessField.style.display = 'inline';
-    guessField.value = ''
     nextWordContainer.style.display = 'inline'
-    decidingContainer.style.display = 'none'
+    guessField.value = ''
 }
 
 
@@ -61,110 +64,117 @@ function playAgainReset(words) {
  * @returns Component that handles the users guess.
  */
 function GuessWord() {
+    // Instantiate the words state and set it to "loading" until it gets updated.
+    const [words, setWords] = useState("loading")
+    // Instantiate the score state and set it to 0.
+    const [score, setScore] = useState(0)
+    // Instantiate the lives state and set it to 3.
+    const [lives, setLives] = useState(3)
+    // Instantiate the index state and set it to 0.
+    const [index, setIndex] = useState(0)
+    // Instantiate the current word state and set it to the first word 
+    const [currentWord, setCurrentWord] = useState(words[0])
 
-     /* 
-      Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
-      words to use for the new game and reset the board.
-      */
-     async function playAgain() {
-         fetchWords();
-         playAgainReset(words)
+    // Functions that will increment or decrement a state using the previous state.
+    function incrementScore() {
+    setScore(prevCount =>  prevCount + 1)
+    }
+    function decrementLives() {
+    setLives(prevCount => prevCount - 1)
+    }
+    function incrementIndex() {
+    setIndex(prevCount => prevCount + 1)
+    }
  
-         setIndex(0)
-         setLives(3)
-         setScore(0)
-     }
+    // Asyn method that calls server to get random words for the game.
+    async function fetchWords() {
+        const result = await fetch("/api/getWords");
+        const body = await result.json();
+        setWords(body);
+    }
  
-     // Asyn method that calls server to get random words for the game.
-     async function fetchWords() {
-         console.log("In async function")
-         const result = await fetch("/api/getWords");
-         const body = await result.json();
-         setWords(body);
-     }
- 
-     useEffect(() => {
-         fetchWords()
-     }, [])
+    // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
+    useEffect(() => {
+        fetchWords()
+    }, [])
 
-     /*
-     'words' is the value of our current state, meaning the current array of random words the current game is using.
-     'setWords' is the value that helps us set the 'words' state after we want to get a new array of random words for the next game.
+    /* 
+    Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
+    words to use for the new game, reset the board, and reset the state of the values to their original state.
+    */
+    async function playAgain() {
+    fetchWords();
+    playAgainReset()
+
+    setIndex(0)
+    setLives(3)
+    setScore(0)
+    }
+
+    /*
+     Conditional useEffect. When the 'index' state updated, if there are still words in the 'words' we got back from the server,
+     update the state of the 'currentWord' using the new value of index, and clear the guess field.
      */
-     const [words, setWords] = useState("loading")
+    useEffect(() => {
 
-     const [score, setScore] = useState(0)
-     function incrementScore() {
-        setScore(prevCount =>  prevCount + 1)
-     }
-
-     const [lives, setLives] = useState(3)
-     function decrementLives() {
-        setLives(prevCount => prevCount - 1)
-     }
-     
-     const [index, setIndex] = useState(0)
-     function incrementIndex() {
-        setIndex(prevCount => prevCount + 1)
-     }
-
-     const [currentWord, setCurrentWord] = useState(words[0])
-
-     useEffect(() => {
+    if (index < words.length) {
         let guessField = document.getElementById('guessField');
 
-        if (index < words.length) {
-            setCurrentWord(words[index])
-            guessField.value = '';
-        }
+        setCurrentWord(words[index])
+        guessField.value = '';
+    }
 
-     }, [index, words.length, words])
+    }, [index, words.length, words])
 
-     useEffect(() => {
+    /*
+     Conditional useEffect. When the 'score' state is updated, if the score is 10, they have won the game so call the 
+     determineOutcome method to clear out the board and let the user know they won.
+     */
+    useEffect(() => {
+
+    if (score == 10) {
         let nextWordContainer = document.getElementById('nextWordContainer');
         let decidingContainer = document.getElementById('decidingContainer');
         let guessField = document.getElementById('guessField');
         let guessButton = document.getElementById("guessButton");
         let playAgainButton = document.getElementById("playAgainButton");
+        determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You Win!", playAgainButton);
+    }
 
-        if (score == 10) {
-            determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You Win!", playAgainButton);
-        }
+    }, [score])
 
-     }, [score])
+    /*
+     Conditional useEffect. When the 'lives' state is udpated, if the lives is 0, they have lost the game so call the
+     determineOutcome method to clear out the board and let the user know they lost.
+     */
+    useEffect(() => {
 
-     useEffect(() => {
+    if (lives == 0) {
         let nextWordContainer = document.getElementById('nextWordContainer');
         let decidingContainer = document.getElementById('decidingContainer');
         let guessField = document.getElementById('guessField');
         let guessButton = document.getElementById("guessButton");
         let playAgainButton = document.getElementById("playAgainButton");
+        determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You ran out of lives, try again.", playAgainButton);
+    }
 
-        if (lives == 0) {
-            determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You ran out of lives, try again.", playAgainButton);
-        }
-
-     }, [lives])
+    }, [lives])
 
     async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
 
         let guessField = document.getElementById('guessField');
-
         const userGuess = guessField.value.toLowerCase().trim();
-        const currentWord = words[index];
 
+        // Check that the users guess is Alphanumeric
         if(isAlphanumeric(userGuess)) {
-            /* 
-            The user got the correct answer, that means that there will be confetti, the background will turn green, 'correctNumberOfGuesses'
-            and 'currentWordIndex' will be incremented by one. The score will be updated as well.
-            */
+            // Check if the users guess is correct. If so, increment the score and the index.
             if (userGuess === currentWord.english.toLowerCase()) {
                 confetti();
                 incrementScore()
                 incrementIndex()
-            } else {
+            } else { // If they users guess is incorrect, decrement the lives and increment the index.
                 decrementLives()
                 incrementIndex()
             }
@@ -174,12 +184,17 @@ function GuessWord() {
   return (
     <div>
 
+        {/* Player information, passing in the score and lives states. */}
         <PlayerInfo 
             score={score}
             lives={lives} 
         />
 
-        {/* Asking the user the word to guess. */}
+        {/* 
+            Container that contains two heading containers. 
+            The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
+            The second container, 'decidingContainer', contains the win or lose message the user will see at the end of the game.
+        */}
         <div className="flex justify-center" >
             <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'inline' }}>
                 ¿Cómo Se Dice&nbsp;<p id="currentWord" className="font-bold" style={{ display: 'inline'}}>{currentWord.spanish}({currentWord.type})?</p>
@@ -199,13 +214,15 @@ function GuessWord() {
             </div>
             
             
-            {/* Buttons that handle the submittion of the users guess. */}
+            {/* 
+                Container that contains two buttons.
+                First button is the guessButton which the user can press to guess the word, which will be shown during the game.
+                Second button is the playAgainButton which is the button that the user will press if they want to play again, which will be shown at the end of the game.
+            */}
             <div className="flex justify-center">
                 <button style={{ display: 'inline' }} onClick={determineInput} id="guessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
                 
-                {/* <button style={{ display: 'none' }} onClick={() => window.location.reload(true)} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button> */}
                 <button style={{ display: 'none' }} onClick={() => {playAgain()}} id="playAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
-
             </div>
             
         </form>

@@ -4,6 +4,9 @@ import shuffle from "./shuffle.js"
 
 const app = express()
 
+/**
+ * Endpoint that will randomize the words.
+ */
 app.get("/api/getWords", (req, res) => {
     shuffle(words)
     console.log("Words after shuffle " + words[0].spanish)
