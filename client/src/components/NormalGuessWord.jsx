@@ -5,30 +5,20 @@ import confetti from "canvas-confetti"
 /**
  * Determines the message that will be posted to the client. Whether they won or lost and they have to try again. 
  * 
- * @param { innerHTML } container in which the message will be set.
+ * @param { innerHTML } container in which the win or lose message will be set.
+ * @param { innerHTML } container in which the word is in.
  * @param { InputHTMLAttributes } guessField HTML input attribute.
  * @param { ButtonHTMLAttributes } guessButton HTML button attribute.
  * @param { String } message that will be posted in the container.
  * @param { ButtonHTMLAttributes } playAgainButton HTML button attribute.
  */
-function determineOutcome(container, guessField, guessButton, message, playAgainButton) {
-    container.innerHTML = message;
+function determineOutcome(decidingContainer, wordContainer, guessField, guessButton, message, playAgainButton) {
+    decidingContainer.innerHTML = message;
+    decidingContainer.style.display = 'inline'
+    wordContainer.style.display = 'none'
     guessField.style.display = 'none';
     guessButton.style.display = 'none';
     playAgainButton.style.display = "inline";
-}
-
-/**
- * Updates the container that holds the word to be guessed and clears the guess field so the user can guess again.
- * 
- * @param { number } index 
- * @param { innerHTML } container in which the message will be set.
- * @param { InputHTMLAttributes } guessField HTML input attribute.
- * @param { List } words object containing all words available.
- */
-function updateWord(index, container, guessField, words) {
-    container.innerHTML = "Cómo Se Dice&nbsp;"  + words[index].spanish.bold() + "(" + words[index].type.italics() + ")?";
-    guessField.value = '';
 }
 
 /**
@@ -53,12 +43,14 @@ function playAgainReset(words) {
     let playAgainButton = document.getElementById('playAgainButton');
     let guessField = document.getElementById('guessField');
     let nextWordContainer = document.getElementById('nextWordContainer');
+    let decidingContainer = document.getElementById('decidingContainer');
 
     playAgainButton.style.display = 'none';
     guessButton.style.display = 'inline'
     guessField.style.display = 'inline';
     guessField.value = ''
-    nextWordContainer.innerHTML = "Cómo Se Dice&nbsp;"  + words[0].spanish.bold() + "(" + words[0].type.italics() + ")?";
+    nextWordContainer.style.display = 'inline'
+    decidingContainer.style.display = 'none'
 }
 
 
@@ -116,39 +108,40 @@ function GuessWord() {
         setIndex(prevCount => prevCount + 1)
      }
 
+     const [currentWord, setCurrentWord] = useState(words[0])
+
      useEffect(() => {
-        console.log("My index changed: " + index);
-        let nextWordContainer = document.getElementById('nextWordContainer');
         let guessField = document.getElementById('guessField');
 
         if (index < words.length) {
-            nextWordContainer.innerHTML = "Cómo Se Dice&nbsp;"  + words[index].spanish + "(" + words[index].type + ")?";
+            setCurrentWord(words[index])
             guessField.value = '';
         }
 
      }, [index, words.length, words])
 
      useEffect(() => {
-        console.log("My score changed: " + score);
         let nextWordContainer = document.getElementById('nextWordContainer');
+        let decidingContainer = document.getElementById('decidingContainer');
         let guessField = document.getElementById('guessField');
         let guessButton = document.getElementById("guessButton");
         let playAgainButton = document.getElementById("playAgainButton");
 
         if (score == 10) {
-            determineOutcome(nextWordContainer, guessField, guessButton, "You Win!", playAgainButton);
+            determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You Win!", playAgainButton);
         }
 
      }, [score])
 
      useEffect(() => {
         let nextWordContainer = document.getElementById('nextWordContainer');
+        let decidingContainer = document.getElementById('decidingContainer');
         let guessField = document.getElementById('guessField');
         let guessButton = document.getElementById("guessButton");
         let playAgainButton = document.getElementById("playAgainButton");
 
         if (lives == 0) {
-            determineOutcome(nextWordContainer, guessField, guessButton, "You ran out of lives, try again.", playAgainButton);
+            determineOutcome(decidingContainer, nextWordContainer, guessField, guessButton, "You ran out of lives, try again.", playAgainButton);
         }
 
      }, [lives])
@@ -188,8 +181,10 @@ function GuessWord() {
 
         {/* Asking the user the word to guess. */}
         <div className="flex justify-center" >
-            <h2 id="nextWordContainer" className="w-1/4 flex justify-center">
-                ¿Cómo Se Dice&nbsp;<b>{words[index].spanish}</b>(<i>{words[index].type}</i>)?
+            <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'inline' }}>
+                ¿Cómo Se Dice&nbsp;<p id="currentWord" className="font-bold" style={{ display: 'inline'}}>{currentWord.spanish}({currentWord.type})?</p>
+            </h2>
+            <h2 id="decidingContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'none' }}>
             </h2>
         </div>
 
