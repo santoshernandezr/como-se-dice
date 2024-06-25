@@ -1,5 +1,5 @@
-import '../css/App.css';
-import mario from '../images/mario.png';
+import '../../css/App.css';
+import mario from '../../images/mario.png';
 
 /**
  * Component that handles the creation of the navigation bar. The navigation bar consists of the title of the game,

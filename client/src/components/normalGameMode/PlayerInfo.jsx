@@ -1,5 +1,5 @@
 import React from 'react'
-import Mario from '../images/mario.png'
+import Mario from '../../images/mario.png'
 
 /**
  * Component responsible for the creation of the users information, so their avatar image, score and lives count.

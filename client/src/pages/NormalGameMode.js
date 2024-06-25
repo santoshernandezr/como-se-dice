@@ -1,9 +1,9 @@
 import '../css/App.css';
 import Mario from '../images/mario.png';
 
-import HomeNavigationBar from '../components/NavigationBar.jsx';
-import Footer from '../components/Footer.jsx';
-import GuessWord from '../components/NormalGuessWord.jsx';
+import HomeNavigationBar from '../components/common/NavigationBar.jsx';
+import Footer from '../components/common/Footer.jsx';
+import GuessWord from '../components/normalGameMode/NormalGuessWord.jsx';
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their 

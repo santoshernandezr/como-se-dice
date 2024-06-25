@@ -1,10 +1,10 @@
 import '../css/App.css';
 import Mario from '../images/mario.png';
 
-import HomeNavigationBar from '../components/NavigationBar.jsx';
-import Footer from '../components/Footer.jsx';
-import GuessWord from '../components/TimedGuessWord.jsx';
-import Counter from '../components/TimedModeCounter.jsx';
+import HomeNavigationBar from '../components/common/NavigationBar.jsx';
+import Footer from '../components/common/Footer.jsx';
+import GuessWord from '../components/timedGameMode/TimedGuessWord.jsx';
+import Counter from '../components/timedGameMode/TimedModeCounter.jsx';
 
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their 

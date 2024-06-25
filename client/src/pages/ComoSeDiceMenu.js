@@ -1,8 +1,8 @@
 import '../css/App.css';
-import HomeNavigationBar from '../components/NavigationBar.jsx'
+import HomeNavigationBar from '../components/common/NavigationBar.jsx'
 import SinglePlayer from '../components/SinglePlayerCard.jsx'
 import DailyChallenge from '../components/DailyChallengeCard.jsx'
-import Footer from '../components/Footer.jsx';
+import Footer from '../components/common/Footer.jsx';
 
 /**
  * Como se dice menu page.
