@@ -1,21 +1,33 @@
+import React, { useEffect, useState } from 'react'
+import { useTimer } from "react-timer-hook";
+import Mario from '../../images/mario.png'
 import confetti from "canvas-confetti"
-import Words from '../../jsonData/words.json'
+import HighScoreModal from './HighScoreModal';
 
 /**
- * Updates the container that holds the word to be guessed and clears the guess field so the user can guess again.
+ * Validate strings are alphanumeric.
  * 
- * @param { number } index 
- * @param { innerHTML } container in which the message will be set.
- * @param { InputHTMLAttributes } guessField HTML input attribute.
- * @param { List } words object containing all words available.
+ * @param { String } string which is being validated.
+ * @returns true or false whether or not the string is alphanumeric.
  */
-function updateWord(index, container, guessField, words) {
-    container.innerHTML = "Cómo Se Dice &nbsp;"  + words[index].spanish.bold() + "&nbsp; (" + words[index].type.italics() + ")?";
-    guessField.value = '';
-}
-
 function isAlphanumeric(str) {
     return /^[a-zA-Z0-9]+$/.test(str);
+}
+
+function playAgainReset() {
+    document.getElementById('timedGameModeModal').close();
+
+    let nextWordContainer = document.getElementById('nextWordContainer');
+    let timeUpContainer = document.getElementById('timeUpContainer');
+    let guessField = document.getElementById('timedModeGuessField');
+    let guessButton = document.getElementById("timedModeGuessButton");
+    let playAgainButton = document.getElementById("timedModePlayAgainButton");
+
+    nextWordContainer.style.display = "inline";
+    guessField.style.display = 'inline';
+    guessButton.style.display = 'inline';
+    timeUpContainer.style.display = 'none';
+    playAgainButton.style.display = "none";
 }
 
 /**
@@ -24,22 +36,104 @@ function isAlphanumeric(str) {
  * @returns 
  */
 function TimedGuessWord() {
+    // Instantiate the words state and set it to "loading" until it gets updated.
+    const [words, setWords] = useState("loading")
+    // Instantiate the score state and set it to 0.
+    const [score, setScore] = useState(0)
+    // Instantiate the lives state and set it to 3.
+    const [bestScore, setBestScore] = useState(2)
+    // Instantiate the index state and set it to 0.
+    const [index, setIndex] = useState(0)
+    // Instantiate the current word state and set it to the first word 
+    const [currentWord, setCurrentWord] = useState(words[0])
 
-    // words already come randomized so we can start with the first index. i.e. 0
-    let currentWordIndex = 0;
+    // Functions that will increment a state using the previous state.
+    function incrementScore() {
+    setScore(prevCount =>  prevCount + 1)
+    }
+    function incrementIndex() {
+    setIndex(prevCount => prevCount + 1)
+    }
 
-    let correctNumberOfGuesses = 0;
+    // Asyn method that calls server to get random words for the game.
+    async function fetchWords() {
+        console.log("Calling from timed mode")
+        const result = await fetch("/api/getWords");
+        const body = await result.json();
+        setWords(body);
+    }
 
-    const determineInput = (e) => {
+    // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
+    useEffect(() => {
+        fetchWords()
+    }, [])
+
+    async function playAgain() {
+        fetchWords();
+        playAgainReset()
+    
+        setIndex(0)
+        setScore(0)
+        const time = new Date();
+        time.setSeconds(time.getSeconds() + 20);
+        restart(time)
+    }
+
+
+    useEffect(() => {
+
+    if (index < words.length) {
+        console.log("updating word when index changes")
+        let guessField = document.getElementById('timedModeGuessField');
+
+        setCurrentWord(words[index])
+        guessField.value = '';
+    }
+
+    }, [index, words.length, words])
+
+    function refactoredUpdateScore() {
+        console.log("In the refactored update score method");
+        console.log("Score: " + score + " Best Score: " + bestScore);
+        if (score > bestScore) {
+          confetti();
+          setBestScore(score);
+          document.getElementById('timedGameModeModal').showModal();
+        } else {
+          let nextWordContainer = document.getElementById('nextWordContainer');
+          let timeUpContainer = document.getElementById('timeUpContainer');
+          let guessField = document.getElementById('timedModeGuessField');
+          let guessButton = document.getElementById("timedModeGuessButton");
+          let playAgainButton = document.getElementById("timedModePlayAgainButton");
+    
+          nextWordContainer.style.display = "none";
+          guessField.style.display = 'none';
+          guessButton.style.display = 'none';
+          timeUpContainer.style.display = 'inline';
+          playAgainButton.style.display = "inline";
+        }
+    }
+
+    const expiryTimestamp = new Date();
+    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 20);
+
+    const {
+        seconds,
+        minutes,
+        restart,
+    } = useTimer({ expiryTimestamp, onExpire: () => refactoredUpdateScore() });
+
+    const formatTime = (time) => {
+        return String(time).padStart(2, '0')
+    }
+
+    async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
-
-        let nextWordContainer = document.getElementById('nextWordContainer');
         let guessField = document.getElementById('timedModeGuessField');
-        let scoreID = document.getElementById("timedModeScore");
 
         const userGuess = guessField.value.toLowerCase().trim();
-        const currentWord = Words[currentWordIndex];
+        // const currentWord = Words[currentWordIndex];
         
         if(isAlphanumeric(userGuess)) {
             /* 
@@ -48,55 +142,55 @@ function TimedGuessWord() {
             */
             if (userGuess === currentWord.english.toLowerCase()) {
                 confetti();
-                
-                correctNumberOfGuesses++
-
-                scoreID.innerHTML = "Score: " + correctNumberOfGuesses.toString();
+                incrementScore();
             }
 
-            if (currentWordIndex < Words.length) {
-                currentWordIndex++;
-                updateWord(currentWordIndex, nextWordContainer, guessField, Words);
-            }
+            incrementIndex();
         }
     }
 
   return (
     <div>
 
-        {/* Asking the user the word to guess. */}
-        <div className="flex justify-center" >
-            <h2 id="nextWordContainer" className="w-1/4 flex justify-center">
-                ¿Cómo Se Dice &nbsp; <b>{Words[0].spanish}</b>(<i>{Words[0].type}</i>)?
-            </h2>
+        {/* Player information, passing in the score and lives states. */}
+        <div>
+            <main>
+                {/* The users information. Users avatar, username, lives and score count. */}
+                <div className="flex flex-col items-center">
+                    <div className="w-full max-w-sm ">
+                        <div className="flex flex-col items-center pb-10">
+                            <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={ Mario }></img>
+                            <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
+
+                            {/* The count down timer. */}
+                            <div style={{textAlign: 'center'}}>
+                                <div style={{fontSize: '30px'}}>
+                                    <span>{formatTime(minutes)}</span>:<span>{formatTime(seconds)}</span>
+                                </div>
+                            </div>
+
+                            <div className="flex mt-2">
+                                <p id="timedModeScore" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: { score }</p>
+                                <p id="timedModeBestScore" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Best score: { bestScore }</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
 
-        {/* 
-            Dialog that will show up at the end of the game if the user got a new high score. It will inform the user
-            that they got a new high score.
-        */}
-        <dialog id="timedGameModeModal" className="rounded-lg max-w-lg border modal fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-fit">
-            <div className="modal-box max-h-full max-w-full">
+        {/* Asking the user the word to guess. */}
+        <div className="flex justify-center" >
+            <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'inline' }}>
+                ¿Cómo Se Dice&nbsp;<p id="currentWord" className="font-bold" style={{ display: 'inline'}}>{currentWord.spanish}({currentWord.type})?</p>
+            </h2>
+            <h2 id="timeUpContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'none' }}>Time up!</h2>
+        </div>
 
-                <div className="max-w-l p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">New high score</h5>
-
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">pollo.io</p>
-                    <p id="userOficialHighScore" className="mb-3 font-normal text-gray-700 dark:text-gray-400"></p>
-
-                    <div className="justify-center items-center flex space-x-28">
-                        <a href="/comosedice" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Home
-                        </a>
-                        <a href="/timedgamemode" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Play again
-                        </a>
-                    </div>
-                    
-                </div>
-
-            </div>
-        </dialog>
+        <HighScoreModal
+            bestScore={bestScore}
+            playAgain={playAgain}
+        />
 
         {/* 
             This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
@@ -111,7 +205,8 @@ function TimedGuessWord() {
             {/* Buttons that handle the submittion of the users guess. */}
             <div className="flex justify-center">
                 <button style={{ display: 'inline' }} onClick={determineInput} id="timedModeGuessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
-                <button style={{ display: 'none' }} onClick={() => window.location.reload(false)} id="timedModePlayAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
+                {/* <button style={{ display: 'none' }} onClick={() => playAgain()} id="timedModePlayAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button> */}
+                <button style={{ display: 'none' }} onClick={() => playAgain()} id="timedModePlayAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
             </div>
         </form>
     </div>

@@ -1,5 +1,4 @@
 import '../css/App.css';
-import Mario from '../images/mario.png';
 
 import HomeNavigationBar from '../components/common/NavigationBar.jsx';
 import Footer from '../components/common/Footer.jsx';

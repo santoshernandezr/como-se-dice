@@ -103,12 +103,12 @@ function GuessWord() {
     words to use for the new game, reset the board, and reset the state of the values to their original state.
     */
     async function playAgain() {
-    fetchWords();
-    playAgainReset()
+        fetchWords();
+        playAgainReset();
 
-    setIndex(0)
-    setLives(3)
-    setScore(0)
+        setIndex(0);
+        setLives(3);
+        setScore(0);
     }
 
     /*
@@ -172,11 +172,11 @@ function GuessWord() {
             // Check if the users guess is correct. If so, increment the score and the index.
             if (userGuess === currentWord.english.toLowerCase()) {
                 confetti();
-                incrementScore()
-                incrementIndex()
+                incrementScore();
+                incrementIndex();
             } else { // If they users guess is incorrect, decrement the lives and increment the index.
-                decrementLives()
-                incrementIndex()
+                decrementLives();
+                incrementIndex();
             }
         }
     }
