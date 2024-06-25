@@ -1,5 +1,5 @@
 import confetti from "canvas-confetti"
-import Words from '../jsonData/words.json'
+import Words from '../../jsonData/words.json'
 
 /**
  * Updates the container that holds the word to be guessed and clears the guess field so the user can guess again.
