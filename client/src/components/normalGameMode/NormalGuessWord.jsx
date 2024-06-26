@@ -112,7 +112,7 @@ function GuessWord() {
     }
 
     /*
-     Conditional useEffect. When the 'index' state updated, if there are still words in the 'words' we got back from the server,
+     Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
      update the state of the 'currentWord' using the new value of index, and clear the guess field.
      */
     useEffect(() => {
@@ -160,6 +160,9 @@ function GuessWord() {
 
     }, [lives])
 
+    /*
+     Function that will determine if the users guess was correct or not.
+     */
     async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();

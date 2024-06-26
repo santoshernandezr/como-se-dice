@@ -14,6 +14,10 @@ function isAlphanumeric(str) {
     return /^[a-zA-Z0-9]+$/.test(str);
 }
 
+/**
+ * Resets the game after the 'play again' button is pressed. This will close the 'timedGameModeModal' modal, the 'timeUpContinaer' container, and show the
+ * 'nextWordContainer', 'timedModeGuessField', and the 'timedModeGuessButton".
+ */
 function playAgainReset() {
     document.getElementById('timedGameModeModal').close();
 
@@ -23,11 +27,13 @@ function playAgainReset() {
     let guessButton = document.getElementById("timedModeGuessButton");
     let playAgainButton = document.getElementById("timedModePlayAgainButton");
 
+    // Hide the following elements.
+    timeUpContainer.style.display = 'none';
+    playAgainButton.style.display = "none";
+    // Show the following elements.
     nextWordContainer.style.display = "inline";
     guessField.style.display = 'inline';
     guessButton.style.display = 'inline';
-    timeUpContainer.style.display = 'none';
-    playAgainButton.style.display = "none";
 }
 
 /**
@@ -40,7 +46,7 @@ function TimedGuessWord() {
     const [words, setWords] = useState("loading")
     // Instantiate the score state and set it to 0.
     const [score, setScore] = useState(0)
-    // Instantiate the lives state and set it to 3.
+    // Instantiate the lives state and set it to 2.
     const [bestScore, setBestScore] = useState(2)
     // Instantiate the index state and set it to 0.
     const [index, setIndex] = useState(0)
@@ -57,7 +63,6 @@ function TimedGuessWord() {
 
     // Asyn method that calls server to get random words for the game.
     async function fetchWords() {
-        console.log("Calling from timed mode")
         const result = await fetch("/api/getWords");
         const body = await result.json();
         setWords(body);
@@ -68,22 +73,29 @@ function TimedGuessWord() {
         fetchWords()
     }, [])
 
+    /* 
+    Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
+    words to use for the new game, reset the board, reset the state of the values to their original state, and restart the timer.
+    */
     async function playAgain() {
         fetchWords();
         playAgainReset()
     
         setIndex(0)
         setScore(0)
+
         const time = new Date();
-        time.setSeconds(time.getSeconds() + 20);
+        time.setSeconds(time.getSeconds() + 60);
         restart(time)
     }
 
-
+    /*
+     Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
+     update the state of the 'currentWord' using the new value of index, and clear the guess field.
+     */
     useEffect(() => {
 
     if (index < words.length) {
-        console.log("updating word when index changes")
         let guessField = document.getElementById('timedModeGuessField');
 
         setCurrentWord(words[index])
@@ -92,9 +104,13 @@ function TimedGuessWord() {
 
     }, [index, words.length, words])
 
-    function refactoredUpdateScore() {
-        console.log("In the refactored update score method");
-        console.log("Score: " + score + " Best Score: " + bestScore);
+    /*
+     Function that will be called when the timer is up. This will check the state of 'score' and 'bestScore'. If the 
+     score is greater than the best score, then celebrate and show the 'timedGameModeModal' modal. If the score is not
+     greater than the best score hide the 'nextWordContainer' container, 'timedModeGuessField' field, 'timedModeGuessButton' field,
+     and show the 'timeUpContainer' container, and 'timedModePlayAgainButton' button.
+     */
+    function updateScore() {
         if (score > bestScore) {
           confetti();
           setBestScore(score);
@@ -106,45 +122,50 @@ function TimedGuessWord() {
           let guessButton = document.getElementById("timedModeGuessButton");
           let playAgainButton = document.getElementById("timedModePlayAgainButton");
     
+          // Hide the following elements.
           nextWordContainer.style.display = "none";
           guessField.style.display = 'none';
           guessButton.style.display = 'none';
+          // Show the following elements.
           timeUpContainer.style.display = 'inline';
           playAgainButton.style.display = "inline";
         }
     }
 
+    // Instantiate the first timer.
     const expiryTimestamp = new Date();
-    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 20);
+    expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60);
 
+    // Instantiate the constants used for the 'useTimer'.
     const {
         seconds,
         minutes,
         restart,
-    } = useTimer({ expiryTimestamp, onExpire: () => refactoredUpdateScore() });
+    } = useTimer({ expiryTimestamp, onExpire: () => updateScore() });
 
     const formatTime = (time) => {
         return String(time).padStart(2, '0')
     }
 
+    /*
+     Function that will determine if the users guess was correct or not.
+     */
     async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
-        let guessField = document.getElementById('timedModeGuessField');
 
+        let guessField = document.getElementById('timedModeGuessField');
         const userGuess = guessField.value.toLowerCase().trim();
-        // const currentWord = Words[currentWordIndex];
         
+        // Check that the users guess is Alphanumeric
         if(isAlphanumeric(userGuess)) {
-            /* 
-            The user got the correct answer, that means that there will be confetti, the background will turn green, 'correctNumberOfGuesses'
-            and 'currentWordIndex' will be incremented by one. The score will be updated as well.
-            */
+            // Check if the users guess is correct. If so, increment the score.
             if (userGuess === currentWord.english.toLowerCase()) {
                 confetti();
                 incrementScore();
             }
 
+            // Always increment the index.
             incrementIndex();
         }
     }
@@ -152,7 +173,7 @@ function TimedGuessWord() {
   return (
     <div>
 
-        {/* Player information, passing in the score and lives states. */}
+        {/* Player information, such as thier user avatar, username, score, and best score. */}
         <div>
             <main>
                 {/* The users information. Users avatar, username, lives and score count. */}
@@ -179,7 +200,11 @@ function TimedGuessWord() {
             </main>
         </div>
 
-        {/* Asking the user the word to guess. */}
+        {/* 
+            Container that contains two heading containers. 
+            The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
+            The second container, 'timeUpContainer', contains the time up message the user will see at the end of the game if they lose.
+        */}
         <div className="flex justify-center" >
             <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'inline' }}>
                 ¿Cómo Se Dice&nbsp;<p id="currentWord" className="font-bold" style={{ display: 'inline'}}>{currentWord.spanish}({currentWord.type})?</p>
@@ -187,6 +212,7 @@ function TimedGuessWord() {
             <h2 id="timeUpContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'none' }}>Time up!</h2>
         </div>
 
+        {/* Modal that the user will see if they get a new highscore. */}
         <HighScoreModal
             bestScore={bestScore}
             playAgain={playAgain}
