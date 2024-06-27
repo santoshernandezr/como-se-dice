@@ -15,7 +15,7 @@ function MainMenu() {
       <header className="App-header">
         <h1>¿Cómo se dice?</h1>
         <p id="challengeMessage">Challenge your language skills with our word game!</p>
-        <a href="/comosedice" id="playButton" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+        <a href="/comosedice" id="playButton" className="animate-bounce bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
           Play
         </a>
       </header>
