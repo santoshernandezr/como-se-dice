@@ -1,5 +1,5 @@
 import '../../css/App.css';
-import mario from '../../images/mario.png';
+import user from '../../images/user.png';
 
 /**
  * Component that handles the creation of the navigation bar. The navigation bar consists of the title of the game,
@@ -22,7 +22,7 @@ function NavigationBar() {
 
                         <button type="button" className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                             <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src={mario} alt=""></img>
+                            <img className="w-8 h-8 rounded-full" src={user} alt=""></img>
                         </button>
 
                         {/* Drop down menu*/}

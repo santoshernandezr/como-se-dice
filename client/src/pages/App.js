@@ -5,6 +5,7 @@ import MainMenu from './MainMenu';
 import ComoSeDiceMenu from './ComoSeDiceMenu';
 import NormalGameMode from './NormalGameMode';
 import TimedGameMode from './TimedGameMode';
+import ComingSoon from './ComingSoon';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
            <Route path="/comosedice" element={<ComoSeDiceMenu />} />
            <Route path="/normalgamemode" element={<NormalGameMode/>} />
            <Route path="/timedgamemode" element={<TimedGameMode />} />
+           <Route path="/comingSoon" element={<ComingSoon />} />
         </Routes>
      </>
   );

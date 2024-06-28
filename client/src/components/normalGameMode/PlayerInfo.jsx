@@ -1,5 +1,5 @@
 import React from 'react'
-import Mario from '../../images/mario.png'
+import user from '../../images/user.png'
 
 /**
  * Component responsible for the creation of the users information, so their avatar image, score and lives count.
@@ -19,7 +19,7 @@ function PlayerInfo(props) {
             <div className="flex flex-col items-center">
                 <div className="w-full max-w-sm ">
                     <div className="flex flex-col items-center pb-10">
-                        <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={ Mario }></img>
+                        <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={user}></img>
                         <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
                         <div className="flex mt-2">
                             <p id="score" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: {score}</p>

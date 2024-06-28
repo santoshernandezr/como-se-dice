@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTimer } from "react-timer-hook";
-import Mario from '../../images/mario.png'
+import user from '../../images/user.png'
 import confetti from "canvas-confetti"
 import HighScoreModal from './HighScoreModal';
 
@@ -180,7 +180,7 @@ function TimedGuessWord() {
                 <div className="flex flex-col items-center">
                     <div className="w-full max-w-sm ">
                         <div className="flex flex-col items-center pb-10">
-                            <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={ Mario }></img>
+                            <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={user}></img>
                             <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
 
                             {/* The count down timer. */}

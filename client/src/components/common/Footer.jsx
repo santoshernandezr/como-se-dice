@@ -13,7 +13,7 @@ function Footer() {
                 
             <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
             <div className="sm:flex sm:items-center sm:justify-between">
-                <span className="text-xs text-gray-500 sm:text-center dark:text-gray-400">© 2023 Cómo Se Dice. All Rights Reserved. Developed by <strong>Gerardo Soto</strong> and <strong>Roberto Santos Hernandez</strong>. Icons used were made by <strong><u><a href="https://www.flaticon.com/authors/darius-dan">Darius Dan</a></u></strong> and <strong><u><a href="https://www.flaticon.com/authors/wahyu-adam">Wahyu Adam</a></u></strong>.
+                <span className="text-xs text-gray-500 sm:text-center dark:text-gray-400">© 2023 Cómo Se Dice. All Rights Reserved. Developed by <strong>Gerardo Soto</strong> and <strong>Roberto Santos Hernandez</strong>. Icons used were made by <strong><a href='href="https://www.flaticon.com/free-icons/work-in-progress"'>Freepik</a></strong> <strong><u><a href="https://www.flaticon.com/authors/darius-dan">Darius Dan</a></u></strong> and <strong><u><a href="https://www.flaticon.com/authors/wahyu-adam">Wahyu Adam</a></u></strong>.
                 </span>
             </div>
             </div>
