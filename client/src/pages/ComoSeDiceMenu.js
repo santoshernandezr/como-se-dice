@@ -25,11 +25,11 @@ function ComoSeDiceMenu() {
             
               <SinglePlayer title="Start Singleplayer" body="Play cómo se dice alone" />
             
-              <DailyChallenge destination="comingSoon" title="Multiplayer" body="Start a room to play against friends!" />
+              <DailyChallenge destination="comingsoon" title="Multiplayer" body="Start a room to play against friends!" />
             
-              <DailyChallenge destination="comingSoon"  title="Start Daily Challenge" body="Get as many words right in the shortest time and see where you stack up against the world 🌐! " />
+              <DailyChallenge destination="dailychallengemode"  title="Start Daily Challenge" body="Get as many words right in the shortest time and see where you stack up against the world 🌐! " />
             
-              <DailyChallenge destination="comingSoon" title="Join Multiplayer Room" body="Room code" />
+              <DailyChallenge destination="comingsoon" title="Join Multiplayer Room" body="Room code" />
             
           </div>
         </div>
