@@ -16,6 +16,7 @@ function DailyChallengeMode() {
             {/* Navigatin bar */}
             <HomeNavigationBar />
 
+            {/* The area in which the user will be asked the word to guess and the input where they'll input their answer. */}
             <DailyChallengeGuessWord />
 
             {/* Footer of the page */}

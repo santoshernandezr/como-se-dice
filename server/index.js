@@ -9,7 +9,6 @@ const app = express()
  */
 app.get("/api/getWords", (req, res) => {
     shuffle(words)
-    console.log("Words after shuffle " + words[0].spanish)
     res.send(words)
 })
 
@@ -19,7 +18,6 @@ app.get("/api/getWords", (req, res) => {
 app.get("/api/dailyChallengeWords", (req, res) => {
     const shuffledWords = shuffle(words)
     const dailyWords = shuffledWords.slice(0, 10)
-    console.log("First daily word " + dailyWords[0].spanish)
     res.send(dailyWords)
 })
 
