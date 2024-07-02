@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import user from '../../images/user.png'
 import confetti from "canvas-confetti"
 import DailyChallengeModal from './DailyChallengeModal';
+import { useStopwatch } from 'react-timer-hook';
 
 
 /**
@@ -24,6 +25,7 @@ function DailyChallengeGuessWord() {
     const [index, setIndex] = useState(0);
     // Instantiate the current word state and set it to the first word 
     const [currentWord, setCurrentWord] = useState(dailyWords[0]);
+    const [time, setTime] = useState(0);
 
     // Functions that will increment a state using the previous state.
     function incrementScore() {
@@ -45,9 +47,21 @@ function DailyChallengeGuessWord() {
         fetchWords()
     }, [])
 
+    // Instantiate the constants used for the 'useStopwatch'.
+    const {
+        seconds,
+        minutes,
+        pause,
+    } = useStopwatch({ autoStart: true});
+
+    const formatTime = (time) => {
+        return String(time).padStart(2, '0')
+    }
+
     /*
      Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
-     update the state of the 'currentWord' using the new value of index, and clear the guess field.
+     update the state of the 'currentWord' using the new value of index, and clear the guess field. Else, pause the stopwatch,
+     set the time state to the stopwatch time, and show the modal with the users score and time.
      */
      useEffect(() => {
 
@@ -57,6 +71,9 @@ function DailyChallengeGuessWord() {
             setCurrentWord(dailyWords[index])
             guessField.value = '';
         } else {
+            pause();
+            let stopWatchTime = document.getElementById("stopTime").textContent;
+            setTime(stopWatchTime)
             document.getElementById('dailyChallengeModal').showModal();
         }
     
@@ -97,6 +114,13 @@ function DailyChallengeGuessWord() {
                             <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={user}></img>
                             <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">pollo.io</h5>
 
+                            {/* The count down timer. */}
+                            <div style={{textAlign: 'center'}}>
+                                <div id="stopTime" style={{fontSize: '30px'}}>
+                                    <span>{formatTime(minutes)}</span>:<span>{formatTime(seconds)}</span>
+                                </div>
+                            </div>
+
                             <div className="flex mt-2">
                                 <p id="dailyModeScore" className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black">Score: {score}/10</p>
                             </div>
@@ -119,6 +143,7 @@ function DailyChallengeGuessWord() {
         {/* Modal that will appear once the user completes the daily challenge. */}
         <DailyChallengeModal 
             score={score}
+            time={time}
         />
 
         {/* 
