@@ -7,6 +7,7 @@ import NormalGameMode from './NormalGameMode';
 import TimedGameMode from './TimedGameMode';
 import ComingSoon from './ComingSoon';
 import DailyChallengeMode from './DailyChallengeMode';
+import SignIn from './SignIn';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
            <Route path="/timedgamemode" element={<TimedGameMode />} />
            <Route path="/comingSoon" element={<ComingSoon />} />
            <Route path="/dailychallengemode" element={<DailyChallengeMode />} />
+           <Route path="/signin" element={<SignIn />} />
         </Routes>
      </>
   );
