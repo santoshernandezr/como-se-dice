@@ -6,14 +6,18 @@ import React, { useState } from 'react'
  * @returns Sign in page.
  */
 function SignIn() {
-
+    // Instantiate the email state.
     const[email, setEmail] = useState('');
+    // Instantiate the password state.
     const[password, setPassword] = useState('');
+    // Instantiate the alert state, which will be used to show the user if their email and password do not match.
+    const[alert, setAlert] = useState(false)
 
     // Method that will make the post call to the backend to get see if we can register the user.
-    async function validateNewUser() {
-        console.log("My eamil: " + email)
-        console.log("My password: " + password)
+    async function validateNewUser(e) {
+        e.preventDefault();
+
+        console.log("Email: " + email + " password: " + password)
     }
 
   return (
@@ -27,15 +31,17 @@ function SignIn() {
                     Sign in to your account
                 </h1>
 
+                {/* Form that will take in the users wmail and password. */}
                 <form className="space-y-4 md:space-y-6" onSubmit={validateNewUser}>
                     <div>
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                        <input onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your remail" required=""></input>
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                        <input onChange={(e) => setEmail(e.target.value)} id="email" type="email" name="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your remail" required></input>
                     </div>
 
                     <div>
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                        <input onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" placeholder="Enter your password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required=""></input>
+                        <input onChange={(e) => setPassword(e.target.value)} id="password" type="password" placeholder="Enter your password" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required></input>
+                        <p style={{ display: alert ? 'inline' : 'none' }} className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Password and email does not match.</span></p>
                     </div>
 
                     <div className="flex items-center justify-between">
