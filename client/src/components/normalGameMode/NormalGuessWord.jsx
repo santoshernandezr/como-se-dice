@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { isAlphanumeric } from '../common/HelperFunctions.ts';
 import PlayerInfo from './PlayerInfo';
 import confetti from "canvas-confetti"
-
-/**
- * Validate strings are alphanumeric.
- * 
- * @param { String } string which is being validated.
- * @returns true or false whether or not the string is alphanumeric.
- */
-function isAlphanumeric(str) {
-    return /^[a-zA-Z0-9]+$/.test(str);
-}
 
 /**
  * Component that handles the creation of the text field that will ask the user what word is being guessed,
@@ -19,20 +10,19 @@ function isAlphanumeric(str) {
  * @returns Component that handles the users guess.
  */
 function GuessWord() {
-    // Instantiate the words state and set it to "loading" until it gets updated.
+    // Instantiate the words states.
+    // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
     const [words, setWords] = useState("loading")
-    // Instantiate the current word state and set it to the first word 
     const [currentWord, setCurrentWord] = useState(words[0])
-    // Instantiate the user guess state.
+
+    // Instantiate the users states. Their guess, score, lives, and index.
     const [userGuess, setUserGuess] = useState("")
-    // Instantiate the score state and set it to 0.
     const [score, setScore] = useState(0)
-    // Instantiate the lives state and set it to 3.
     const [lives, setLives] = useState(3)
-    // Instantiate the index state and set it to 0.
     const [index, setIndex] = useState(0)
 
-    // Components that will show and not show, depending if the user wins or loses.
+    // Instantiate the components states.
+    // Each component that can be shown or hidden depending if the user wins or loses.
     const [nextWordContainer, setNextWordContainer] = useState(true);
     const [guessField, setGuessField] = useState(true);
     const [guessButton, setGuessButton] = useState(true);
@@ -89,49 +79,29 @@ function GuessWord() {
     useEffect(() => {
 
     if (index < words.length) {
-        let guessField = document.getElementById('guessField');
-
         setCurrentWord(words[index])
-        guessField.value = '';
+        document.getElementById('guessField').value = '';
     }
 
     }, [index, words.length, words])
 
     /*
-     Conditional useEffect. When the 'score' state is updated, if the score is 10, they have won the game so call the 
-     determineOutcome method to clear out the board and let the user know they won.
+     Conditional useEffect. When the 'score' or 'lives' state is updated, if the score is 10 or if the user
+     ran out of lives, update the 'nextWordContianer', 'guessField', and 'guessButton' to 'false', and 'decidingContainer'
+     and 'playAgainButton' state to 'true'.
      */
     useEffect(() => {
 
-    if (score == 10) {
+    if (score == 10 || lives == 0) {
         setNextWordContainer(false);
         setGuessField(false);
         setGuessButton(false);
         
         setDecidingContainer(true);
         setPlayAgainButton(true);
-        document.getElementById('decidingContainer').innerHTML = "You Win!";
     }
 
-    }, [score])
-
-    /*
-     Conditional useEffect. When the 'lives' state is udpated, if the lives is 0, they have lost the game so call the
-     determineOutcome method to clear out the board and let the user know they lost.
-     */
-    useEffect(() => {
-
-    if (lives == 0) {
-        setNextWordContainer(false);
-        setGuessField(false);
-        setGuessButton(false);
-        
-        setDecidingContainer(true);
-        setPlayAgainButton(true);
-        document.getElementById('decidingContainer').innerHTML = "You ran out of lives, try again.";
-    }
-
-    }, [lives])
+    }, [score, lives])
 
     /*
      Function that will determine if the users guess was correct or not.
@@ -173,6 +143,7 @@ function GuessWord() {
                 ¿Cómo Se Dice&nbsp;<p className="font-bold" >{currentWord.spanish}({currentWord.type})?</p>
             </h2>
             <h2 id="decidingContainer" className="w-1/4 flex justify-center text-center" style={{ display: decidingContainer ? 'inline': 'none' }}>
+                {score == 10 ? "You win!" : "You ran out of lives, try again."}
             </h2>
         </div>
 
@@ -185,7 +156,6 @@ function GuessWord() {
             <div className="flex justify-center">
                 <input style={{ display: guessField ? 'inline': 'none' }} onChange={(e) => setUserGuess(e.target.value)} autoComplete="one-time-code" type="text" id="guessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
             </div>
-            
             
             {/* 
                 Container that contains two buttons.

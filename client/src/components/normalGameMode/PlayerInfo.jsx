@@ -4,8 +4,8 @@ import user from '../../images/user.png'
 /**
  * Component responsible for the creation of the users information, so their avatar image, score and lives count.
  * 
- * @param { Score State } State of the users score.
- * @param { Lives State } State of the users lives.
+ * @param { score State } State of the users score.
+ * @param { lives State } State of the users lives.
  * @returns 
  */
 function PlayerInfo(props) {
