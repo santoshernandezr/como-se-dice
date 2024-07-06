@@ -1,40 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useTimer } from "react-timer-hook";
+import { isAlphanumeric } from '../common/HelperFunctions.ts'
 import user from '../../images/user.png'
 import confetti from "canvas-confetti"
 import HighScoreModal from './HighScoreModal';
-
-/**
- * Validate strings are alphanumeric.
- * 
- * @param { String } string which is being validated.
- * @returns true or false whether or not the string is alphanumeric.
- */
-function isAlphanumeric(str) {
-    return /^[a-zA-Z0-9]+$/.test(str);
-}
-
-/**
- * Resets the game after the 'play again' button is pressed. This will close the 'timedGameModeModal' modal, the 'timeUpContinaer' container, and show the
- * 'nextWordContainer', 'timedModeGuessField', and the 'timedModeGuessButton".
- */
-function playAgainReset() {
-    document.getElementById('timedGameModeModal').close();
-
-    let nextWordContainer = document.getElementById('nextWordContainer');
-    let timeUpContainer = document.getElementById('timeUpContainer');
-    let guessField = document.getElementById('timedModeGuessField');
-    let guessButton = document.getElementById("timedModeGuessButton");
-    let playAgainButton = document.getElementById("timedModePlayAgainButton");
-
-    // Hide the following elements.
-    timeUpContainer.style.display = 'none';
-    playAgainButton.style.display = "none";
-    // Show the following elements.
-    nextWordContainer.style.display = "inline";
-    guessField.style.display = 'inline';
-    guessButton.style.display = 'inline';
-}
 
 /**
  * Component that hanldes the creation of the text field that will ask the user what word is being guessed,
@@ -42,6 +11,7 @@ function playAgainReset() {
  * @returns 
  */
 function TimedGuessWord() {
+    const [userGuess, setUserGuess] = useState("")
     // Instantiate the words state and set it to "loading" until it gets updated.
     const [words, setWords] = useState("loading")
     // Instantiate the score state and set it to 0.
@@ -52,6 +22,13 @@ function TimedGuessWord() {
     const [index, setIndex] = useState(0)
     // Instantiate the current word state and set it to the first word 
     const [currentWord, setCurrentWord] = useState(words[0])
+
+
+    const[nextWordContainer, setNextWordContainer] = useState(true);
+    const[guessField, setGuessField] = useState(true);
+    const[guessButton, setGuessButton] = useState(true);
+    const[timeUpContainer, setTimeUpContainer]  = useState(false);
+    const[playAgainButton, setPlayAgainButton] = useState(false);
 
     // Functions that will increment a state using the previous state.
     function incrementScore() {
@@ -79,8 +56,16 @@ function TimedGuessWord() {
     */
     async function playAgain() {
         fetchWords();
-        playAgainReset()
-    
+
+        document.getElementById('timedGameModeModal').close();
+
+        setNextWordContainer(true);
+        setGuessField(true);
+        setGuessButton(true);
+
+        setTimeUpContainer(false);
+        setPlayAgainButton(false);
+        
         setIndex(0)
         setScore(0)
 
@@ -116,19 +101,12 @@ function TimedGuessWord() {
           setBestScore(score);
           document.getElementById('timedGameModeModal').showModal();
         } else {
-          let nextWordContainer = document.getElementById('nextWordContainer');
-          let timeUpContainer = document.getElementById('timeUpContainer');
-          let guessField = document.getElementById('timedModeGuessField');
-          let guessButton = document.getElementById("timedModeGuessButton");
-          let playAgainButton = document.getElementById("timedModePlayAgainButton");
-    
-          // Hide the following elements.
-          nextWordContainer.style.display = "none";
-          guessField.style.display = 'none';
-          guessButton.style.display = 'none';
-          // Show the following elements.
-          timeUpContainer.style.display = 'inline';
-          playAgainButton.style.display = "inline";
+          setNextWordContainer(false);
+          setGuessField(false);
+          setGuessButton(false);
+
+          setTimeUpContainer(true);
+          setPlayAgainButton(true);
         }
     }
 
@@ -153,14 +131,11 @@ function TimedGuessWord() {
     async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
-
-        let guessField = document.getElementById('timedModeGuessField');
-        const userGuess = guessField.value.toLowerCase().trim();
         
         // Check that the users guess is Alphanumeric
         if(isAlphanumeric(userGuess)) {
             // Check if the users guess is correct. If so, increment the score.
-            if (userGuess === currentWord.english.toLowerCase()) {
+            if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
                 confetti();
                 incrementScore();
             }
@@ -206,10 +181,10 @@ function TimedGuessWord() {
             The second container, 'timeUpContainer', contains the time up message the user will see at the end of the game if they lose.
         */}
         <div className="flex justify-center" >
-            <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'inline' }}>
-                ¿Cómo Se Dice&nbsp;<p id="currentWord" className="font-bold" style={{ display: 'inline'}}>{currentWord.spanish}({currentWord.type})?</p>
+            <h2 id="nextWordContainer" className="w-1/4 flex justify-center text-center" style={{ display: nextWordContainer ? 'inline' : 'none'}}>
+                ¿Cómo Se Dice&nbsp;<p className="font-bold">{currentWord.spanish}({currentWord.type})?</p>
             </h2>
-            <h2 id="timeUpContainer" className="w-1/4 flex justify-center text-center" style={{ display: 'none' }}>Time up!</h2>
+            <h2 id="timeUpContainer" className="w-1/4 flex justify-center text-center" style={{ display: timeUpContainer ? 'inline': 'none' }}>Time up!</h2>
         </div>
 
         {/* Modal that the user will see if they get a new highscore. */}
@@ -225,13 +200,13 @@ function TimedGuessWord() {
         <form onSubmit={determineInput}>
             {/* Input field for the users guess. */}
             <div className="flex justify-center">
-                <input autoComplete="one-time-code" type="text" id="timedModeGuessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
+                <input style={{ display: guessField ? 'inline': 'none' }} onChange={(e) => setUserGuess(e.target.value)} autoComplete="one-time-code" type="text" id="timedModeGuessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
             </div>
             
             {/* Buttons that handle the submittion of the users guess. */}
             <div className="flex justify-center">
-                <button style={{ display: 'inline' }} onClick={determineInput} id="timedModeGuessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
-                <button style={{ display: 'none' }} onClick={() => playAgain()} id="timedModePlayAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
+                <button style={{ display: guessButton ? 'inline': 'none' }} onClick={determineInput} id="timedModeGuessButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4">Guess</button>
+                <button style={{ display: playAgainButton ? 'inline': 'none' }} onClick={() => playAgain()} id="timedModePlayAgainButton" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Play again</button>
             </div>
         </form>
     </div>
