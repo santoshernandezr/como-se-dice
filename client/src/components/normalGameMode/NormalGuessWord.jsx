@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { isAlphanumeric } from '../common/HelperFunctions.ts';
-import PlayerInfo from './PlayerInfo';
 import confetti from "canvas-confetti"
+import PlayerInfo from './PlayerInfo';
 
 /**
  * Component that handles the creation of the text field that will ask the user what word is being guessed,

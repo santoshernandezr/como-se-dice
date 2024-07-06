@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useTimer } from "react-timer-hook";
 import { isAlphanumeric } from '../common/HelperFunctions.ts'
-import user from '../../images/user.png'
 import confetti from "canvas-confetti"
+import user from '../../images/user.png'
 import HighScoreModal from './HighScoreModal';
 
 /**
@@ -11,22 +11,23 @@ import HighScoreModal from './HighScoreModal';
  * @returns 
  */
 function TimedGuessWord() {
-    const [userGuess, setUserGuess] = useState("")
-    // Instantiate the words state and set it to "loading" until it gets updated.
+    // Instantiate the words states.
+    // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
     const [words, setWords] = useState("loading")
-    // Instantiate the score state and set it to 0.
-    const [score, setScore] = useState(0)
-    // Instantiate the lives state and set it to 2.
-    const [bestScore, setBestScore] = useState(2)
-    // Instantiate the index state and set it to 0.
-    const [index, setIndex] = useState(0)
-    // Instantiate the current word state and set it to the first word 
     const [currentWord, setCurrentWord] = useState(words[0])
 
+    // Instantiate the users states. Their guess, score, best score, and index.
+    const [userGuess, setUserGuess] = useState("")
+    const [score, setScore] = useState(0)
+    const [bestScore, setBestScore] = useState(2)
+    const [index, setIndex] = useState(0)
 
+    // Instantiate the components states.
+    // Each component that can be shown or hidden depending if the user has ran out of time or not.
     const[nextWordContainer, setNextWordContainer] = useState(true);
     const[guessField, setGuessField] = useState(true);
     const[guessButton, setGuessButton] = useState(true);
+
     const[timeUpContainer, setTimeUpContainer]  = useState(false);
     const[playAgainButton, setPlayAgainButton] = useState(false);
 
@@ -81,10 +82,8 @@ function TimedGuessWord() {
     useEffect(() => {
 
         if (index < words.length) {
-            let guessField = document.getElementById('timedModeGuessField');
-
             setCurrentWord(words[index])
-            guessField.value = '';
+            document.getElementById('timedModeGuessField').value = '';
         }
 
     }, [index, words.length, words])
