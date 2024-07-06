@@ -1,30 +1,26 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
-import user from '../../images/user.png'
-import confetti from "canvas-confetti"
-import DailyChallengeModal from './DailyChallengeModal';
 import { useStopwatch } from 'react-timer-hook';
-
+import { isAlphanumeric } from '../common/HelperFunctions.ts'
+import confetti from "canvas-confetti"
+import user from '../../images/user.png'
+import DailyChallengeModal from './DailyChallengeModal';
 
 /**
- * Validate strings are alphanumeric.
- * 
- * @param { String } string which is being validated.
- * @returns true or false whether or not the string is alphanumeric.
+ * Component that handles the creation of the stop watch, the text field that will ask the user what word is 
+ * being guessed, the input for the user to guess, the button that triggers the validation of the users guess.
+ * @returns
  */
-function isAlphanumeric(str) {
-    return /^[a-zA-Z0-9]+$/.test(str);
-}
-
 function DailyChallengeGuessWord() {
-    // Instantiate the words state and set it to "loading" until it gets updated.
+    // Instantiate the words states.
+    // Daily words will contain the words used during the game and the current word will hold the current word the user needs to guess.
     const [dailyWords, setDailyWords] = useState("loading");
-    // Instantiate the score state and set it to 0.
-    const [score, setScore] = useState(0);
-    // Instantiate the index state and set it to 0.
-    const [index, setIndex] = useState(0);
-    // Instantiate the current word state and set it to the first word 
     const [currentWord, setCurrentWord] = useState(dailyWords[0]);
+
+    // Instantiate the users states. Their guess, score, best score, and index.
+    const [userGuess, setUserGuess] = useState("")
+    const [score, setScore] = useState(0);
+    const [index, setIndex] = useState(0);
     const [time, setTime] = useState(0);
 
     // Functions that will increment a state using the previous state.
@@ -65,11 +61,9 @@ function DailyChallengeGuessWord() {
      */
      useEffect(() => {
 
-        if (index < dailyWords.length) {
-            let guessField = document.getElementById('dailyModeGuessField');
-    
+        if (index < dailyWords.length) {    
             setCurrentWord(dailyWords[index])
-            guessField.value = '';
+            document.getElementById('dailyModeGuessField').value = '';
         } else {
             pause();
             let stopWatchTime = document.getElementById("stopTime").textContent;
@@ -85,14 +79,11 @@ function DailyChallengeGuessWord() {
      async function determineInput(e) {
         // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
         e.preventDefault();
-
-        let guessField = document.getElementById('dailyModeGuessField');
-        const userGuess = guessField.value.toLowerCase().trim();
         
         // Check that the users guess is Alphanumeric
         if(isAlphanumeric(userGuess)) {
             // Check if the users guess is correct. If so, increment the score.
-            if (userGuess === currentWord.english.toLowerCase()) {
+            if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
                 confetti();
                 incrementScore();
             }
@@ -153,7 +144,7 @@ function DailyChallengeGuessWord() {
         <form onSubmit={determineInput}>
             {/* Input field for the users guess. */}
             <div className="flex justify-center">
-                <input autoComplete="one-time-code" type="text" id="dailyModeGuessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
+                <input onChange={(e) => setUserGuess(e.target.value)} autoComplete="one-time-code" type="text" id="dailyModeGuessField" className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "></input>
             </div>
             
             {/* Buttons that handle the submittion of the users guess. */}

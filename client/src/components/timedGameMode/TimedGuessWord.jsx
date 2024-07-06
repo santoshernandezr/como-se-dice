@@ -6,7 +6,7 @@ import user from '../../images/user.png'
 import HighScoreModal from './HighScoreModal';
 
 /**
- * Component that hanldes the creation of the text field that will ask the user what word is being guessed,
+ * Component that handles the creation of the text field that will ask the user what word is being guessed,
  * the input field for the user to guess, the button that trigger the validation of the users guess.
  * @returns 
  */

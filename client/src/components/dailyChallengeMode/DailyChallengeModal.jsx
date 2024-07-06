@@ -4,8 +4,8 @@ import React from 'react'
  * Component responsible for the creation of the modal that the user will get when they finish playing the
  * daily challenge. It will show them their score and time.
  * 
- * @param { Score state } State of the users score. 
- * @param { Time state } State of the users time.
+ * @param { score state } State of the users score. 
+ * @param { time state } State of the users time.
  * @returns 
  */
 function DailyChallengeModal(props) {
