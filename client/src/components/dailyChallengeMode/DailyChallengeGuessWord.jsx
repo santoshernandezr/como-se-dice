@@ -1,10 +1,11 @@
 import React from 'react'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import { isAlphanumeric } from '../common/HelperFunctions.ts'
 import confetti from "canvas-confetti"
 import user from '../../images/user.png'
-import DailyChallengeModal from './DailyChallengeModal';
+
+const DailyChallengeModal = lazy(() => import('./DailyChallengeModal.jsx'));
 
 /**
  * Component that handles the creation of the stop watch, the text field that will ask the user what word is 

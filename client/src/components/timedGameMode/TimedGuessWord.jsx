@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, lazy } from 'react'
 import { useTimer } from "react-timer-hook";
 import { isAlphanumeric } from '../common/HelperFunctions.ts'
 import confetti from "canvas-confetti"
 import user from '../../images/user.png'
-import HighScoreModal from './HighScoreModal';
+
+const HighScoreModal = lazy(() => import('./HighScoreModal.jsx'));
 
 /**
  * Component that handles the creation of the text field that will ask the user what word is being guessed,
