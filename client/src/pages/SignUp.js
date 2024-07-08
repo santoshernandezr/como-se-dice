@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, lazy } from 'react'
 import user from '../images/user.png'
 
+const ProfilePictureGridModal = lazy(() => import('../components/signUp/profiilePictureGrid.jsx'));
+
+/**
+ * Component that handles the creation of the sign up form page. The page will ask the user to pick a profile picture,
+ * their name, username, email, and password.
+ * 
+ * @returns Component that handles the user signing up.
+ */
 function SignUp() {
     // Instantiating user states that will be used to submit the form.
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [profilePicture, setProfilePicture] = useState(user);
 
     // Instantiate the alert states.
     const [usernameAlert, setUsernameAlert] = useState(false);
@@ -36,7 +45,6 @@ function SignUp() {
         console.log("Username: " + username);
         console.log("Email: " + email);
         console.log("password: " + password);
-
     }
 
   return (
@@ -54,11 +62,15 @@ function SignUp() {
                         <form className="space-y-4 md:space-y-6" onSubmit={verifyNewAccount}>
 
                             <div className="flex items-center justify-center mt-5">
-                                <img id="profilePicture" src={user} className="w-24 h-24 mb-3 shadow-lg hover:opacity-40" alt=""></img>
+                                <img id="profilePicture" src={profilePicture} className="w-24 h-24 mb-3 shadow-lg hover:opacity-40" alt=""></img>
                             </div>  
 
-                            {/* <ProfilePictureGrid client:idle urls= { urlMap }></ProfilePictureGrid> */}
+                            {/* Grid that will show up when the user chooses his profile picture. */}
+                            <ProfilePictureGridModal 
+                                setProfilePicture={setProfilePicture}
+                            />
 
+                            {/* Input fields: Name, username, email, and password */}
                             <div>
                                 <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                 <input onChange={(e) => setName(e.target.value)} type="name" name="name" id="name" placeholder="Enter your name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required></input>
