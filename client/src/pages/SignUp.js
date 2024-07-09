@@ -32,7 +32,7 @@ function SignUp() {
 
     // Conditional useEffect. If the email is already used, set email alert.
     useEffect(() => {
-        if (email == "robertos.0917@gmail.com") {
+        if (email == "testing@gmail.com") {
             setEmailAlert(true);
         } else {
             setEmailAlert(false)
@@ -40,11 +40,6 @@ function SignUp() {
     }, [email])
 
     async function verifyNewAccount() {
-        console.log("Verifying new account");
-        console.log("Name: " + name);
-        console.log("Username: " + username);
-        console.log("Email: " + email);
-        console.log("password: " + password);
     }
 
   return (
