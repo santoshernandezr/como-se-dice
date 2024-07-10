@@ -4,7 +4,7 @@
  * @param array to be shuffled.
  * @returns randomized array.
  */
-export default function shuffle(array) {
+function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
   
     // While there remain elements to shuffle.
@@ -21,3 +21,5 @@ export default function shuffle(array) {
   
     return array;
   }
+
+module.exports = { shuffle }
