@@ -1,13 +1,15 @@
 const express = require('express');
-const { connectToDb, getDb } = require('./db');
 const { words } = require("./words");
 const { shuffle } = require('./shuffle');
+const { connectToDb, getDb } = require('./db');
+// This allows us to use the environment variables in our .env file: 'process.env.<KEY_VALUE>'
 require('dotenv').config();
 
 const port = process.env.PORT || 3001
 const app = express();
 
 // Database connection
+let db;
 connectToDb((err) => {
     if (!err) {
         app.listen(port, () => {
