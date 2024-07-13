@@ -1,10 +1,11 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom';
 
 /**
  * Component that is responsible for the creation of the modal that will appear if the user gets a new highscore.
  * 
- * @param { bestScore State } State of the users best score.
- * @param { playAgain function } Function that will be called when the play again button is pressed inside the modal.
+ * @param { Int } bestScore users best score.
+ * @param { Function } playAgain function that will be called when the play again button is pressed inside the modal.
  * @returns 
  */
 function HighScoreModal(props) {
@@ -27,9 +28,9 @@ function HighScoreModal(props) {
                     <p id="userOficialHighScore" className="mb-3 font-normal text-gray-700 dark:text-gray-400">New High Score: {bestScore} </p>
 
                     <div className="justify-center items-center flex space-x-28">
-                        <a href="/comosedice" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <NavLink to="/comosedice/menu" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Home
-                        </a>
+                        </NavLink>
                         <button onClick={() => playAgain()} id="modalPlayAgainButton" type="button" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Play again</button>
                     </div>
                 </div>

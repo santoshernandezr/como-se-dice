@@ -1,21 +1,13 @@
-import '../css/App.css';
-import HomeNavigationBar from '../components/common/NavigationBar.jsx';
-import WorkInProgress from '../components/common/WorkInProgress.jsx';
-import Footer from '../components/common/Footer.jsx';
+import "../css/App.css";
+import WorkInProgress from "../components/common/WorkInProgress.jsx";
 
 function ComingSoon() {
-    return (
-        <div className='h-full'>
-            {/* Navigatin bar */}
-            <HomeNavigationBar />
-
-            {/* Work in progress image  */}
-            <WorkInProgress />
-          
-            {/* Footer of the page */}
-            <Footer />
-        </div>
-      );
+  return (
+    <div className="h-full">
+      {/* Work in progress image  */}
+      <WorkInProgress />
+    </div>
+  );
 }
 
 export default ComingSoon;
