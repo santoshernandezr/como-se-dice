@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom'
  * 
  * @returns Choose game mode modal.
  */
-function ChooseGameModeModal() {
+export default function ChooseGameModeModal() {
   return (
     <div>
         {/* 
@@ -57,5 +57,3 @@ function ChooseGameModeModal() {
     </div>
   )
 }
-
-export default ChooseGameModeModal

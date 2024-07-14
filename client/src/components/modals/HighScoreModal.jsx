@@ -6,9 +6,9 @@ import { NavLink } from 'react-router-dom';
  * 
  * @param { int } bestScore users best score.
  * @param { function } playAgain function that will be called when the play again button is pressed inside the modal.
- * @returns 
+ * @returns High score modal for timed mode.
  */
-function HighScoreModal({bestScore, playAgain}) {
+export default function HighScoreModal({bestScore, playAgain}) {
   return (
     <div>
         {/* 
@@ -37,5 +37,3 @@ function HighScoreModal({bestScore, playAgain}) {
     </div>
   )
 }
-
-export default HighScoreModal

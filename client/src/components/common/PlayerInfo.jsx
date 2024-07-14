@@ -8,7 +8,7 @@ import user from '../../images/user.png'
  * @param { int } lives users lives.
  * @returns 
  */
-function PlayerInfo({score, lives}) {
+export default function PlayerInfo({score, lives}) {
   return (
     <div>
         <main>
@@ -29,5 +29,3 @@ function PlayerInfo({score, lives}) {
     </div>
   )
 }
-
-export default PlayerInfo

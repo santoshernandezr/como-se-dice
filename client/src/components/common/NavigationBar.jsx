@@ -10,7 +10,7 @@ import { useState } from 'react';
  * 
  * @returns the navigation bar that will be used in ALL pages of the pages.
  */
-function NavigationBar() {
+export default function NavigationBar() {
     const [open, setOpen] = useState(false)
 
     return (
@@ -63,5 +63,3 @@ function NavigationBar() {
         </div>
     );
 }
-
-export default NavigationBar;

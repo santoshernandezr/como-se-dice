@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
  * @param { string } body Body of the card.
  * @returns Daily challenge card component.
  */
-export default function CardWithGameMode({destination, title, body}) {
+export default function DailyChallengeCard({destination, title, body}) {
     return (
         <div className="h-[23vh] border-solid border border-sky-500 rounded-lg hover:border-dotted shadow-2xl">
             {/* The 'a' tag that will redirect the user to appropriate gamemode */}

@@ -5,7 +5,7 @@ import React from 'react'
  * 
  * @returns Footer for the Como se dice game.
  */
-function Footer() {
+export default function Footer() {
   return (
     <div>
         <footer className="bg-white dark:bg-gray-900 fixed bottom-0 w-screen">
@@ -22,5 +22,3 @@ function Footer() {
     </div>
   )
 }
-
-export default Footer

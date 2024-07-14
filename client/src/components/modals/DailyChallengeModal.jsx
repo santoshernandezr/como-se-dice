@@ -7,9 +7,9 @@ import { NavLink } from 'react-router-dom'
  * 
  * @param { int } score Users score. 
  * @param { string } time Users time.
- * @returns 
+ * @returns Daily challenge modal.
  */
-function DailyChallengeModal({score, time}) {
+export default function DailyChallengeModal({score, time}) {
   return (
     <div>
         {/* 
@@ -35,5 +35,3 @@ function DailyChallengeModal({score, time}) {
     </div>
   )
 }
-
-export default DailyChallengeModal
