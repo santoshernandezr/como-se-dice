@@ -4,14 +4,11 @@ import { NavLink } from 'react-router-dom';
 /**
  * Component that is responsible for the creation of the modal that will appear if the user gets a new highscore.
  * 
- * @param { Int } bestScore users best score.
- * @param { Function } playAgain function that will be called when the play again button is pressed inside the modal.
+ * @param { int } bestScore users best score.
+ * @param { function } playAgain function that will be called when the play again button is pressed inside the modal.
  * @returns 
  */
-function HighScoreModal(props) {
-    let bestScore = props.bestScore;
-    let playAgain = props.playAgain;
-    
+function HighScoreModal({bestScore, playAgain}) {
   return (
     <div>
         {/* 

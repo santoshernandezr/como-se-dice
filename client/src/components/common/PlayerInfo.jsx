@@ -4,14 +4,11 @@ import user from '../../images/user.png'
 /**
  * Component responsible for the creation of the users information, so their avatar image, score and lives count.
  * 
- * @param { Int } score users score.
- * @param { Int } lives users lives.
+ * @param { int } score users score.
+ * @param { int } lives users lives.
  * @returns 
  */
-function PlayerInfo(props) {
-    let score = props.score;
-    let lives = props.lives;
-
+function PlayerInfo({score, lives}) {
   return (
     <div>
         <main>

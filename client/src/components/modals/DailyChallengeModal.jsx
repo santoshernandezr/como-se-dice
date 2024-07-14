@@ -5,14 +5,11 @@ import { NavLink } from 'react-router-dom'
  * Component responsible for the creation of the modal that the user will get when they finish playing the
  * daily challenge. It will show them their score and time.
  * 
- * @param { Int } score users score. 
- * @param { String } time users time.
+ * @param { int } score Users score. 
+ * @param { string } time Users time.
  * @returns 
  */
-function DailyChallengeModal(props) {
-    let score = props.score
-    let time = props.time
-
+function DailyChallengeModal({score, time}) {
   return (
     <div>
         {/* 

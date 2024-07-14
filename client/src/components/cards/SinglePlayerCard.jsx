@@ -7,15 +7,11 @@ import ChooseGameModeModal from '../modals/ChooseGameModeModal.jsx';
  * user the option of choosing 'Normal mode' or 'Timed mode'. The user is then redirected to the 
  * appropriate game mode chosen by the user.
  * 
- * @param { title } - Title of the button card that will be used.
- * @param { body } - Body of the button.
+ * @param { string } title Title of the button card that will be used.
+ * @param { string } body Body of the button.
  * @returns Single player card.
  */
-export default function SinglePlayerCard(props) {
-
-    let title = props.title;
-    let body = props.body;
-
+export default function SinglePlayerCard({title, body}) {
     return (
         <div className="h-[23vh] border-solid border border-sky-500 rounded-lg hover:border-dotted shadow-2xl">
             {/* The button that will trigger the modal. */}

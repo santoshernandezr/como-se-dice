@@ -16,11 +16,9 @@ import snake from '../../images/comoSeDiceAvatars/snake.png';
 /**
  * Component that handles the creation of the modal and the profile picture grid.
  * 
- * @param { setProfilePicture } function that will allow us to set the state of the profile picture.
+ * @param { function } setProfilePicture Function that will allow us to set the state of the profile picture.
  */
-export default function Counter(props) {
-
-    let setProfilePicture = props.setProfilePicture;
+export default function Counter({setProfilePicture}) {
     const images = [camel, cow, gorilla, leopard, lion, mouse, octopus, panda, penguin, rabbit, shark, snake]
 
     let itemList=[];
