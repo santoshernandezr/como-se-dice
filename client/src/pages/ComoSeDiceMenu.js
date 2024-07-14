@@ -1,6 +1,6 @@
 import "../css/App.css";
-import SinglePlayer from "../components/SinglePlayerCard.jsx";
-import DailyChallenge from "../components/DailyChallengeCard.jsx";
+import SinglePlayer from "../components/cards/SinglePlayerCard.jsx";
+import DailyChallenge from "../components/cards/DailyChallengeCard.jsx";
 
 /**
  * Como se dice menu page.

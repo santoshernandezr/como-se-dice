@@ -1,5 +1,5 @@
 import React from 'react'
-import ChooseGameModeModal from './common/ChooseGameModeModal';
+import ChooseGameModeModal from '../modals/ChooseGameModeModal.jsx';
 
 /**
  * Component that handles the creation of the single player card in the ComoSeDiceMenu page.

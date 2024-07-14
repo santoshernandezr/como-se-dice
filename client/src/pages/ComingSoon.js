@@ -1,11 +1,22 @@
 import "../css/App.css";
-import WorkInProgress from "../components/common/WorkInProgress.jsx";
+import workInProgressImage from "../images/work-in-progress.png";
 
+/**
+ * Coming soon page. Will show this page whenever a page is in progress.
+ *
+ * @returns Coming soon page.
+ */
 function ComingSoon() {
   return (
     <div className="h-full">
       {/* Work in progress image  */}
-      <WorkInProgress />
+      <div className="pt-36 flex justify-center">
+        <img
+          className="animate-bounce w-1/4 h-1/4"
+          src={workInProgressImage}
+          alt=""
+        ></img>
+      </div>
     </div>
   );
 }

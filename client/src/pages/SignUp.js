@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import ProfilePictureGridModal from "../components/signUp/profiilePictureGrid.jsx";
+import ProfilePictureGridModal from "../components/common/profiilePictureGrid.jsx";
 import user from "../images/user.png";
 
 /**
