@@ -34,14 +34,6 @@ function TimedGameMode() {
   const [timeUpContainer, setTimeUpContainer] = useState(false);
   const [playAgainButton, setPlayAgainButton] = useState(false);
 
-  // Functions that will increment a state using the previous state.
-  function incrementScore() {
-    setScore((prevCount) => prevCount + 1);
-  }
-  function incrementIndex() {
-    setIndex((prevCount) => prevCount + 1);
-  }
-
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
     const result = await fetch("/api/getWords");
@@ -120,10 +112,6 @@ function TimedGameMode() {
     onExpire: () => updateScore(),
   });
 
-  const formatTime = (time) => {
-    return String(time).padStart(2, "0");
-  };
-
   /*
      Function that will determine if the users guess was correct or not.
      */
@@ -136,11 +124,11 @@ function TimedGameMode() {
       // Check if the users guess is correct. If so, increment the score.
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
-        incrementScore();
+        setScore((prevCount) => prevCount + 1);
       }
 
       // Always increment the index.
-      incrementIndex();
+      setIndex((prevCount) => prevCount + 1);
     }
   }
   return (
@@ -164,8 +152,8 @@ function TimedGameMode() {
                 {/* The count down timer. */}
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontSize: "30px" }}>
-                    <span>{formatTime(minutes)}</span>:
-                    <span>{formatTime(seconds)}</span>
+                    <span>{String(minutes).padStart(2, "0")}</span>:
+                    <span>{String(seconds).padStart(2, "0")}</span>
                   </div>
                 </div>
 

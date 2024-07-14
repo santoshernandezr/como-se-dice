@@ -10,12 +10,23 @@ import user from "../images/user.png";
  * @returns Component that handles the user signing up.
  */
 function SignUp() {
-  // Instantiating user states that will be used to submit the form.
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // Instantiating the form state. This state will contain an object with the form values.
+  const [form, setForm] = useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+
   const [profilePicture, setProfilePicture] = useState(user);
+
+  // Function that will be called when a field changes and update the forms correct values state.
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   // Instantiate the alert states.
   const [usernameAlert, setUsernameAlert] = useState(false);
@@ -23,23 +34,29 @@ function SignUp() {
 
   // Conditional useEffect. If the username is already used, set username alert.
   useEffect(() => {
-    if (username == "pollo") {
+    if (form.username == "pollo") {
       setUsernameAlert(true);
     } else {
       setUsernameAlert(false);
     }
-  }, [username]);
+  }, [form.username]);
 
   // Conditional useEffect. If the email is already used, set email alert.
   useEffect(() => {
-    if (email == "testing@gmail.com") {
+    if (form.email == "testing@gmail.com") {
       setEmailAlert(true);
     } else {
       setEmailAlert(false);
     }
-  }, [email]);
+  }, [form.email]);
 
-  async function verifyNewAccount() {}
+  async function verifyNewAccount(e) {
+    e.preventDefault();
+    console.log("name: " + form.name);
+    console.log("username: " + form.username);
+    console.log("email: " + form.email);
+    console.log("password: " + form.password);
+  }
 
   return (
     <div>
@@ -78,7 +95,7 @@ function SignUp() {
                     Name
                   </label>
                   <input
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={handleChange}
                     type="name"
                     name="name"
                     id="name"
@@ -96,7 +113,7 @@ function SignUp() {
                     Username
                   </label>
                   <input
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={handleChange}
                     type="username"
                     name="username"
                     id="username"
@@ -121,7 +138,7 @@ function SignUp() {
                     Email
                   </label>
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleChange}
                     type="email"
                     name="email"
                     id="email"
@@ -148,7 +165,7 @@ function SignUp() {
                     Password
                   </label>
                   <input
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handleChange}
                     type="password"
                     name="password"
                     id="password"

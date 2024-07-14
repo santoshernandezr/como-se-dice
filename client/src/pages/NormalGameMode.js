@@ -32,17 +32,6 @@ function NormalGameMode() {
   const [decidingContainer, setDecidingContainer] = useState(false);
   const [playAgainButton, setPlayAgainButton] = useState(false);
 
-  // Functions that will increment or decrement a state using the previous state.
-  function incrementScore() {
-    setScore((prevCount) => prevCount + 1);
-  }
-  function decrementLives() {
-    setLives((prevCount) => prevCount - 1);
-  }
-  function incrementIndex() {
-    setIndex((prevCount) => prevCount + 1);
-  }
-
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
     const result = await fetch("/api/getWords");
@@ -113,13 +102,12 @@ function NormalGameMode() {
       // Check if the users guess is correct. If so, increment the score and the index.
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
-        incrementScore();
-        incrementIndex();
+        setScore((prevCount) => prevCount + 1);
       } else {
         // If they users guess is incorrect, decrement the lives and increment the index.
-        decrementLives();
-        incrementIndex();
+        setLives((prevCount) => prevCount - 1);
       }
+      setIndex((prevCount) => prevCount + 1);
     }
   }
   return (

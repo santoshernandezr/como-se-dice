@@ -7,10 +7,19 @@ import { NavLink } from "react-router-dom";
  * @returns Sign in page.
  */
 function SignIn() {
-  // Instantiate the email state.
-  const [email, setEmail] = useState("");
-  // Instantiate the password state.
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Function that will be called when a field changes and update the forms correct values state.
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   // Instantiate the alert state, which will be used to show the user if their email and password do not match.
   const [alert, setAlert] = useState(false);
 
@@ -18,7 +27,10 @@ function SignIn() {
   async function validateNewUser(e) {
     e.preventDefault();
 
-    console.log("Email: " + email + " password: " + password);
+    console.log("Email: " + form.email + " password: " + form.password);
+    if (form.password == "hello") {
+      console.log("They match");
+    }
   }
 
   return (
@@ -44,7 +56,7 @@ function SignIn() {
                     Email
                   </label>
                   <input
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleChange}
                     id="email"
                     type="email"
                     name="email"
@@ -62,9 +74,10 @@ function SignIn() {
                     Password
                   </label>
                   <input
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handleChange}
                     id="password"
                     type="password"
+                    name="password"
                     placeholder="Enter your password"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required

@@ -26,14 +26,6 @@ function DailyChallengeMode() {
   const [index, setIndex] = useState(0);
   const [time, setTime] = useState(0);
 
-  // Functions that will increment a state using the previous state.
-  function incrementScore() {
-    setScore((prevCount) => prevCount + 1);
-  }
-  function incrementIndex() {
-    setIndex((prevCount) => prevCount + 1);
-  }
-
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
     const result = await fetch("/api/dailyChallengeWords");
@@ -82,11 +74,11 @@ function DailyChallengeMode() {
       // Check if the users guess is correct. If so, increment the score.
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
-        incrementScore();
+        setScore((prevCount) => prevCount + 1);
       }
 
       // Always increment the index.
-      incrementIndex();
+      setIndex((prevCount) => prevCount + 1);
     }
   }
 
