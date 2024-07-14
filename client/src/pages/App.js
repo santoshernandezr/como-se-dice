@@ -14,7 +14,7 @@ import ComingSoon from "./ComingSoon";
 import DailyChallengeMode from "./DailyChallengeMode";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import RootLayout from "../layouts/RootLayout";
+import Layout from "../layouts/Layout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +23,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<MainMenu />} />
 
       {/* Parent route. */}
-      <Route path="/comosedice" element={<RootLayout />}>
+      <Route path="/comosedice" element={<Layout />}>
         {/* Child routes of /comosedice path. */}
         <Route path="menu" element={<ComoSeDiceMenu />} />
         <Route path="dailychallenge" element={<DailyChallengeMode />} />
