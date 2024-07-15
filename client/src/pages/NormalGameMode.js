@@ -23,14 +23,15 @@ function NormalGameMode() {
   const [lives, setLives] = useState(3);
   const [index, setIndex] = useState(0);
 
-  // Instantiate the components states.
-  // Each component that can be shown or hidden depending if the user wins or loses.
-  const [nextWordContainer, setNextWordContainer] = useState(true);
-  const [guessField, setGuessField] = useState(true);
-  const [guessButton, setGuessButton] = useState(true);
-
-  const [decidingContainer, setDecidingContainer] = useState(false);
-  const [playAgainButton, setPlayAgainButton] = useState(false);
+  /* 
+    Instantiate two states, 'gameContainers' and 'decideGameContainers'.
+    - 'gameContainers' will be the state of the game containers. These are the containers that will be shown when the user is playing the games. Such as
+      'nextWordContainer', 'guessField', and 'guessButton'.
+    - 'decideGameContainers' will be the state of the deciding game containers. These are the containers that will be shown when the user is done playing
+      the game. Such as 'timeUpContainer' and 'playAgainButton'.
+  */
+  const [gameContainers, setGameContainers] = useState(true);
+  const [decideGameContainers, setDecideGameContainers] = useState(false);
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
@@ -50,12 +51,9 @@ function NormalGameMode() {
     */
   async function playAgain() {
     fetchWords();
-    setNextWordContainer(true);
-    setGuessField(true);
-    setGuessButton(true);
 
-    setDecidingContainer(false);
-    setPlayAgainButton(false);
+    setGameContainers(true);
+    setDecideGameContainers(false);
     document.getElementById("guessField").value = "";
 
     setIndex(0);
@@ -81,12 +79,8 @@ function NormalGameMode() {
      */
   useEffect(() => {
     if (score == 10 || lives == 0) {
-      setNextWordContainer(false);
-      setGuessField(false);
-      setGuessButton(false);
-
-      setDecidingContainer(true);
-      setPlayAgainButton(true);
+      setGameContainers(false);
+      setDecideGameContainers(true);
     }
   }, [score, lives]);
 
@@ -116,15 +110,15 @@ function NormalGameMode() {
       <PlayerInfo score={score} lives={lives} />
 
       {/* 
-            Container that contains two heading containers. 
-            The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
-            The second container, 'decidingContainer', contains the win or lose message the user will see at the end of the game.
+        Container that contains two heading containers. 
+        The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
+        The second container, 'decidingContainer', contains the win or lose message the user will see at the end of the game.
         */}
       <div className="flex justify-center">
         <h2
           id="nextWordContainer"
           className="w-1/4 flex justify-center text-center"
-          style={{ display: nextWordContainer ? "inline" : "none" }}
+          style={{ display: gameContainers ? "inline" : "none" }}
         >
           ¿Cómo Se Dice&nbsp;
           <p className="font-bold">
@@ -134,21 +128,21 @@ function NormalGameMode() {
         <h2
           id="decidingContainer"
           className="w-1/4 flex justify-center text-center"
-          style={{ display: decidingContainer ? "inline" : "none" }}
+          style={{ display: decideGameContainers ? "inline" : "none" }}
         >
           {score == 10 ? "You win!" : "You ran out of lives, try again."}
         </h2>
       </div>
 
       {/* 
-            This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
-            For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
+        This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
+        For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
         */}
       <form onSubmit={determineInput}>
         {/* Input field for the users guess. */}
         <div className="flex justify-center">
           <input
-            style={{ display: guessField ? "inline" : "none" }}
+            style={{ display: gameContainers ? "inline" : "none" }}
             onChange={(e) => setUserGuess(e.target.value)}
             autoComplete="one-time-code"
             type="text"
@@ -158,13 +152,13 @@ function NormalGameMode() {
         </div>
 
         {/* 
-                Container that contains two buttons.
-                First button is the guessButton which the user can press to guess the word, which will be shown during the game.
-                Second button is the playAgainButton which is the button that the user will press if they want to play again, which will be shown at the end of the game.
+            Container that contains two buttons.
+            First button is the guessButton which the user can press to guess the word, which will be shown during the game.
+            Second button is the playAgainButton which is the button that the user will press if they want to play again, which will be shown at the end of the game.
             */}
         <div className="flex justify-center">
           <button
-            style={{ display: guessButton ? "inline" : "none" }}
+            style={{ display: gameContainers ? "inline" : "none" }}
             onClick={determineInput}
             id="guessButton"
             type="button"
@@ -174,7 +168,7 @@ function NormalGameMode() {
           </button>
 
           <button
-            style={{ display: playAgainButton ? "inline" : "none" }}
+            style={{ display: decideGameContainers ? "inline" : "none" }}
             onClick={() => {
               playAgain();
             }}

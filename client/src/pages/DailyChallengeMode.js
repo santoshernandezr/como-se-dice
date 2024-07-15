@@ -41,15 +41,11 @@ function DailyChallengeMode() {
   // Instantiate the constants used for the 'useStopwatch'.
   const { seconds, minutes, pause } = useStopwatch({ autoStart: true });
 
-  const formatTime = (time) => {
-    return String(time).padStart(2, "0");
-  };
-
   /*
-     Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
-     update the state of the 'currentWord' using the new value of index, and clear the guess field. Else, pause the stopwatch,
-     set the time state to the stopwatch time, and show the modal with the users score and time.
-     */
+    Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
+    update the state of the 'currentWord' using the new value of index, and clear the guess field. Else, pause the stopwatch,
+    set the time state to the stopwatch time, and show the modal with the users score and time.
+    */
   useEffect(() => {
     if (index < dailyWords.length) {
       setCurrentWord(dailyWords[index]);
@@ -63,8 +59,8 @@ function DailyChallengeMode() {
   }, [index, dailyWords.length, dailyWords]);
 
   /*
-     Function that will determine if the users guess was correct or not.
-     */
+    Function that will determine if the users guess was correct or not.
+    */
   async function determineInput(e) {
     // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
     e.preventDefault();
@@ -103,8 +99,8 @@ function DailyChallengeMode() {
                 {/* The count down timer. */}
                 <div style={{ textAlign: "center" }}>
                   <div id="stopTime" style={{ fontSize: "30px" }}>
-                    <span>{formatTime(minutes)}</span>:
-                    <span>{formatTime(seconds)}</span>
+                    <span>{String(minutes).padStart(2, "0")}</span>:
+                    <span>{String(seconds).padStart(2, "0")}</span>
                   </div>
                 </div>
 
@@ -123,8 +119,8 @@ function DailyChallengeMode() {
       </div>
 
       {/* 
-            Container that contains heading containers. 
-            The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
+        Container that contains heading containers. 
+        The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
         */}
       <div className="flex justify-center">
         <h2
@@ -147,8 +143,8 @@ function DailyChallengeMode() {
       <DailyChallengeModal score={score} time={time} />
 
       {/* 
-            This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
-            For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
+        This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
+        For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
         */}
       <form onSubmit={determineInput}>
         {/* Input field for the users guess. */}

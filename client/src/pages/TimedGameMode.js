@@ -25,14 +25,15 @@ function TimedGameMode() {
   const [bestScore, setBestScore] = useState(2);
   const [index, setIndex] = useState(0);
 
-  // Instantiate the components states.
-  // Each component that can be shown or hidden depending if the user has ran out of time or not.
-  const [nextWordContainer, setNextWordContainer] = useState(true);
-  const [guessField, setGuessField] = useState(true);
-  const [guessButton, setGuessButton] = useState(true);
-
-  const [timeUpContainer, setTimeUpContainer] = useState(false);
-  const [playAgainButton, setPlayAgainButton] = useState(false);
+  /* 
+     Instantiate two states, 'gameContainers' and 'decideGameContainers'.
+     - 'gameContainers' will be the state of the game containers. These are the containers that will be shown when the user is playing the games. Such as
+       'nextWordContainer', 'guessField', and 'guessButton'.
+     - 'decideGameContainers' will be the state of the deciding game containers. These are the containers that will be shown when the user is done playing
+       the game. Such as 'timeUpContainer' and 'playAgainButton'.
+    */
+  const [gameContainers, setGameContainers] = useState(true);
+  const [decideGameContainers, setDecideGameContainers] = useState(false);
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
@@ -47,20 +48,16 @@ function TimedGameMode() {
   }, []);
 
   /* 
-    Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
-    words to use for the new game, reset the board, reset the state of the values to their original state, and restart the timer.
-    */
+     Async function that will be called when the user clicks the 'play again' button. Will call the server to get a new set of 
+     words to use for the new game, reset the board, reset the state of the values to their original state, and restart the timer.
+     */
   async function playAgain() {
     fetchWords();
 
     document.getElementById("timedGameModeModal").close();
 
-    setNextWordContainer(true);
-    setGuessField(true);
-    setGuessButton(true);
-
-    setTimeUpContainer(false);
-    setPlayAgainButton(false);
+    setGameContainers(true);
+    setDecideGameContainers(false);
 
     setIndex(0);
     setScore(0);
@@ -93,12 +90,8 @@ function TimedGameMode() {
       setBestScore(score);
       document.getElementById("timedGameModeModal").showModal();
     } else {
-      setNextWordContainer(false);
-      setGuessField(false);
-      setGuessButton(false);
-
-      setTimeUpContainer(true);
-      setPlayAgainButton(true);
+      setGameContainers(false);
+      setDecideGameContainers(true);
     }
   }
 
@@ -112,9 +105,7 @@ function TimedGameMode() {
     onExpire: () => updateScore(),
   });
 
-  /*
-     Function that will determine if the users guess was correct or not.
-     */
+  // Function that will determine if the users guess was correct or not.
   async function determineInput(e) {
     // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
     e.preventDefault();
@@ -186,7 +177,7 @@ function TimedGameMode() {
         <h2
           id="nextWordContainer"
           className="w-1/4 flex justify-center text-center"
-          style={{ display: nextWordContainer ? "inline" : "none" }}
+          style={{ display: gameContainers ? "inline" : "none" }}
         >
           ¿Cómo Se Dice&nbsp;
           <p className="font-bold">
@@ -196,7 +187,7 @@ function TimedGameMode() {
         <h2
           id="timeUpContainer"
           className="w-1/4 flex justify-center text-center"
-          style={{ display: timeUpContainer ? "inline" : "none" }}
+          style={{ display: decideGameContainers ? "inline" : "none" }}
         >
           Time up!
         </h2>
@@ -213,7 +204,7 @@ function TimedGameMode() {
         {/* Input field for the users guess. */}
         <div className="flex justify-center">
           <input
-            style={{ display: guessField ? "inline" : "none" }}
+            style={{ display: gameContainers ? "inline" : "none" }}
             onChange={(e) => setUserGuess(e.target.value)}
             autoComplete="one-time-code"
             type="text"
@@ -225,7 +216,7 @@ function TimedGameMode() {
         {/* Buttons that handle the submittion of the users guess. */}
         <div className="flex justify-center">
           <button
-            style={{ display: guessButton ? "inline" : "none" }}
+            style={{ display: gameContainers ? "inline" : "none" }}
             onClick={determineInput}
             id="timedModeGuessButton"
             type="button"
@@ -234,7 +225,7 @@ function TimedGameMode() {
             Guess
           </button>
           <button
-            style={{ display: playAgainButton ? "inline" : "none" }}
+            style={{ display: decideGameContainers ? "inline" : "none" }}
             onClick={() => playAgain()}
             id="timedModePlayAgainButton"
             type="button"
