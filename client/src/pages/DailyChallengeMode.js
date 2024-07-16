@@ -28,7 +28,7 @@ function DailyChallengeMode() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/api/dailyChallengeWords");
+    const result = await fetch("/words/dailyChallengeWords");
     const body = await result.json();
     setDailyWords(body);
   }

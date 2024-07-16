@@ -35,7 +35,7 @@ function NormalGameMode() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/api/getWords");
+    const result = await fetch("/words/normalGameWords");
     const body = await result.json();
     setWords(body);
   }
