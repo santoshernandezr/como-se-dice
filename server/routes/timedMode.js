@@ -14,13 +14,12 @@ connectToDb((err) => {
  * the users username, look them up, and update 'bestScore' field.
  */
 timedModeRouter.put("/updateBestScore/:username", (req, res) => {
-  const userBestScore = req.body.bestScore;
   db.collection("Users")
     .updateOne(
       // Query that looks for the user.
       { username: req.params.username },
       // Field to be updated
-      { $set: { timedGameMode: { bestScore: userBestScore } } }
+      { $set: { timedGameMode: { bestScore: req.body.score } } }
     )
     .then(() => {
       res.status(200).json({ msg: "Timed mode best score updated." });

@@ -10,6 +10,8 @@ require("dotenv").config();
 
 const port = process.env.PORT || 3001;
 const app = express();
+
+// Allows us to read the json that's incoming from the clients request.
 app.use(express.json());
 
 // Telling our app to use these routes.

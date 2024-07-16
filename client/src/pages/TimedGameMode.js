@@ -1,7 +1,7 @@
 import "../css/App.css";
 import React, { useEffect, useState } from "react";
 import { useTimer } from "react-timer-hook";
-import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
+import { isAlphanumeric, PUTOptions } from "../typescript/HelperFunctions.ts";
 import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
 import user from "../images/user.png";
@@ -81,13 +81,16 @@ function TimedGameMode() {
   /*
      Function that will be called when the timer is up. This will check the state of 'score' and 'bestScore'. If the 
      score is greater than the best score, then celebrate and show the 'timedGameModeModal' modal. If the score is not
-     greater than the best score hide the 'nextWordContainer' container, 'timedModeGuessField' field, 'timedModeGuessButton' field,
-     and show the 'timeUpContainer' container, and 'timedModePlayAgainButton' button.
+     greater than the best score hide then hide the game containers and show the decide game containers.
      */
   function updateScore() {
     if (score > bestScore) {
       confetti();
       setBestScore(score);
+
+      // FIXME: Update this to be the actual username of a user instead of hard coded value, 'pollo'.
+      fetch("/timedMode/updateBestScore/pollo", PUTOptions({ score: score }));
+
       document.getElementById("timedGameModeModal").showModal();
     } else {
       setGameContainers(false);
@@ -169,9 +172,9 @@ function TimedGameMode() {
       </div>
 
       {/* 
-            Container that contains two heading containers. 
-            The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
-            The second container, 'timeUpContainer', contains the time up message the user will see at the end of the game if they lose.
+        Container that contains two heading containers. 
+        The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
+        The second container, 'timeUpContainer', contains the time up message the user will see at the end of the game if they lose.
         */}
       <div className="flex justify-center">
         <h2
@@ -197,8 +200,8 @@ function TimedGameMode() {
       <HighScoreModal bestScore={bestScore} playAgain={playAgain} />
 
       {/* 
-            This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
-            For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
+        This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
+        For some reason the 'onkeydown', 'onkeyup' and other variations of binding does not work. 
         */}
       <form onSubmit={determineInput}>
         {/* Input field for the users guess. */}
