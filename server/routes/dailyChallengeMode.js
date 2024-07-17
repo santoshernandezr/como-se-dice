@@ -1,7 +1,7 @@
 const express = require("express");
-const { words } = require("../helpers/words");
-const { shuffle } = require("../helpers/shuffle");
 const { connectToDb, getDb } = require("../helpers/db");
+const { words } = require("../helpers/words");
+const { shuffle } = require("../helpers/helperFunctions");
 const dailyChallengeModeRouter = express.Router();
 
 let db;
@@ -33,7 +33,6 @@ dailyChallengeModeRouter.get("/getWords", (req, res) => {
  */
 dailyChallengeModeRouter.post("/updateWords", (req, res) => {
   shuffle(words);
-  console.log("Words shuffled: " + words.slice(0, 10));
   db.collection("DailyChallengeWords")
     .updateOne(
       { words: { $size: 10 } },

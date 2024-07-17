@@ -1,6 +1,6 @@
 const express = require("express");
 const { words } = require("../helpers/words");
-const { shuffle } = require("../helpers/shuffle");
+const { shuffle } = require("../helpers/helperFunctions");
 const wordsRouter = express.Router();
 
 /**
