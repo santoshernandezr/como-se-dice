@@ -4,6 +4,7 @@ const { connectToDb, getDb } = require("./helpers/db");
 // Instantiating the external routes that are in '/routes' directory.
 const wordsRoute = require("./routes/words");
 const timedModeRouter = require("./routes/timedMode");
+const dailyChallengeModeRouter = require("./routes/dailyChallengeMode");
 
 // This allows us to use the environment variables in our .env file: 'process.env.<KEY_VALUE>'
 require("dotenv").config();
@@ -17,6 +18,7 @@ app.use(express.json());
 // Telling our app to use these routes.
 app.use("/words", wordsRoute);
 app.use("/timedMode", timedModeRouter);
+app.use("/dailyMode", dailyChallengeModeRouter);
 
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
