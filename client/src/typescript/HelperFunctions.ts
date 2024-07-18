@@ -1,3 +1,4 @@
+
 /**
  * Validate strings are alphanumeric.
  * 
@@ -22,5 +23,17 @@ export function PUTOptions(body) {
         },
         body: JSON.stringify(body),
     }
+}
+
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+/**
+ * Function that will turn the enuemerated date from the date object into a day of the week.
+ * 
+ * @param enumeratedDay Enumerated day coming from the date object.
+ * @returns Day of the week value.
+ */
+export function getDayOfTheWeek(enumeratedDay) {
+    return days[enumeratedDay - 1];
 }
 

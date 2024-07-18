@@ -131,9 +131,9 @@ function TimedGameMode() {
       <div>
         <main>
           {/* The users information. Users avatar, username, lives and score count. */}
-          <div className="flex flex-col items-center">
+          <div className="mt-8 flex flex-col items-center">
             <div className="w-full max-w-sm ">
-              <div className="flex flex-col items-center pb-10">
+              <div className="flex flex-col items-center pb-4">
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
