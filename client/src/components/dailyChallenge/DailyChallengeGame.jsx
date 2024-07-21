@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { isAlphanumeric } from "../../typescript/HelperFunctions.ts";
+import { isAlphanumeric, POSTOptions } from "../../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
 import user from "../../images/user.png";
 
-function DailyChallengeGame() {
+function DailyChallengeGame({userData}) {
   // Instantiate the words states.
   // Daily words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [dailyWords, setDailyWords] = useState("loading");
@@ -22,6 +22,11 @@ function DailyChallengeGame() {
     const result = await fetch("/dailyMode/getWords");
     const body = await result.json();
     setDailyWords(body);
+  }
+
+  // Asyn method to call server to update the users fields accordingly.
+  async function gameFinished(userScore, userTime, username) {
+    fetch("/dailyMode/updateUser/" + username, POSTOptions({score: userScore, time: userTime }))
   }
 
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
@@ -45,6 +50,7 @@ function DailyChallengeGame() {
       pause();
       let stopWatchTime = document.getElementById("stopTime").textContent;
       setTime(stopWatchTime);
+      gameFinished(score, stopWatchTime, userData);
       document.getElementById("dailyChallengeModal").showModal();
     }
   }, [index, dailyWords.length, dailyWords]);
@@ -83,7 +89,7 @@ function DailyChallengeGame() {
                   src={user}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
-                  pollo.io
+                  {userData}
                 </h5>
 
                 {/* The count down timer. */}

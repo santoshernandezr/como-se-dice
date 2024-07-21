@@ -1,3 +1,20 @@
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const POSTOptions = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
+
 /**
  * Will randomize an array so we can get a random array everytime.
  *
@@ -90,4 +107,43 @@ function formatDate(dateObject) {
   );
 }
 
-module.exports = { shuffle, createCronDatetime, formatDate };
+/**
+ * Function that will get todays date and puts it in the following format:
+ * <day>, <month>/<date>: example: Saturday, 7/20
+ * @returns Todays date in <day>, <month>/<date> format.
+ */
+function getDate() {
+  const date = new Date();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const currentDate =
+    days[date.getDay()] + ", " + month.toString() + "/" + day.toString();
+  return currentDate;
+}
+
+/**
+ * Function that will get yesterdays date and put it in the following format:
+ * <day>, <month>/<date>: example: Saturday, 7/20
+ * @returns Yesterdays date in <day>, <month>/<date> format.
+ */
+function getPreviousDay() {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const previousDay =
+    days[date.getDay()] + ", " + month.toString() + "/" + day.toString();
+
+  return previousDay;
+}
+
+module.exports = {
+  shuffle,
+  createCronDatetime,
+  formatDate,
+  getDate,
+  getPreviousDay,
+  POSTOptions,
+};

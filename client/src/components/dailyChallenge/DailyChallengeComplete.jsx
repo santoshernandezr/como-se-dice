@@ -1,17 +1,23 @@
 import React from 'react'
-// import userData from "./user.json"
-import userData from "./userNew.json"
 import Emoji from "../common/Emoji.jsx"
-import { getDayOfTheWeek } from '../../typescript/HelperFunctions.ts';
 
 /**
  * Component responsible for the creation of what the user will see when they have completed the daily challenge. 
  * They will get a message saying they completed the daily challenge, their stats, and their previous 5 daily challenge stats.
  * @returns DailyChallengeComplete component.
  */
-function DailyChallengeComplete() {
-    const date = new Date();
-    const history = userData.dailyChallengeMode.history;
+function DailyChallengeComplete({userData}) {
+    const allHistory = userData.dailyChallengeMode.history // Gets the entire history of the user
+    const currentDay = allHistory[0]; // Gets the first element of the users history which will be the most current daily challenge they completed.
+
+    let history;
+    // Sometimes the database gets wonky and the length gets longer than 6, so we just want to make sure we only get the past 5 days, i.e. index 1-6.
+    if (allHistory.length > 6) {
+        history = allHistory.slice(1, 6)
+    } else {
+        history = allHistory.slice(1, allHistory.length)
+    }
+
     let historyList = [];
 
     // Iterate through the history of the users daily challenges, and insert every instance into an individual 'li' tag.
@@ -40,9 +46,9 @@ function DailyChallengeComplete() {
     <div className="flex flex-col items-center">
         {/* Heading conntainer daily challenge completion and stats. */}
         <h1 className="mt-1 font-extrabold leading-none tracking-tight lg:text-4xl dark:text-black">Daily challenge completed</h1>
-        <h1 className="mt-2 font-bold">{getDayOfTheWeek(date.getDay())}, {date.getMonth()}/{date.getDate()} stats:</h1>
-        <h1 className="font-bold">Score: {userData.dailyChallengeMode.score}</h1>
-        <h1 className="font-bold">Time: {userData.dailyChallengeMode.time}</h1>
+        <h1 className="mt-2 font-bold">{currentDay.date} stats:</h1>
+        <h1 className="font-bold">Score: {currentDay.score}</h1>
+        <h1 className="font-bold">Time: {currentDay.time}</h1>
 
         <p className="mb-4 mt-2 font-normal text-gray-500 lg:text-l sm:px-16 xl:px-48 dark:text-black">Come back tomorrow for another fun daily challenge <Emoji symbol="😃"></Emoji></p>
 
