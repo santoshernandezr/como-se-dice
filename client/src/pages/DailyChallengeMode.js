@@ -1,11 +1,12 @@
 import "../css/App.css";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useStopwatch } from "react-timer-hook";
 import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../components/modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
-import user from "../images/user.png";
+import userPicture from "../images/user.png";
+import UserContext from "./UserContext";
 
 /**
  * Daily challenge page.
@@ -15,6 +16,9 @@ import user from "../images/user.png";
  * @returns Daily challenge page.
  */
 function DailyChallengeMode() {
+  // Getting the user context.
+  const { user } = useContext(UserContext);
+
   // Instantiate the words states.
   // Daily words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [dailyWords, setDailyWords] = useState("loading");
@@ -90,10 +94,10 @@ function DailyChallengeMode() {
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
-                  src={user}
+                  src={userPicture}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
-                  pollo.io
+                  {user.username}
                 </h5>
 
                 {/* The count down timer. */}

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { POSTOptions } from "../typescript/HelperFunctions.ts";
+import { NavLink, useNavigate } from "react-router-dom";
+import UserContext from "./UserContext.js";
 
 /**
  * Sign in page. Will ask the user to input their email and password and it'll try to sign them into the game.
@@ -7,10 +9,10 @@ import { NavLink } from "react-router-dom";
  * @returns Sign in page.
  */
 function SignIn() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  // Login method that will set the user context to the user we retreive from the database.
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ email: "", password: "" });
 
   // Function that will be called when a field changes and update the forms correct values state.
   const handleChange = (e) => {
@@ -24,12 +26,18 @@ function SignIn() {
   const [alert, setAlert] = useState(false);
 
   // Method that will make the post call to the backend to get see if we can register the user.
-  async function validateNewUser(e) {
+  async function ValidateNewUser(e) {
     e.preventDefault();
+    const result = await fetch("/users/signin", POSTOptions(form));
+    const body = await result.json();
 
-    console.log("Email: " + form.email + " password: " + form.password);
-    if (form.password == "hello") {
-      console.log("They match");
+    if (body.msg == "Login successful") {
+      console.log("I am successful");
+      console.log("Player: " + body.player.name);
+      navigate("/comosedice/menu");
+      login(body.player);
+    } else {
+      setAlert(true);
     }
   }
 
@@ -46,7 +54,7 @@ function SignIn() {
               {/* Form that will take in the users wmail and password. */}
               <form
                 className="space-y-4 md:space-y-6"
-                onSubmit={validateNewUser}
+                onSubmit={ValidateNewUser}
               >
                 <div>
                   <label

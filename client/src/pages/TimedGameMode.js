@@ -1,10 +1,11 @@
 import "../css/App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useTimer } from "react-timer-hook";
 import { isAlphanumeric, PUTOptions } from "../typescript/HelperFunctions.ts";
 import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
-import user from "../images/user.png";
+import userPicture from "../images/user.png";
+import UserContext from "./UserContext";
 
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their
@@ -14,6 +15,17 @@ import user from "../images/user.png";
  * @returns Timed game mode page.
  */
 function TimedGameMode() {
+  const { user, updateField } = useContext(UserContext);
+  console.log("Name: " + user.name);
+  console.log("Email: " + user.email);
+  console.log("Timed game mode: " + user.timedGameMode.bestScore);
+  console.log("Username: " + user.username);
+  console.log("Password: " + user.password);
+  console.log(
+    "Daily Challenge Mode: " + user.dailyChallengeMode.dailyChallengeCompleted
+  );
+  console.log("Daily Challenge Mode: " + user.dailyChallengeMode.history);
+
   // Instantiate the words states.
   // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [words, setWords] = useState("loading");
@@ -91,6 +103,8 @@ function TimedGameMode() {
       // FIXME: Update this to be the actual username of a user instead of hard coded value, 'pollo'.
       fetch("/timedMode/updateBestScore/pollo", PUTOptions({ score: score }));
 
+      updateField("timedGameMode.bestScore", score);
+
       document.getElementById("timedGameModeModal").showModal();
     } else {
       setGameContainers(false);
@@ -137,10 +151,10 @@ function TimedGameMode() {
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
-                  src={user}
+                  src={userPicture}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
-                  pollo.io
+                  {user.username}
                 </h5>
 
                 {/* The count down timer. */}
@@ -162,7 +176,7 @@ function TimedGameMode() {
                     id="timedModeBestScore"
                     className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black"
                   >
-                    Best score: {bestScore}
+                    Best score: {user.timedGameMode.bestScore}
                   </p>
                 </div>
               </div>

@@ -4,6 +4,8 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
+import { useState } from "react";
+import UserContext from "./UserContext";
 
 // These are all the pages that will be used for the game. All the files that are in ./pages should be here as well.
 import MainMenu from "./MainMenu";
@@ -22,7 +24,15 @@ const router = createBrowserRouter(
       {/* Main route. */}
       <Route path="/" element={<MainMenu />} />
 
-      {/* Parent route. */}
+      {/* Their own routes */}
+      <Route path="signin" element={<SignIn />} />
+      <Route path="signup" element={<SignUp />} />
+
+      {/* 
+        Parent route. 
+        These routes will be protected routes. Meaning that they will only be able to be viewed by users that are logged in.
+        In the 'Layout' component we will check if the user state exists. If it is then we will get to these routes, otherwise send them to the sign in page.
+       */}
       <Route path="/comosedice" element={<Layout />}>
         {/* Child routes of /comosedice path. */}
         <Route path="menu" element={<ComoSeDiceMenu />} />
@@ -31,16 +41,41 @@ const router = createBrowserRouter(
         <Route path="timedgamemode" element={<TimedGameMode />} />
         <Route path="comingSoon" element={<ComingSoon />} />
       </Route>
-
-      {/* Their own routes */}
-      <Route path="signin" element={<SignIn />} />
-      <Route path="signup" element={<SignUp />} />
     </Route>
   )
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  // Instantiate the user state that will be the user context.
+  const [user, setUser] = useState(null);
+
+  // Function to be called to set the user in the 'sign in' page.
+  const login = (userData) => {
+    setUser(userData);
+  };
+
+  // Function to be called to set the user to null in the 'sign out' page.
+  const logout = () => {
+    setUser(null);
+  };
+
+  const updateField = (field, value) => {
+    console.log("Updating field: " + field);
+    console.log("With value: " + value);
+    setUser({
+      ...user,
+      timedGameMode: {
+        bestScore: value,
+      },
+    });
+  };
+
+  return (
+    // Wrapping the Router Provider by the User Context Provider so that all the routes have access to the user context.
+    <UserContext.Provider value={{ user, login, logout, updateField }}>
+      <RouterProvider router={router} />
+    </UserContext.Provider>
+  );
 }
 
 export default App;
