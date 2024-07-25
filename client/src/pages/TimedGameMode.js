@@ -15,26 +15,16 @@ import UserContext from "./UserContext";
  * @returns Timed game mode page.
  */
 function TimedGameMode() {
-  const { user, updateField } = useContext(UserContext);
-  console.log("Name: " + user.name);
-  console.log("Email: " + user.email);
-  console.log("Timed game mode: " + user.timedGameMode.bestScore);
-  console.log("Username: " + user.username);
-  console.log("Password: " + user.password);
-  console.log(
-    "Daily Challenge Mode: " + user.dailyChallengeMode.dailyChallengeCompleted
-  );
-  console.log("Daily Challenge Mode: " + user.dailyChallengeMode.history);
+  const { user, updateTimedModeBestScore } = useContext(UserContext);
 
   // Instantiate the words states.
   // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [words, setWords] = useState("loading");
   const [currentWord, setCurrentWord] = useState(words[0]);
 
-  // Instantiate the users states. Their guess, score, best score, and index.
+  // Instantiate the users states. Their guess, score, and index.
   const [userGuess, setUserGuess] = useState("");
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(2);
   const [index, setIndex] = useState(0);
 
   /* 
@@ -64,16 +54,21 @@ function TimedGameMode() {
      words to use for the new game, reset the board, reset the state of the values to their original state, and restart the timer.
      */
   async function playAgain() {
+    // Fetch new words for new game.
     fetchWords();
 
+    // Close the modal that shows the user their new highscore.
     document.getElementById("timedGameModeModal").close();
 
+    // Reset the containers. Show the game and hide the deciding containers.
     setGameContainers(true);
     setDecideGameContainers(false);
 
+    // Reset the game to start at the first word of the new words fetched and set the score to 0.
     setIndex(0);
     setScore(0);
 
+    // Reset the timer to 60 seconds.
     const time = new Date();
     time.setSeconds(time.getSeconds() + 60);
     restart(time);
@@ -96,14 +91,16 @@ function TimedGameMode() {
      greater than the best score hide then hide the game containers and show the decide game containers.
      */
   function updateScore() {
-    if (score > bestScore) {
+    if (score > user.timedGameMode.bestScore) {
       confetti();
-      setBestScore(score);
 
       // FIXME: Update this to be the actual username of a user instead of hard coded value, 'pollo'.
-      fetch("/timedMode/updateBestScore/pollo", PUTOptions({ score: score }));
+      fetch(
+        "/timedMode/updateBestScore/" + user.username,
+        PUTOptions({ score: score })
+      );
 
-      updateField("timedGameMode.bestScore", score);
+      updateTimedModeBestScore(score);
 
       document.getElementById("timedGameModeModal").showModal();
     } else {
@@ -211,7 +208,10 @@ function TimedGameMode() {
       </div>
 
       {/* Modal that the user will see if they get a new highscore. */}
-      <HighScoreModal bestScore={bestScore} playAgain={playAgain} />
+      <HighScoreModal
+        bestScore={user.timedGameMode.bestScore}
+        playAgain={playAgain}
+      />
 
       {/* 
         This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 

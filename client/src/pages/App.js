@@ -59,9 +59,8 @@ function App() {
     setUser(null);
   };
 
-  const updateField = (field, value) => {
-    console.log("Updating field: " + field);
-    console.log("With value: " + value);
+  // Updating the users timed game mode score when they're logged in.
+  const updateTimedModeBestScore = (value) => {
     setUser({
       ...user,
       timedGameMode: {
@@ -72,7 +71,9 @@ function App() {
 
   return (
     // Wrapping the Router Provider by the User Context Provider so that all the routes have access to the user context.
-    <UserContext.Provider value={{ user, login, logout, updateField }}>
+    <UserContext.Provider
+      value={{ user, login, logout, updateTimedModeBestScore }}
+    >
       <RouterProvider router={router} />
     </UserContext.Provider>
   );
