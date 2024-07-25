@@ -1,7 +1,7 @@
 import '../../css/App.css';
 import userPicture from '../../images/user.png';
 import UserContext from "../../pages/UserContext";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useState, useContext } from 'react';
 
 /**

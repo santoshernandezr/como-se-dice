@@ -12,6 +12,8 @@ function SignIn() {
   // Login method that will set the user context to the user we retreive from the database.
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
+
+  // Instantiate the state that will be used for the email and password.
   const [form, setForm] = useState({ email: "", password: "" });
 
   // Function that will be called when a field changes and update the forms correct values state.
@@ -22,23 +24,31 @@ function SignIn() {
     });
   };
 
-  // Instantiate the alert state, which will be used to show the user if their email and password do not match.
-  const [alert, setAlert] = useState(false);
+  // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
+  const [alert, setAlert] = useState({ alertState: false, message: "" });
 
   // Method that will make the post call to the backend to get see if we can register the user.
   async function ValidateNewUser(e) {
     e.preventDefault();
-    const result = await fetch("/users/signin", POSTOptions(form));
-    const body = await result.json();
 
-    if (body.msg == "Login successful") {
-      console.log("I am successful");
-      console.log("Player: " + body.player.name);
-      navigate("/comosedice/menu");
-      login(body.player);
-    } else {
-      setAlert(true);
-    }
+    fetch("/users/signin", POSTOptions(form)).then(async (response) => {
+      const body = await response.json();
+
+      // If we don't get a good response back, check the status to see what the issue was.
+      if (!response.ok) {
+        let alertMsg;
+        if (response.status == 404) {
+          alertMsg = "User does not exist";
+        } else if (response.status == 403) {
+          alertMsg = "Password is incorrect";
+        }
+
+        setAlert({ alertState: true, message: alertMsg });
+      } else {
+        navigate("/comosedice/menu");
+        login(body.player);
+      }
+    });
   }
 
   return (
@@ -91,12 +101,10 @@ function SignIn() {
                     required
                   ></input>
                   <p
-                    style={{ display: alert ? "inline" : "none" }}
+                    style={{ display: alert.alertState ? "inline" : "none" }}
                     className="mt-2 text-sm text-red-600 dark:text-red-500"
                   >
-                    <span className="font-medium">
-                      Password and email does not match.
-                    </span>
+                    <span className="font-medium">{alert.message}</span>
                   </p>
                 </div>
 
