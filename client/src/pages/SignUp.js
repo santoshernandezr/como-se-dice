@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { PUTOptions } from "../typescript/HelperFunctions.ts";
+import { useNavigate } from "react-router-dom";
 import ProfilePictureGridModal from "../components/common/profiilePictureGrid.jsx";
 import user from "../images/user.png";
 
@@ -10,6 +12,7 @@ import user from "../images/user.png";
  * @returns Component that handles the user signing up.
  */
 function SignUp() {
+  const navigate = useNavigate();
   // Instantiating the form state. This state will contain an object with the form values.
   const [form, setForm] = useState({
     name: "",
@@ -34,28 +37,41 @@ function SignUp() {
 
   // Conditional useEffect. If the username is already used, set username alert.
   useEffect(() => {
-    if (form.username == "pollo") {
-      setUsernameAlert(true);
-    } else {
-      setUsernameAlert(false);
-    }
+    fetch("/users/usernameExists/" + form.username).then((response) => {
+      if (response.status == 403) {
+        setUsernameAlert(true);
+      } else {
+        setUsernameAlert(false);
+      }
+    });
   }, [form.username]);
 
   // Conditional useEffect. If the email is already used, set email alert.
   useEffect(() => {
-    if (form.email == "testing@gmail.com") {
-      setEmailAlert(true);
-    } else {
-      setEmailAlert(false);
-    }
+    fetch("/users/emailExists/" + form.email).then((response) => {
+      if (response.status === 403) {
+        setEmailAlert(true);
+      } else {
+        setEmailAlert(false);
+      }
+    });
   }, [form.email]);
 
+  /*
+   Function that will be called to verify if the user is ready to be created. If the user has chosen a 
+   username and email that has not been taken, then call the sign up endpoint to add user.
+   */
   async function verifyNewAccount(e) {
     e.preventDefault();
-    console.log("name: " + form.name);
-    console.log("username: " + form.username);
-    console.log("email: " + form.email);
-    console.log("password: " + form.password);
+    if (usernameAlert !== true && emailAlert !== true) {
+      fetch("/users/signup", PUTOptions(form)).then((response) => {
+        if (response.status === 200) {
+          navigate("/signin");
+        }
+      });
+    } else {
+      console.log("Username or email is already being  used");
+    }
   }
 
   return (

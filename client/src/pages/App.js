@@ -72,6 +72,7 @@ function App() {
   return (
     // Wrapping the Router Provider by the User Context Provider so that all the routes have access to the user context.
     <UserContext.Provider
+      // Passing in the user context and other methods related to the user, so they are available to the routes.
       value={{ user, login, logout, updateTimedModeBestScore }}
     >
       <RouterProvider router={router} />

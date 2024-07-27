@@ -94,7 +94,6 @@ function TimedGameMode() {
     if (score > user.timedGameMode.bestScore) {
       confetti();
 
-      // FIXME: Update this to be the actual username of a user instead of hard coded value, 'pollo'.
       fetch(
         "/timedMode/updateBestScore/" + user.username,
         PUTOptions({ score: score })
