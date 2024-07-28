@@ -37,9 +37,9 @@ function SignIn() {
       // If we don't get a good response back, check the status to see what the issue was.
       if (!response.ok) {
         let alertMsg;
-        if (response.status == 404) {
+        if (response.status === 404) {
           alertMsg = "User does not exist";
-        } else if (response.status == 403) {
+        } else if (response.status === 403) {
           alertMsg = "Password is incorrect";
         }
 
