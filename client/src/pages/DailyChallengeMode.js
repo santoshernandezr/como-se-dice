@@ -5,7 +5,6 @@ import { useStopwatch } from "react-timer-hook";
 import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../components/modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
-import userPicture from "../images/user.png";
 import UserContext from "./UserContext";
 
 /**
@@ -94,7 +93,7 @@ function DailyChallengeMode() {
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
-                  src={userPicture}
+                  src={user.profilePicture}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
                   {user.username}

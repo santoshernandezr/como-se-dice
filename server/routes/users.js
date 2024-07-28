@@ -28,6 +28,7 @@ function createUserObject(user) {
       history: [],
       dailyChallengeCompleted: false,
     },
+    profilePicture: user.profilePicture,
   };
 }
 

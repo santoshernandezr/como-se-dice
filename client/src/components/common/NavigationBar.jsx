@@ -1,5 +1,4 @@
 import '../../css/App.css';
-import userPicture from '../../images/user.png';
 import UserContext from "../../pages/UserContext";
 import { NavLink } from 'react-router-dom';
 import { useState, useContext } from 'react';
@@ -30,7 +29,7 @@ export default function NavigationBar() {
                         {/* Drop down button. */}
                         <button onClick={() => {setOpen(!open)}} type="button" className="flex right-0 mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false">
                             <span className="sr-only">Open user menu</span>
-                            <img className="w-8 h-8 rounded-full" src={userPicture} alt=""></img>
+                            <img className="w-8 h-8 rounded-full" src={user.profilePicture} alt=""></img>
                         </button>
 
                         {/* Drop down menu. */}

@@ -5,6 +5,7 @@ const { connectToDb, getDb } = require("./helpers/db");
 const wordsRoute = require("./routes/words");
 const timedModeRouter = require("./routes/timedMode");
 const usersRouter = require("./routes/users");
+const imageRouter = require("./routes/images");
 
 // This allows us to use the environment variables in our .env file: 'process.env.<KEY_VALUE>'
 require("dotenv").config();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use("/words", wordsRoute);
 app.use("/timedMode", timedModeRouter);
 app.use("/users", usersRouter);
+app.use("/images", imageRouter);
 
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
