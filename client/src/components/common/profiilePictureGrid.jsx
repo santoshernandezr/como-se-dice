@@ -1,32 +1,24 @@
 import React from "react";
-// Images the user can choose from. TODO: Get from database when ready.
-import camel from '../../images/comoSeDiceAvatars/camel.png';
-import cow from '../../images/comoSeDiceAvatars/cow.png';
-import gorilla from '../../images/comoSeDiceAvatars/gorilla.png';
-import leopard from '../../images/comoSeDiceAvatars/leopard.png';
-import lion from '../../images/comoSeDiceAvatars/lion.png';
-import mouse from '../../images/comoSeDiceAvatars/mouse.png';
-import octopus from '../../images/comoSeDiceAvatars/octopus.png';
-import panda from '../../images/comoSeDiceAvatars/panda.png';
-import penguin from '../../images/comoSeDiceAvatars/penguin.png';
-import rabbit from '../../images/comoSeDiceAvatars/rabbit.png';
-import shark from '../../images/comoSeDiceAvatars/shark.png';
-import snake from '../../images/comoSeDiceAvatars/snake.png';
 
 /**
  * Component that handles the creation of the modal and the profile picture grid.
  * 
- * @param { function } setProfilePicture Function that will allow us to set the state of the profile picture.
+ * @param { form state } form Form state. JSON object that contains the users details, i.e. name, username, etc.
+ * @param { function } setForm Function to set the state of form. Will be used to update the profile picture field.
+ * @param { pictureList state } pictureList State of the 'pictureList'. Contains the images retrieved from the database.
  */
-export default function Counter({setProfilePicture}) {
-    const images = [camel, cow, gorilla, leopard, lion, mouse, octopus, panda, penguin, rabbit, shark, snake]
-
+export default function Counter({form, setForm, pictureList}) {
+    // List where all the individual pictures will go and then shown in the modal.
     let itemList=[];
 
-    images.forEach((item, index)=>{
+    // Going through each item in pictureList to retreive each picture to put them in an a tag.
+    pictureList.forEach((item, index)=>{
         itemList.push( 
         <div key={index} className="flex items-center justify-center">
-            <a id="link" onClick={() => {setProfilePicture(item); document.getElementById('profilePictureGridModal').close()}} href="#">  <img className="h-20 rounded-lg max-w-xs border" src={item} alt=""></img></a>
+            {/* On click, set ONLY the profile picture field. */}
+            <a id="link" onClick={() => {setForm({...form, profilePicture: item.base64Image}); document.getElementById('profilePictureGridModal').close()}} href="#">  
+                <img className="h-20 rounded-lg max-w-xs border" src={item.base64Image} alt=""></img>
+            </a>
         </div>)
     })
 

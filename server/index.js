@@ -1,4 +1,5 @@
 const express = require("express");
+const { connectToDb, getDb } = require("./helpers/db");
 const cron = require("node-cron");
 const {
   createCronDatetime,
@@ -10,6 +11,8 @@ const {
 const wordsRoute = require("./routes/words");
 const timedModeRouter = require("./routes/timedMode");
 const dailyChallengeModeRouter = require("./routes/dailyChallengeMode");
+const usersRouter = require("./routes/users");
+const imageRouter = require("./routes/images");
 
 // This allows us to use the environment variables in our .env file: 'process.env.<KEY_VALUE>'
 require("dotenv").config();
@@ -24,13 +27,15 @@ app.use(express.json());
 app.use("/words", wordsRoute);
 app.use("/timedMode", timedModeRouter);
 app.use("/dailyMode", dailyChallengeModeRouter);
+app.use("/users", usersRouter);
+app.use("/images", imageRouter);
 
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
 });
 
-/* 
-  Scheduled cron job to be run every night at 12am. Calls the 'updateWords' endpoint to update the daily challenge words 
+/*
+  Scheduled cron job to be run every night at 12am. Calls the 'updateWords' endpoint to update the daily challenge words
   in the database and 'resetDailyChallenge' endpoint to update the users 'dailyChallengeMode.DailyChallengeCompleted' boolean value.
   */
 cron.schedule(createCronDatetime("0", "0", "0", "*", "*", "*"), function () {

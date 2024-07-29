@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { PUTOptions } from "../typescript/HelperFunctions.ts";
+import { useNavigate } from "react-router-dom";
 import ProfilePictureGridModal from "../components/common/profiilePictureGrid.jsx";
 import user from "../images/user.png";
 
@@ -10,15 +12,28 @@ import user from "../images/user.png";
  * @returns Component that handles the user signing up.
  */
 function SignUp() {
+  // Method that will allow us to navigate to other pages.
+  const navigate = useNavigate();
+
+  // Instantiate the 'pictureList' state. This state will be used to save the list of pictures retreived from the database.
+  const [pictureList, setPictureList] = useState();
+
+  // Use effect that ONLY renders ONCE. Will retrieve the images from the database and add them to the 'pictureList' state.
+  useEffect(() => {
+    fetch("/images/getAllImages").then(async (body) => {
+      const pictures = await body.json();
+      setPictureList(pictures);
+    });
+  }, []);
+
   // Instantiating the form state. This state will contain an object with the form values.
   const [form, setForm] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
+    profilePicture: user,
   });
-
-  const [profilePicture, setProfilePicture] = useState(user);
 
   // Function that will be called when a field changes and update the forms correct values state.
   const handleChange = (e) => {
@@ -34,28 +49,43 @@ function SignUp() {
 
   // Conditional useEffect. If the username is already used, set username alert.
   useEffect(() => {
-    if (form.username == "pollo") {
-      setUsernameAlert(true);
-    } else {
-      setUsernameAlert(false);
-    }
+    fetch("/users/usernameExists/" + form.username).then((response) => {
+      if (response.status === 403) {
+        setUsernameAlert(true);
+      } else {
+        setUsernameAlert(false);
+      }
+    });
   }, [form.username]);
 
   // Conditional useEffect. If the email is already used, set email alert.
   useEffect(() => {
-    if (form.email == "testing@gmail.com") {
-      setEmailAlert(true);
-    } else {
-      setEmailAlert(false);
-    }
+    fetch("/users/emailExists/" + form.email).then((response) => {
+      if (response.status === 403) {
+        setEmailAlert(true);
+      } else {
+        setEmailAlert(false);
+      }
+    });
   }, [form.email]);
 
+  /*
+   Function that will be called to verify if the user is ready to be created. If the user has chosen a 
+   username and email that has not been taken, then call the sign up endpoint to add user.
+   */
   async function verifyNewAccount(e) {
     e.preventDefault();
-    console.log("name: " + form.name);
-    console.log("username: " + form.username);
-    console.log("email: " + form.email);
-    console.log("password: " + form.password);
+    if (
+      usernameAlert !== true &&
+      emailAlert !== true &&
+      form.profilePicture !== user
+    ) {
+      fetch("/users/signup", PUTOptions(form)).then((response) => {
+        if (response.status === 200) {
+          navigate("/signin");
+        }
+      });
+    }
   }
 
   return (
@@ -75,16 +105,29 @@ function SignUp() {
                 <div className="flex items-center justify-center">
                   <img
                     id="profilePicture"
-                    src={profilePicture}
+                    src={form.profilePicture}
                     className="w-24 h-24 shadow-lg hover:opacity-40"
                     alt=""
                   ></img>
                 </div>
 
                 {/* Grid that will show up when the user chooses his profile picture. */}
-                <ProfilePictureGridModal
-                  setProfilePicture={setProfilePicture}
-                />
+                {pictureList ? (
+                  <ProfilePictureGridModal
+                    form={form}
+                    setForm={setForm}
+                    pictureList={pictureList}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <button
+                      className="btn w-28 bg-gray-700 hover:bg-gray-500 text-white text-sm rounded text-center mt-2"
+                      type="button"
+                    >
+                      Profile picture
+                    </button>
+                  </div>
+                )}
 
                 {/* Input fields: Name, username, email, and password */}
                 <div>
@@ -100,6 +143,7 @@ function SignUp() {
                     name="name"
                     id="name"
                     placeholder="Enter your name"
+                    autoComplete="off"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   ></input>
@@ -118,6 +162,7 @@ function SignUp() {
                     name="username"
                     id="username"
                     placeholder="Enter your username"
+                    autoComplete="off"
                     className="bg-red-50 border border-red-300 text-red-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
                     required
                   ></input>
@@ -142,7 +187,8 @@ function SignUp() {
                     type="email"
                     name="email"
                     id="email"
-                    placeholder="Enter your remail"
+                    placeholder="Enter your email"
+                    autoComplete="off"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   ></input>
@@ -170,6 +216,7 @@ function SignUp() {
                     name="password"
                     id="password"
                     placeholder="Enter your password"
+                    autoComplete="off"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   ></input>

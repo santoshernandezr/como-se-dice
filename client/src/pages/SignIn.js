@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { POSTOptions } from "../typescript/HelperFunctions.ts";
+import { NavLink, useNavigate } from "react-router-dom";
+import UserContext from "./UserContext.js";
 
 /**
  * Sign in page. Will ask the user to input their email and password and it'll try to sign them into the game.
@@ -7,10 +9,12 @@ import { NavLink } from "react-router-dom";
  * @returns Sign in page.
  */
 function SignIn() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  // Login method that will set the user context to the user we retreive from the database.
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  // Instantiate the state that will be used for the email and password.
+  const [form, setForm] = useState({ email: "", password: "" });
 
   // Function that will be called when a field changes and update the forms correct values state.
   const handleChange = (e) => {
@@ -20,17 +24,31 @@ function SignIn() {
     });
   };
 
-  // Instantiate the alert state, which will be used to show the user if their email and password do not match.
-  const [alert, setAlert] = useState(false);
+  // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
+  const [alert, setAlert] = useState({ alertState: false, message: "" });
 
   // Method that will make the post call to the backend to get see if we can register the user.
-  async function validateNewUser(e) {
+  async function ValidateNewUser(e) {
     e.preventDefault();
 
-    console.log("Email: " + form.email + " password: " + form.password);
-    if (form.password == "hello") {
-      console.log("They match");
-    }
+    fetch("/users/signin", POSTOptions(form)).then(async (response) => {
+      const body = await response.json();
+
+      // If we don't get a good response back, check the status to see what the issue was.
+      if (!response.ok) {
+        let alertMsg;
+        if (response.status === 404) {
+          alertMsg = "User does not exist";
+        } else if (response.status === 403) {
+          alertMsg = "Password is incorrect";
+        }
+
+        setAlert({ alertState: true, message: alertMsg });
+      } else {
+        navigate("/comosedice/menu");
+        login(body.player);
+      }
+    });
   }
 
   return (
@@ -46,7 +64,7 @@ function SignIn() {
               {/* Form that will take in the users wmail and password. */}
               <form
                 className="space-y-4 md:space-y-6"
-                onSubmit={validateNewUser}
+                onSubmit={ValidateNewUser}
               >
                 <div>
                   <label
@@ -62,6 +80,7 @@ function SignIn() {
                     name="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Enter your remail"
+                    autoComplete="off"
                     required
                   ></input>
                 </div>
@@ -79,16 +98,15 @@ function SignIn() {
                     type="password"
                     name="password"
                     placeholder="Enter your password"
+                    autoComplete="off"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   ></input>
                   <p
-                    style={{ display: alert ? "inline" : "none" }}
+                    style={{ display: alert.alertState ? "inline" : "none" }}
                     className="mt-2 text-sm text-red-600 dark:text-red-500"
                   >
-                    <span className="font-medium">
-                      Password and email does not match.
-                    </span>
+                    <span className="font-medium">{alert.message}</span>
                   </p>
                 </div>
 

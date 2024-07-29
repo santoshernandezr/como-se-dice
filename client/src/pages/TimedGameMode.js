@@ -1,10 +1,10 @@
 import "../css/App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useTimer } from "react-timer-hook";
 import { isAlphanumeric, PUTOptions } from "../typescript/HelperFunctions.ts";
 import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
-import user from "../images/user.png";
+import UserContext from "./UserContext";
 
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their
@@ -14,15 +14,16 @@ import user from "../images/user.png";
  * @returns Timed game mode page.
  */
 function TimedGameMode() {
+  const { user, updateTimedModeBestScore } = useContext(UserContext);
+
   // Instantiate the words states.
   // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [words, setWords] = useState("loading");
   const [currentWord, setCurrentWord] = useState(words[0]);
 
-  // Instantiate the users states. Their guess, score, best score, and index.
+  // Instantiate the users states. Their guess, score, and index.
   const [userGuess, setUserGuess] = useState("");
   const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(2);
   const [index, setIndex] = useState(0);
 
   /* 
@@ -52,16 +53,21 @@ function TimedGameMode() {
      words to use for the new game, reset the board, reset the state of the values to their original state, and restart the timer.
      */
   async function playAgain() {
+    // Fetch new words for new game.
     fetchWords();
 
+    // Close the modal that shows the user their new highscore.
     document.getElementById("timedGameModeModal").close();
 
+    // Reset the containers. Show the game and hide the deciding containers.
     setGameContainers(true);
     setDecideGameContainers(false);
 
+    // Reset the game to start at the first word of the new words fetched and set the score to 0.
     setIndex(0);
     setScore(0);
 
+    // Reset the timer to 60 seconds.
     const time = new Date();
     time.setSeconds(time.getSeconds() + 60);
     restart(time);
@@ -84,12 +90,15 @@ function TimedGameMode() {
      greater than the best score hide then hide the game containers and show the decide game containers.
      */
   function updateScore() {
-    if (score > bestScore) {
+    if (score > user.timedGameMode.bestScore) {
       confetti();
-      setBestScore(score);
 
-      // FIXME: Update this to be the actual username of a user instead of hard coded value, 'pollo'.
-      fetch("/timedMode/updateBestScore/pollo", PUTOptions({ score: score }));
+      fetch(
+        "/timedMode/updateBestScore/" + user.username,
+        PUTOptions({ score: score })
+      );
+
+      updateTimedModeBestScore(score);
 
       document.getElementById("timedGameModeModal").showModal();
     } else {
@@ -137,10 +146,10 @@ function TimedGameMode() {
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
-                  src={user}
+                  src={user.profilePicture}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
-                  pollo.io
+                  {user.username}
                 </h5>
 
                 {/* The count down timer. */}
@@ -162,7 +171,7 @@ function TimedGameMode() {
                     id="timedModeBestScore"
                     className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black"
                   >
-                    Best score: {bestScore}
+                    Best score: {user.timedGameMode.bestScore}
                   </p>
                 </div>
               </div>
@@ -197,7 +206,10 @@ function TimedGameMode() {
       </div>
 
       {/* Modal that the user will see if they get a new highscore. */}
-      <HighScoreModal bestScore={bestScore} playAgain={playAgain} />
+      <HighScoreModal
+        bestScore={user.timedGameMode.bestScore}
+        playAgain={playAgain}
+      />
 
       {/* 
         This form is what allows the usage of the 'enter' key when the user wants to submit their input/guess to be verified. 
