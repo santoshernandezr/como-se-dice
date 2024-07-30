@@ -56,7 +56,6 @@ function DailyChallengeComplete({userData}) {
         <div className="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center justify-between mb-4">
                 <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">Latest Daily Challenges</h5>
-                { userData.dailyChallengeMode.streak > 1 ? <p className="text-xl font-bold leading-none text-gray-900 dark:text-white">{userData.dailyChallengeMode.streak} <Emoji symbol="🔥"></Emoji></p>: null}
             </div>
             <div className="flow-root">
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">

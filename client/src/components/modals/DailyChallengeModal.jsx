@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import UserContext from "../../pages/UserContext";
 
 /**
  * Component responsible for the creation of the modal that the user will get when they finish playing the
@@ -10,6 +11,9 @@ import { NavLink } from 'react-router-dom'
  * @returns Daily challenge modal.
  */
 export default function DailyChallengeModal({score, time}) {
+    // Getting the user context.
+    const { user } = useContext(UserContext);
+
   return (
     <div>
         {/* 
@@ -21,7 +25,7 @@ export default function DailyChallengeModal({score, time}) {
                 <div className="max-w-l p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Daily Challenge</h5>
 
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">pollo.io</p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{user.username}</p>
                     <p id="userDailyChallengeScore" className="mb-3 font-normal text-gray-700 dark:text-gray-400">Score: {score}/10 </p>
                     <p id="userDailyChallengeTime" className="mb-3 font-normal text-gray-700 dark:text-gray-400">Time: {time} </p>
 

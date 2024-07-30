@@ -1,7 +1,8 @@
 import "../css/App.css";
 import DailyChallengeGame from "../components/dailyChallenge/DailyChallengeGame.jsx";
 import DailyChallengeComplete from "../components/dailyChallenge/DailyChallengeComplete.jsx";
-import { useEffect, useState } from "react";
+import UserContext from "./UserContext";
+import { useEffect, useState, useContext } from "react";
 
 /**
  * Daily challenge page.
@@ -11,26 +12,28 @@ import { useEffect, useState } from "react";
  * @returns Daily challenge page.
  */
 function DailyChallengeMode() {
-  const [user, setUser] = useState();
+  // Getting the user context.
+  const { user } = useContext(UserContext);
+
+  // Instantiate the userData state where we'll store the
+  const [userData, setUserData] = useState();
   const [completed, setCompleted] = useState();
-  const [username, setUsername] = useState("");
 
   useEffect(() => {
     async function fetchUser() {
-      const result = await fetch("/dailyMode/getUser/pollo");
+      const result = await fetch("/dailyMode/getUser/" + user.username);
       const body = await result.json();
-      setUser(body);
+      setUserData(body);
       setCompleted(body.dailyChallengeMode.dailyChallengeCompleted);
-      setUsername(body.username);
     }
 
     fetchUser();
   }, []);
 
   return completed ? (
-    <DailyChallengeComplete userData={user}></DailyChallengeComplete>
+    <DailyChallengeComplete userData={userData}></DailyChallengeComplete>
   ) : (
-    <DailyChallengeGame userData={username}></DailyChallengeGame>
+    <DailyChallengeGame></DailyChallengeGame>
   );
 }
 

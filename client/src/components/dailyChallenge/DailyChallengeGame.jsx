@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useStopwatch } from "react-timer-hook";
 import { isAlphanumeric, POSTOptions } from "../../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
-import user from "../../images/user.png";
+import UserContext from "../../pages/UserContext";
 
-function DailyChallengeGame({userData}) {
+function DailyChallengeGame() {
+  // Getting the user context.
+  const { user } = useContext(UserContext);
+
   // Instantiate the words states.
   // Daily words will contain the words used during the game and the current word will hold the current word the user needs to guess.
   const [dailyWords, setDailyWords] = useState("loading");
@@ -50,7 +53,7 @@ function DailyChallengeGame({userData}) {
       pause();
       let stopWatchTime = document.getElementById("stopTime").textContent;
       setTime(stopWatchTime);
-      gameFinished(score, stopWatchTime, userData);
+      gameFinished(score, stopWatchTime, user.username);
       document.getElementById("dailyChallengeModal").showModal();
     }
   }, [index, dailyWords.length, dailyWords]);
@@ -86,10 +89,10 @@ function DailyChallengeGame({userData}) {
                 <img
                   className="w-32 h-32 mt-8 rounded-full shadow-lg"
                   alt=""
-                  src={user}
+                  src={user.profilePicture}
                 ></img>
                 <h5 className="mb-0 mt-4 text-xl font-medium dark:text-black">
-                  {userData}
+                  {user.username}
                 </h5>
 
                 {/* The count down timer. */}
