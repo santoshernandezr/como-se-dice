@@ -55,7 +55,7 @@ usersRouter.post("/signin", (req, res) => {
 });
 
 /**
- * Endpoint that checks the database to see if the username the user is trying to use is already taken/being used.
+ * Dynamic endpoint that checks the database to see if the username the user is trying to use is already taken/being used.
  */
 usersRouter.get("/usernameExists/:username", (req, res) => {
   db.collection("Users")
@@ -70,7 +70,7 @@ usersRouter.get("/usernameExists/:username", (req, res) => {
 });
 
 /**
- * Endpoint that checks the database to see if the email the user is trying to use is already taken/being used.
+ * Dynamic endpoint that checks the database to see if the email the user is trying to use is already taken/being used.
  */
 usersRouter.get("/emailExists/:email", (req, res) => {
   db.collection("Users")
