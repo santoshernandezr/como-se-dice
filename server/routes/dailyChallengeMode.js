@@ -12,7 +12,7 @@ connectToDb((err) => {
 });
 
 /**
- * Endpoint that will get the user daily information. We will return the 'user.dailyChallengeMode.dailyChallengeCompleted'
+ * Dynamic endpoint that will get the user daily information. We will return the 'user.dailyChallengeMode.dailyChallengeCompleted'
  * to determine if the user completed the daily challeng and the users daily challenge 'history'.
  */
 dailyChallengeModeRouter.get("/getUserDailyInfo/:username", (req, res) => {
@@ -50,7 +50,7 @@ dailyChallengeModeRouter.get("/getWords", (req, res) => {
 });
 
 /**
- * Endpoint to be called when the user finishes the daily challenge. The endpoint will do the following:
+ * Dynamic endpoint to be called when the user finishes the daily challenge. The endpoint will do the following:
  *
  * 1. If the 'history' object has 6 elements, pop the last element, so the new element can go in.
  * 2. Insert todays daily challenge object to the 'history' object.

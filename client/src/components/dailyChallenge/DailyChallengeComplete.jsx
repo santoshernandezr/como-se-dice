@@ -3,13 +3,14 @@ import Emoji from "../common/Emoji.jsx"
 
 /**
  * Component responsible for the creation of what the user will see when they have completed the daily challenge. 
- * They will get a message saying they completed the daily challenge, their stats, and their previous 5 daily challenge stats.
+ * They will get a message saying they completed the daily challenge, their stats, and their previous daily challenge stats.
+ * We will cap the previous daily challenge stats to 5.
  * 
  * @param { array } userHistory Array containing the users daily challenge history.
  * 
  * @returns DailyChallengeComplete component.
  */
-function DailyChallengeComplete({userHistory}) {
+export default function DailyChallengeComplete({userHistory}) {
     // Gets the first element of the users history which will be the most current daily challenge they completed.
     const currentDay = userHistory[0];
 
@@ -70,5 +71,3 @@ function DailyChallengeComplete({userHistory}) {
     </div>
   )
 }
-
-export default DailyChallengeComplete

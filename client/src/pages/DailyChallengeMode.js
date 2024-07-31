@@ -15,10 +15,17 @@ function DailyChallengeMode() {
   // Getting the user context.
   const { user } = useContext(UserContext);
 
-  // Instantiate the userData state where we'll store the
+  /* 
+   Instantiate the history and completed state where we'll store the history and the boolean 
+   that indicates whether the user has completed the daily challenge of the day. 
+   */
   const [history, setHistory] = useState();
   const [completed, setCompleted] = useState();
 
+  /* 
+   useEffect that will ONLY render ONCE and will get the users daily challenge information, their daily 
+   challenge history and the boolean indicating whether they have completed the daily challenge of the day. 
+   */
   useEffect(() => {
     async function fetchUser() {
       const result = await fetch(
@@ -32,6 +39,10 @@ function DailyChallengeMode() {
     fetchUser();
   }, []);
 
+  /* 
+   Check if the user completed the daily challenge. If they have, render the 'DailyChallengeComplete' component
+   otherwise render the 'DailyChallengeGame' component.
+   */
   return completed ? (
     <DailyChallengeComplete userHistory={history}></DailyChallengeComplete>
   ) : (

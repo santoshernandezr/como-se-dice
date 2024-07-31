@@ -29,6 +29,7 @@ function SignIn() {
 
   // Method that will make the post call to the backend to get see if we can register the user.
   async function ValidateNewUser(e) {
+    // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
     e.preventDefault();
 
     fetch("/users/signin", POSTOptions(form)).then(async (response) => {

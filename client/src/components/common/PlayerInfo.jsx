@@ -12,7 +12,6 @@ import { useContext } from "react";
 export default function PlayerInfo({score, lives}) {
   // Getting the user context.
   const { user } = useContext(UserContext);
-  console.log("Username: " + user.username)
 
   return (
     <div>

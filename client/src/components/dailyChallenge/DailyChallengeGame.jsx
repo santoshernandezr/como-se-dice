@@ -10,7 +10,7 @@ import UserContext from "../../pages/UserContext";
  * 
  * @returns Daily challenge user interface.
  */
-function DailyChallengeGame() {
+export default function DailyChallengeGame() {
   // Getting the user context.
   const { user } = useContext(UserContext);
 
@@ -46,10 +46,10 @@ function DailyChallengeGame() {
   const { seconds, minutes, pause } = useStopwatch({ autoStart: true });
 
   /*
-    Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
-    update the state of the 'currentWord' using the new value of index, and clear the guess field. Else, pause the stopwatch,
-    set the time state to the stopwatch time, and show the modal with the users score and time.
-    */
+   Conditional useEffect. When the 'index' state is updated, if there are still words in the 'words' we got back from the server,
+   update the state of the 'currentWord' using the new value of index, and clear the guess field. Else, pause the stopwatch,
+   set the time state to the stopwatch time, and show the modal with the users score and time.
+   */
   useEffect(() => {
     if (index < dailyWords.length) {
       setCurrentWord(dailyWords[index]);
@@ -178,5 +178,3 @@ function DailyChallengeGame() {
     </div>
   );
 }
-
-export default DailyChallengeGame
