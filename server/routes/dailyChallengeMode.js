@@ -1,11 +1,7 @@
 const express = require("express");
 const { connectToDb, getDb } = require("../helpers/db");
 const { words } = require("../helpers/words");
-const {
-  shuffle,
-  getDate,
-  getPreviousDay,
-} = require("../helpers/helperFunctions");
+const { shuffle, getTodaysDate } = require("../helpers/helperFunctions");
 const dailyChallengeModeRouter = express.Router();
 
 let db;
@@ -13,6 +9,27 @@ connectToDb((err) => {
   if (!err) {
     db = getDb();
   }
+});
+
+/**
+ * Endpoint that will get the user daily information. We will return the 'user.dailyChallengeMode.dailyChallengeCompleted'
+ * to determine if the user completed the daily challeng and the users daily challenge 'history'.
+ */
+dailyChallengeModeRouter.get("/getUserDailyInfo/:username", (req, res) => {
+  console.log("username: " + req.params.username);
+  db.collection("Users")
+    .findOne({ username: req.params.username })
+    .then((user) => {
+      res.status(200).json({
+        completed: user.dailyChallengeMode.dailyChallengeCompleted,
+        history: user.dailyChallengeMode.history,
+      });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .json({ error: "Couldn't get the users daily challenge info." });
+    });
 });
 
 /**
@@ -33,47 +50,24 @@ dailyChallengeModeRouter.get("/getWords", (req, res) => {
 });
 
 /**
- * Endpoint to update the words in the database.
- */
-dailyChallengeModeRouter.post("/updateWords", (req, res) => {
-  shuffle(words);
-  db.collection("DailyChallengeWords")
-    .updateOne(
-      { words: { $size: 10 } },
-      { $set: { words: words.slice(0, 10) } }
-    )
-    .then(() => {
-      res.status(200).json({ msg: "Daily challenge words updated." });
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .json({ error: "Daily challenge words couldn't get updated." });
-    });
-});
-
-/**
  * Endpoint to be called when the user finishes the daily challenge. The endpoint will do the following:
  *
  * 1. If the 'history' object has 6 elements, pop the last element, so the new element can go in.
- * 2. Increase the users 'streak' field if they played yesterday.
- * 3. Update the 'dailyChallengeMode.dailyChallengeCompleted' field to true, indicating the user completed the daily challenge.
- * 4. Insert todays daily challenge object to the 'history' object.
+ * 2. Insert todays daily challenge object to the 'history' object.
  */
 dailyChallengeModeRouter.post("/updateUser/:username", (req, res) => {
-  const previousDay = getPreviousDay();
-  console.log("Previouos day: " + previousDay);
   const userScore = req.body.score;
   const userTime = req.body.time;
 
-  const newRecord = { date: getDate(), time: userTime, score: userScore };
+  const newRecord = { date: getTodaysDate(), time: userTime, score: userScore };
 
   try {
     // If 6 elements exist, then pop the last element out so we can add the current
     db.collection("Users").updateOne(
       {
         username: req.params.username,
-        "dailyChallengeMode.history": { $size: 6 },
+        // Checks if the size of the 'history' array is greater than 6
+        $expr: { $gt: [{ $size: "$dailyChallengeMode.history" }, 6] },
       },
       { $pop: { "dailyChallengeMode.history": 1 } }
     );
@@ -89,15 +83,17 @@ dailyChallengeModeRouter.post("/updateUser/:username", (req, res) => {
       }
     );
 
-    res.status(200).json({ msg: "Updated user" });
+    res.status(200).json({ msg: "Updated user." });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// --------------------------------- Endpoints called in cron job in `index.js` --------------------------------- //
+
 /**
- * Endpont that will be called everyday at midnight to reset all the users 'dailyChallengeMode.DailyChallengeCompleted'
- * boolean value.
+ * Endpont that will be called everyday at midnight to reset all the users
+ * 'dailyChallengeMode.DailyChallengeCompleted' boolean value.
  */
 dailyChallengeModeRouter.post("/resetDailyChallenge", (req, res) => {
   db.collection("Users")
@@ -114,15 +110,23 @@ dailyChallengeModeRouter.post("/resetDailyChallenge", (req, res) => {
     });
 });
 
-dailyChallengeModeRouter.get("/getUser/:username", (req, res) => {
-  console.log("username: " + req.params.username);
-  db.collection("Users")
-    .findOne({ username: req.params.username })
-    .then((user) => {
-      res.status(200).json(user);
+/**
+ * Endpoint to update the words in the database.
+ */
+dailyChallengeModeRouter.post("/updateWords", (req, res) => {
+  shuffle(words);
+  db.collection("DailyChallengeWords")
+    .updateOne(
+      { words: { $size: 10 } },
+      { $set: { words: words.slice(0, 10) } }
+    )
+    .then(() => {
+      res.status(200).json({ msg: "Daily challenge words updated." });
     })
     .catch(() => {
-      res.status(500).json({ error: "Couldn't get the user" });
+      res
+        .status(500)
+        .json({ error: "Daily challenge words couldn't get updated." });
     });
 });
 

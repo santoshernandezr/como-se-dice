@@ -4,6 +4,7 @@ import React from 'react';
  * Component responsible to create the emoji render correctly. 
  * 
  * @param { * } props 
+ * 
  * @returns Emoji component.
  */
 export default function Emoji(props) {

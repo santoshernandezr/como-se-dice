@@ -8,6 +8,7 @@ import UserContext from "../../pages/UserContext";
  * 
  * @param { int } score Users score. 
  * @param { string } time Users time.
+ * 
  * @returns Daily challenge modal.
  */
 export default function DailyChallengeModal({score, time}) {

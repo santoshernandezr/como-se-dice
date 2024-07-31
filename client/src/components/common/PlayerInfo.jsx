@@ -7,7 +7,7 @@ import { useContext } from "react";
  * 
  * @param { int } score users score.
  * @param { int } lives users lives.
- * @returns 
+ * @returns Play information component.
  */
 export default function PlayerInfo({score, lives}) {
   // Getting the user context.

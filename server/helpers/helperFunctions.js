@@ -82,13 +82,13 @@ function createCronDatetime(
  * @returns Formated date.
  */
 function formatDate(dateObject) {
-  day = dateObject.getDate();
-  month = dateObject.getMonth();
-  year = dateObject.getFullYear();
-  hour = dateObject.getHours() % 12 || 12;
-  minute = dateObject.getMinutes().toString().padStart(2, "0");
-  seconds = dateObject.getSeconds().toString().padStart(2, "0");
-  amOrPm = dateObject.getHours() < 12 ? "AM" : "PM";
+  const day = dateObject.getDate();
+  const month = dateObject.getMonth();
+  const year = dateObject.getFullYear();
+  const hour = dateObject.getHours() % 12 || 12;
+  const minute = dateObject.getMinutes().toString().padStart(2, "0");
+  const seconds = dateObject.getSeconds().toString().padStart(2, "0");
+  const amOrPm = dateObject.getHours() < 12 ? "AM" : "PM";
 
   return (
     month +
@@ -112,7 +112,7 @@ function formatDate(dateObject) {
  * <day>, <month>/<date>: example: Saturday, 7/20
  * @returns Todays date in <day>, <month>/<date> format.
  */
-function getDate() {
+function getTodaysDate() {
   const date = new Date();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -122,28 +122,10 @@ function getDate() {
   return currentDate;
 }
 
-/**
- * Function that will get yesterdays date and put it in the following format:
- * <day>, <month>/<date>: example: Saturday, 7/20
- * @returns Yesterdays date in <day>, <month>/<date> format.
- */
-function getPreviousDay() {
-  const date = new Date();
-  date.setDate(date.getDate() - 1);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  const previousDay =
-    days[date.getDay()] + ", " + month.toString() + "/" + day.toString();
-
-  return previousDay;
-}
-
 module.exports = {
   shuffle,
   createCronDatetime,
   formatDate,
-  getDate,
-  getPreviousDay,
+  getTodaysDate,
   POSTOptions,
 };

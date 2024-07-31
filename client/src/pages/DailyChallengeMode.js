@@ -16,22 +16,24 @@ function DailyChallengeMode() {
   const { user } = useContext(UserContext);
 
   // Instantiate the userData state where we'll store the
-  const [userData, setUserData] = useState();
+  const [history, setHistory] = useState();
   const [completed, setCompleted] = useState();
 
   useEffect(() => {
     async function fetchUser() {
-      const result = await fetch("/dailyMode/getUser/" + user.username);
+      const result = await fetch(
+        "/dailyMode/getUserDailyInfo/" + user.username
+      );
       const body = await result.json();
-      setUserData(body);
-      setCompleted(body.dailyChallengeMode.dailyChallengeCompleted);
+      setHistory(body.history);
+      setCompleted(body.completed);
     }
 
     fetchUser();
   }, []);
 
   return completed ? (
-    <DailyChallengeComplete userData={userData}></DailyChallengeComplete>
+    <DailyChallengeComplete userHistory={history}></DailyChallengeComplete>
   ) : (
     <DailyChallengeGame></DailyChallengeGame>
   );

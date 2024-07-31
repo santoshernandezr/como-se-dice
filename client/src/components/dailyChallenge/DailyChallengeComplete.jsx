@@ -4,18 +4,21 @@ import Emoji from "../common/Emoji.jsx"
 /**
  * Component responsible for the creation of what the user will see when they have completed the daily challenge. 
  * They will get a message saying they completed the daily challenge, their stats, and their previous 5 daily challenge stats.
+ * 
+ * @param { array } userHistory Array containing the users daily challenge history.
+ * 
  * @returns DailyChallengeComplete component.
  */
-function DailyChallengeComplete({userData}) {
-    const allHistory = userData.dailyChallengeMode.history // Gets the entire history of the user
-    const currentDay = allHistory[0]; // Gets the first element of the users history which will be the most current daily challenge they completed.
+function DailyChallengeComplete({userHistory}) {
+    // Gets the first element of the users history which will be the most current daily challenge they completed.
+    const currentDay = userHistory[0];
 
     let history;
     // Sometimes the database gets wonky and the length gets longer than 6, so we just want to make sure we only get the past 5 days, i.e. index 1-6.
-    if (allHistory.length > 6) {
-        history = allHistory.slice(1, 6)
+    if (userHistory.length > 6) {
+        history = userHistory.slice(1, 6)
     } else {
-        history = allHistory.slice(1, allHistory.length)
+        history = userHistory.slice(1, userHistory.length)
     }
 
     let historyList = [];

@@ -5,6 +5,11 @@ import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "../../pages/UserContext";
 
+/**
+ * Component responsible for the creation of the daily challenge game user interface.
+ * 
+ * @returns Daily challenge user interface.
+ */
 function DailyChallengeGame() {
   // Getting the user context.
   const { user } = useContext(UserContext);
