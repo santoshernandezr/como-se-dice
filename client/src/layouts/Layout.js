@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "../css/App.css";
 import NavigationBar from "../components/common/NavigationBar";
 import Footer from "../components/common/Footer";
 import { Outlet, Navigate } from "react-router-dom";
 import UserContext from "../pages/UserContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 /**
  * Component responsible for the creation of the skeleton of the entire game. It consists of the Navigation bar and the
@@ -16,9 +19,27 @@ import UserContext from "../pages/UserContext";
  * @returns Layout component.
  */
 function Layout() {
-  const { user } = useContext(UserContext);
+  const { login } = useContext(UserContext);
+  const [isLoggedIn, setIsLoggedIn] = useState();
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
 
-  return user ? (
+  useEffect(() => {
+    axios.get("/login").then((response) => {
+      console.log("Checking if i'm logged in");
+      if (response.data.loggedIn) {
+        console.log("I am logged in");
+        setIsLoggedIn(true);
+      } else {
+        console.log("I am not logged in");
+        navigate("/signin");
+      }
+      console.log("In axios call layout");
+      console.log("Logged in: " + response.data.loggedIn);
+    });
+  });
+
+  return isLoggedIn ? (
     <div>
       <NavigationBar />
 
@@ -29,7 +50,7 @@ function Layout() {
       <Footer />
     </div>
   ) : (
-    <Navigate to="/signin" />
+    <div></div>
   );
 }
 

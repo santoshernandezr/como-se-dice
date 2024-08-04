@@ -14,6 +14,7 @@ export default function NavigationBar() {
     const [open, setOpen] = useState(false)
     // Getting the user context and the function to log the user out.
     const { user, logout } = useContext(UserContext);
+    console.log("username: " + user.username)
 
     return (
         <div className="NavigationBar">

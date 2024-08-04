@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { POSTOptions } from "../typescript/HelperFunctions.ts";
 import { NavLink, useNavigate } from "react-router-dom";
 import UserContext from "./UserContext.js";
+import axios from "axios";
 
 /**
  * Sign in page. Will ask the user to input their email and password and it'll try to sign them into the game.
@@ -9,6 +9,7 @@ import UserContext from "./UserContext.js";
  * @returns Sign in page.
  */
 function SignIn() {
+  axios.defaults.withCredentials = true;
   // Login method that will set the user context to the user we retreive from the database.
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
@@ -31,11 +32,17 @@ function SignIn() {
   async function ValidateNewUser(e) {
     e.preventDefault();
 
-    fetch("/users/signin", POSTOptions(form)).then(async (response) => {
-      const body = await response.json();
-
+    axios.post("/testingSignIn", form).then((response) => {
+      // const body = await response.json();
+      console.log(
+        "In axios post method getting the player: " + response.status
+      );
+      console.log(
+        "In axios post method getting the player: " +
+          response.data.player.username
+      );
       // If we don't get a good response back, check the status to see what the issue was.
-      if (!response.ok) {
+      if (response.status !== 200) {
         let alertMsg;
         if (response.status === 404) {
           alertMsg = "User does not exist";
@@ -46,9 +53,28 @@ function SignIn() {
         setAlert({ alertState: true, message: alertMsg });
       } else {
         navigate("/comosedice/menu");
-        login(body.player);
+        login(response.data.player);
       }
     });
+
+    // fetch("/testingSignIn", POSTOptions(form)).then(async (response) => {
+    //   const body = await response.json();
+
+    //   // If we don't get a good response back, check the status to see what the issue was.
+    //   if (!response.ok) {
+    //     let alertMsg;
+    //     if (response.status === 404) {
+    //       alertMsg = "User does not exist";
+    //     } else if (response.status === 403) {
+    //       alertMsg = "Password is incorrect";
+    //     }
+
+    //     setAlert({ alertState: true, message: alertMsg });
+    //   } else {
+    //     navigate("/comosedice/menu");
+    //     login(body.player);
+    //   }
+    // });
   }
 
   return (
