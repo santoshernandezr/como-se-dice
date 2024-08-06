@@ -62,9 +62,9 @@ usersRouter.get("/usernameExists/:username", (req, res) => {
     .findOne({ username: req.params.username })
     .then((user) => {
       if (user != null) {
-        res.status(403).json({ msg: "Username already being used" });
+        res.json({ usernameAvailable: false });
       } else {
-        res.status(200).json({ msg: "Username available" });
+        res.json({ usernameAvailable: true });
       }
     });
 });
@@ -77,9 +77,9 @@ usersRouter.get("/emailExists/:email", (req, res) => {
     .findOne({ email: req.params.email })
     .then((user) => {
       if (user != null) {
-        res.status(403).json({ msg: "Email already being used" });
+        res.json({ emailAvailable: false });
       } else {
-        res.status(200).json({ msg: "Email available" });
+        res.json({ emailAvailable: true });
       }
     });
 });
@@ -92,11 +92,6 @@ usersRouter.put("/signup", async (req, res) => {
     .insertOne(createUserObject(req.body))
     .then(() => {
       res.status(200).json({ msg: "User added" });
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .json({ msg: "Something went wrong while adding the user" });
     });
 });
 
