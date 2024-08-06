@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { POSTOptions } from "../typescript/HelperFunctions.ts";
 import { NavLink, useNavigate } from "react-router-dom";
 import UserContext from "./UserContext.js";
+import axios from "axios";
 
 /**
  * Sign in page. Will ask the user to input their email and password and it'll try to sign them into the game.
@@ -31,24 +31,27 @@ function SignIn() {
   async function ValidateNewUser(e) {
     e.preventDefault();
 
-    fetch("/users/signin", POSTOptions(form)).then(async (response) => {
-      const body = await response.json();
-
-      // If we don't get a good response back, check the status to see what the issue was.
-      if (!response.ok) {
-        let alertMsg;
-        if (response.status === 404) {
+    axios
+      .post("/users/signin", form)
+      .then((response) => {
+        // Check if the status was successful.
+        if (response.status === 200) {
+          navigate("/comosedice/menu");
+          login(response.data.player);
+        }
+      })
+      .catch((error) => {
+        // Instantiate a generic alert message.
+        let alertMsg = "Something went wrong";
+        // Handle http status code 404 and 403.
+        if (error.response.status === 404) {
           alertMsg = "User does not exist";
-        } else if (response.status === 403) {
+        } else if (error.response.status === 403) {
           alertMsg = "Password is incorrect";
         }
-
+        // Set the alert with the appropriate message.
         setAlert({ alertState: true, message: alertMsg });
-      } else {
-        navigate("/comosedice/menu");
-        login(body.player);
-      }
-    });
+      });
   }
 
   return (

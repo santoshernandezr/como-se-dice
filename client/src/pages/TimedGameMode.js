@@ -1,10 +1,11 @@
 import "../css/App.css";
 import React, { useEffect, useState, useContext } from "react";
 import { useTimer } from "react-timer-hook";
-import { isAlphanumeric, PUTOptions } from "../typescript/HelperFunctions.ts";
+import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "./UserContext";
+import axios from "axios";
 
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their
@@ -38,9 +39,9 @@ function TimedGameMode() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/words/normalGameWords");
-    const body = await result.json();
-    setWords(body);
+    axios.get("/words/normalGameWords").then((response) => {
+      setWords(response.data);
+    });
   }
 
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
@@ -93,10 +94,9 @@ function TimedGameMode() {
     if (score > user.timedGameMode.bestScore) {
       confetti();
 
-      fetch(
-        "/timedMode/updateBestScore/" + user.username,
-        PUTOptions({ score: score })
-      );
+      axios.put("/timedMode/updateBestScore/" + user.username, {
+        score: score,
+      });
 
       updateTimedModeBestScore(score);
 

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import confetti from "canvas-confetti";
 import PlayerInfo from "../components/common/PlayerInfo.jsx";
+import axios from "axios";
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their
@@ -35,9 +36,9 @@ function NormalGameMode() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/words/normalGameWords");
-    const body = await result.json();
-    setWords(body);
+    axios.get("/words/normalGameWords").then((response) => {
+      setWords(response.data);
+    });
   }
 
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
@@ -78,7 +79,7 @@ function NormalGameMode() {
      and 'playAgainButton' state to 'true'.
      */
   useEffect(() => {
-    if (score == 10 || lives == 0) {
+    if (score === 10 || lives === 0) {
       setGameContainers(false);
       setDecideGameContainers(true);
     }
@@ -130,7 +131,7 @@ function NormalGameMode() {
           className="w-1/4 flex justify-center text-center"
           style={{ display: decideGameContainers ? "inline" : "none" }}
         >
-          {score == 10 ? "You win!" : "You ran out of lives, try again."}
+          {score === 10 ? "You win!" : "You ran out of lives, try again."}
         </h2>
       </div>
 

@@ -6,6 +6,7 @@ import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../components/modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "./UserContext";
+import axios from "axios";
 
 /**
  * Daily challenge page.
@@ -31,9 +32,9 @@ function DailyChallengeMode() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/words/dailyChallengeWords");
-    const body = await result.json();
-    setDailyWords(body);
+    axios.get("/words/dailyChallengeWords").then((response) => {
+      setDailyWords(response.data);
+    });
   }
 
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].

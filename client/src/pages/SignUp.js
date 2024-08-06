@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { PUTOptions } from "../typescript/HelperFunctions.ts";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureGridModal from "../components/common/profiilePictureGrid.jsx";
 import user from "../images/user.png";
+import axios from "axios";
 
 /**
  * Component that handles the creation of the sign up form page. The page will ask the user to pick a profile picture,
@@ -20,9 +20,8 @@ function SignUp() {
 
   // Use effect that ONLY renders ONCE. Will retrieve the images from the database and add them to the 'pictureList' state.
   useEffect(() => {
-    fetch("/images/getAllImages").then(async (body) => {
-      const pictures = await body.json();
-      setPictureList(pictures);
+    axios.get("/images/getAllImages").then((response) => {
+      setPictureList(response.data);
     });
   }, []);
 
@@ -49,24 +48,36 @@ function SignUp() {
 
   // Conditional useEffect. If the username is already used, set username alert.
   useEffect(() => {
-    fetch("/users/usernameExists/" + form.username).then((response) => {
-      if (response.status === 403) {
-        setUsernameAlert(true);
-      } else {
-        setUsernameAlert(false);
-      }
-    });
+    /*
+    Check if the username is not empty, i.e. length is greater than 0. Since '/users/usernameExists/' is a dynamic
+    endpoint, we don't want to send form.username if it is an empty string.
+    */
+    if (form.username.length > 0) {
+      axios.get("/users/usernameExists/" + form.username).then((response) => {
+        if (response.data.usernameAvailable) {
+          setUsernameAlert(false);
+        } else {
+          setUsernameAlert(true);
+        }
+      });
+    }
   }, [form.username]);
 
   // Conditional useEffect. If the email is already used, set email alert.
   useEffect(() => {
-    fetch("/users/emailExists/" + form.email).then((response) => {
-      if (response.status === 403) {
-        setEmailAlert(true);
-      } else {
-        setEmailAlert(false);
-      }
-    });
+    /*
+    Check if the email is not empty, i.e. length is greater than 0. Since '/users/emailExists/' is a dynamic
+    endpoint, we don't want to send form.email if it is an empty string.
+    */
+    if (form.email.length > 0) {
+      axios.get("/users/emailExists/" + form.email).then((response) => {
+        if (response.data.emailAvailable) {
+          setEmailAlert(false);
+        } else {
+          setEmailAlert(true);
+        }
+      });
+    }
   }, [form.email]);
 
   /*
@@ -80,7 +91,7 @@ function SignUp() {
       emailAlert !== true &&
       form.profilePicture !== user
     ) {
-      fetch("/users/signup", PUTOptions(form)).then((response) => {
+      axios.put("/users/signup", form).then((response) => {
         if (response.status === 200) {
           navigate("/signin");
         }
