@@ -43,7 +43,7 @@ usersRouter.post("/signin", (req, res) => {
     .findOne({ email: req.body.email })
     .then((user) => {
       if (user != null) {
-        if (req.body.password == user.password) {
+        if (req.body.password === user.password) {
           res.status(200).json({ msg: "Login successful", player: user });
         } else {
           res.status(403).json({ msg: "Password did not match" });
