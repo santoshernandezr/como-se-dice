@@ -7,7 +7,7 @@ import { useContext } from "react";
  * 
  * @param { int } score users score.
  * @param { int } lives users lives.
- * @returns 
+ * @returns Play information component.
  */
 export default function PlayerInfo({score, lives}) {
   // Getting the user context.
@@ -17,7 +17,7 @@ export default function PlayerInfo({score, lives}) {
     <div>
         <main>
             {/* The users information. Users avatar, username, lives and score count. */}
-            <div className="flex flex-col items-center">
+            <div className="mt-12 flex flex-col items-center">
                 <div className="w-full max-w-sm ">
                     <div className="flex flex-col items-center pb-10">
                         <img className="w-32 h-32 mt-8 rounded-full shadow-lg" alt="" src={user.profilePicture}></img>

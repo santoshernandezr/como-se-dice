@@ -9,6 +9,7 @@ import { NavLink } from 'react-router-dom';
  * @param { string } destination Path of the page in which the user will be redirected when they click the button.
  * @param { string } title Title of the card that will be used.
  * @param { string } body Body of the card.
+ * 
  * @returns Daily challenge card component.
  */
 export default function DailyChallengeCard({destination, title, body}) {

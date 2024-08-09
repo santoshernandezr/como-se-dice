@@ -74,6 +74,7 @@ function SignUp() {
    username and email that has not been taken, then call the sign up endpoint to add user.
    */
   async function verifyNewAccount(e) {
+    // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
     e.preventDefault();
     if (
       usernameAlert !== true &&
