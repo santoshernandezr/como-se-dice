@@ -16,7 +16,6 @@ connectToDb((err) => {
  * to determine if the user completed the daily challeng and the users daily challenge 'history'.
  */
 dailyChallengeModeRouter.get("/getUserDailyInfo/:username", (req, res) => {
-  console.log("username: " + req.params.username);
   db.collection("Users")
     .findOne({ username: req.params.username })
     .then((user) => {
