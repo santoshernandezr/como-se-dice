@@ -25,7 +25,7 @@ usersRouter.post("/signin", (req, res) => {
     .then((user) => {
       if (user != null) {
         /*
-         Using the bcrypt .compare method to compare the hashed pasword that's in the database with the 
+         Using the bcrypt .compare method to compare the hashed pasword that's in the database with the
          password (converted into hash password) the user tried using when logging in.
         */
         bcrypt.compare(req.body.password, user.password, (error, response) => {
@@ -51,7 +51,7 @@ usersRouter.post("/signin", (req, res) => {
 usersRouter.put("/signup", async (req, res) => {
   /*
    Using the bcrypt .hash method to hash the users password in the database.
-   NOTE: The hashed password will be stored in the variable 'hash', which is what we'll pass in the 
+   NOTE: The hashed password will be stored in the variable 'hash', which is what we'll pass in the
    'password' field in the object we create for the user.
    */
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
@@ -86,7 +86,7 @@ usersRouter.put("/signup", async (req, res) => {
 });
 
 /**
- * Endpoint that checks the database to see if the username the user is trying to use is already taken/being used.
+ * Dynamic endpoint that checks the database to see if the username the user is trying to use is already taken/being used.
  */
 usersRouter.get("/usernameExists/:username", (req, res) => {
   db.collection("Users")
@@ -101,7 +101,7 @@ usersRouter.get("/usernameExists/:username", (req, res) => {
 });
 
 /**
- * Endpoint that checks the database to see if the email the user is trying to use is already taken/being used.
+ * Dynamic endpoint that checks the database to see if the email the user is trying to use is already taken/being used.
  */
 usersRouter.get("/emailExists/:email", (req, res) => {
   db.collection("Users")

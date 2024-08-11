@@ -6,6 +6,8 @@ import React from "react";
  * @param { form state } form Form state. JSON object that contains the users details, i.e. name, username, etc.
  * @param { function } setForm Function to set the state of form. Will be used to update the profile picture field.
  * @param { pictureList state } pictureList State of the 'pictureList'. Contains the images retrieved from the database.
+ * 
+ * @returns Profile picture grid component that will be used in the sign up page.
  */
 export default function Counter({form, setForm, pictureList}) {
     // List where all the individual pictures will go and then shown in the modal.
