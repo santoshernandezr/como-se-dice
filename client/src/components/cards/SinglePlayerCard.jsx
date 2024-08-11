@@ -9,6 +9,7 @@ import ChooseGameModeModal from '../modals/ChooseGameModeModal.jsx';
  * 
  * @param { string } title Title of the button card that will be used.
  * @param { string } body Body of the button.
+ * 
  * @returns Single player card.
  */
 export default function SinglePlayerCard({title, body}) {
