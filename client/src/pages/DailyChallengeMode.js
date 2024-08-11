@@ -27,17 +27,14 @@ function DailyChallengeMode() {
    useEffect that will ONLY render ONCE and will get the users daily challenge information, their daily
    challenge history and the boolean indicating whether they have completed the daily challenge of the day.
    */
-   useEffect(() => {
-     async function fetchUser() {
-       axios.get("/dailyMode/getUserDailyInfo/" + user.username).then((response) => {
-         setHistory(response.data.history);
-         setCompleted(response.data.completed);
-       })
-     }
-
-     fetchUser();
-   }, []);
-
+  useEffect(() => {
+    axios
+      .get("/dailyMode/getUserDailyInfo/" + user.username)
+      .then((response) => {
+        setHistory(response.data.history);
+        setCompleted(response.data.completed);
+      });
+  }, []);
 
   /*
    Check if the user completed the daily challenge. If they have, render the 'DailyChallengeComplete' component

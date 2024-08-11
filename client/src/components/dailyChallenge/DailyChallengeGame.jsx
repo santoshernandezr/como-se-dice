@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { isAlphanumeric, POSTOptions } from "../../typescript/HelperFunctions.ts";
+import { isAlphanumeric } from "../../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "../../pages/UserContext";
+import axios from "axios";
 
 /**
  * Component responsible for the creation of the daily challenge game user interface.
@@ -27,14 +28,14 @@ export default function DailyChallengeGame() {
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
-    const result = await fetch("/dailyMode/getWords");
-    const body = await result.json();
-    setDailyWords(body);
+    axios.get("/dailyMode/getWords").then((response) => {
+      setDailyWords(response.data)
+    })
   }
 
   // Asyn method to call server to update the users fields accordingly.
   async function gameFinished(userScore, userTime, username) {
-    fetch("/dailyMode/updateUser/" + username, POSTOptions({score: userScore, time: userTime }))
+    axios.post("/dailyMode/updateUser/" + username, {score: userScore, time: userTime });
   }
 
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
