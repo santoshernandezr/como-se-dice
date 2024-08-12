@@ -64,7 +64,7 @@ export default function DailyChallengeComplete({userHistory}) {
             <div className="flow-root">
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
 
-                    {history.length == 0 ? <div className="dark:text-gray-400">Welcome to ¿Cómo se dice? daily challenge! See your stats from your previous 5 daily challenges  here!</div> : historyList}
+                    {history.length === 0 ? <div className="dark:text-gray-400">Welcome to ¿Cómo se dice? daily challenge! See your stats from your previous 5 daily challenges  here!</div> : historyList}
                 </ul>
             </div>
         </div>

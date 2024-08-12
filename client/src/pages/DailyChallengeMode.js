@@ -3,6 +3,7 @@ import DailyChallengeGame from "../components/dailyChallenge/DailyChallengeGame.
 import DailyChallengeComplete from "../components/dailyChallenge/DailyChallengeComplete.jsx";
 import UserContext from "./UserContext";
 import { useEffect, useState, useContext } from "react";
+import axios from "axios";
 
 /**
  * Daily challenge page.
@@ -15,31 +16,27 @@ function DailyChallengeMode() {
   // Getting the user context.
   const { user } = useContext(UserContext);
 
-  /* 
-   Instantiate the history and completed state where we'll store the history and the boolean 
-   that indicates whether the user has completed the daily challenge of the day. 
+  /*
+   Instantiate the history and completed state where we'll store the history and the boolean
+   that indicates whether the user has completed the daily challenge of the day.
    */
   const [history, setHistory] = useState();
   const [completed, setCompleted] = useState();
 
-  /* 
-   useEffect that will ONLY render ONCE and will get the users daily challenge information, their daily 
-   challenge history and the boolean indicating whether they have completed the daily challenge of the day. 
+  /*
+   useEffect that will ONLY render ONCE and will get the users daily challenge information, their daily
+   challenge history and the boolean indicating whether they have completed the daily challenge of the day.
    */
   useEffect(() => {
-    async function fetchUser() {
-      const result = await fetch(
-        "/dailyMode/getUserDailyInfo/" + user.username
-      );
-      const body = await result.json();
-      setHistory(body.history);
-      setCompleted(body.completed);
-    }
-
-    fetchUser();
+    axios
+      .get("/dailyMode/getUserDailyInfo/" + user.username)
+      .then((response) => {
+        setHistory(response.data.history);
+        setCompleted(response.data.completed);
+      });
   }, []);
 
-  /* 
+  /*
    Check if the user completed the daily challenge. If they have, render the 'DailyChallengeComplete' component
    otherwise render the 'DailyChallengeGame' component.
    */
