@@ -103,6 +103,9 @@ app.post("/signin", (req, res) => {
           }
 
           if (response) {
+            // Delete the password field from the object we send back as we don't want to show the password in the front end.
+            delete user.password;
+
             // Set the session, named user, to the user we got from the database.
             req.session.user = user;
             res.status(200).json({ Login: true, user: req.session.user });
