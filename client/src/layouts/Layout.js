@@ -5,6 +5,7 @@ import Footer from "../components/common/Footer";
 import { Outlet, useNavigate } from "react-router-dom";
 import UserContext from "../pages/UserContext";
 import axios from "axios";
+import LoadingSignIn from "./LoadingSignIn";
 
 /**
  * Component responsible for the creation of the skeleton of the entire game. It consists of the Navigation bar and the
@@ -61,7 +62,9 @@ function Layout() {
       <Footer />
     </div>
   ) : (
-    <div>Loading</div>
+    <div>
+      <LoadingSignIn></LoadingSignIn>
+    </div>
   );
 }
 
