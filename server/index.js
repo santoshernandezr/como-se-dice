@@ -88,7 +88,6 @@ app.listen(port, () => {
  * exist, we send back a 404 indicating that the user doesn't exist.
  */
 app.post("/signin", (req, res) => {
-  console.log("In the index sign in endpoint");
   db.collection("Users")
     .findOne({ email: req.body.email })
     .then((user) => {
