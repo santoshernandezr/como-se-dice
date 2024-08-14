@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
 import "../css/App.css";
+import React, { useContext, useEffect, useState } from "react";
 import NavigationBar from "../components/common/NavigationBar";
 import Footer from "../components/common/Footer";
 import { Outlet, useNavigate } from "react-router-dom";
 import UserContext from "../pages/UserContext";
 import axios from "axios";
-import LoadingSignIn from "./LoadingSignIn";
+import Loading from "./Loading";
 
 /**
  * Component responsible for the creation of the skeleton of the entire game. It consists of the Navigation bar and the
@@ -63,7 +63,7 @@ function Layout() {
     </div>
   ) : (
     <div>
-      <LoadingSignIn></LoadingSignIn>
+      <Loading message={"Signing into ¿Cómo se dice?"}></Loading>
     </div>
   );
 }
