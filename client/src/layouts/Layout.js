@@ -2,10 +2,10 @@ import "../css/App.css";
 import React, { useContext, useEffect, useState } from "react";
 import NavigationBar from "../components/common/NavigationBar";
 import Footer from "../components/common/Footer";
+import Loading from "./Loading";
 import { Outlet, useNavigate } from "react-router-dom";
 import UserContext from "../pages/UserContext";
 import axios from "axios";
-import Loading from "./Loading";
 
 /**
  * Component responsible for the creation of the skeleton of the entire game. It consists of the Navigation bar and the
@@ -34,14 +34,11 @@ function Layout() {
       .then((response) => {
         // If the user has a valid session, then re-set the user context with 'response.data.user'.
         if (response.data.valid) {
-          console.log("session is valid");
-          console.log("username: " + response.data.user.username);
           login(response.data.user);
           setLoggedIn(true);
         }
         // If the user DOES NOT have a valid session, then navigate to the signed in page.
         else {
-          console.log("Session is not valid");
           setLoggedIn(false);
           navigate("/signin");
         }
