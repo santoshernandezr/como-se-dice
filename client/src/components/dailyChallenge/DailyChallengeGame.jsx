@@ -5,7 +5,7 @@ import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "../../pages/UserContext";
 import axios from "axios";
-
+import { Shake } from 'reshake';
 /**
  * Component responsible for the creation of the daily challenge game user interface.
  * 
@@ -25,6 +25,25 @@ export default function DailyChallengeGame() {
   const [score, setScore] = useState(0);
   const [index, setIndex] = useState(0);
   const [time, setTime] = useState(0);
+  const [shake, setShake] = useState(false);
+  const MyShake = () => (
+    <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
+        <h2
+          id="nextWordContainer"
+          className="w-1/4 flex justify-center text-center"
+          style={{ display: "inline" }}
+        >
+          ¿Cómo Se Dice&nbsp;
+          <p
+            id="currentWord"
+            className="font-bold"
+            style={{ display: "inline" }}
+          >
+            {currentWord.spanish}({currentWord.type})?
+          </p>
+        </h2>
+    </Shake>
+  )
 
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
@@ -63,7 +82,12 @@ export default function DailyChallengeGame() {
       document.getElementById("dailyChallengeModal").showModal();
     }
   }, [index, dailyWords.length, dailyWords]);
-
+  /* function shakes the word that is being guessed to give the user feedback. */
+  useEffect(() => {
+    setTimeout(() => {
+      setShake(false);
+    }, 150);
+  }, [shake]);
   /*
     Function that will determine if the users guess was correct or not.
     */
@@ -77,6 +101,8 @@ export default function DailyChallengeGame() {
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
         setScore((prevCount) => prevCount + 1);
+      } else{
+        setShake(true);
       }
 
       // Always increment the index.
@@ -128,20 +154,7 @@ export default function DailyChallengeGame() {
         The first container, 'nextWordContainer', is asking the user the word to guess, which will show during the game.
         */}
       <div className="flex justify-center">
-        <h2
-          id="nextWordContainer"
-          className="w-1/4 flex justify-center text-center"
-          style={{ display: "inline" }}
-        >
-          ¿Cómo Se Dice&nbsp;
-          <p
-            id="currentWord"
-            className="font-bold"
-            style={{ display: "inline" }}
-          >
-            {currentWord.spanish}({currentWord.type})?
-          </p>
-        </h2>
+        <MyShake></MyShake>
       </div>
 
       {/* Modal that will appear once the user completes the daily challenge. */}

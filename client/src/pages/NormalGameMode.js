@@ -5,11 +5,6 @@ import confetti from "canvas-confetti";
 import PlayerInfo from "../components/common/PlayerInfo.jsx";
 import axios from "axios";
 import { Shake } from 'reshake';
-const MyShake = () => (
-  <Shake h={10} v={0} r={3}>
-    Brrr...
-  </Shake>
-)
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their
@@ -30,7 +25,7 @@ function NormalGameMode() {
   const [lives, setLives] = useState(3);
   const [index, setIndex] = useState(0);
   const [shake, setShake] = useState(false);
-  const Shake = () => (
+  const MyShake = () => (
     <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
     <h2
           id="nextWordContainer"
@@ -104,6 +99,7 @@ function NormalGameMode() {
       setDecideGameContainers(true);
     }
   }, [score, lives]);
+  /* function shakes the word that is being guessed to give the user feedback. */
   useEffect(() => {
     setTimeout(() => {
       setShake(false);
