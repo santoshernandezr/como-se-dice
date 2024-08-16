@@ -18,12 +18,13 @@ leaderboardRouter.get("/getTimedModeList", (req, res) => {
     .find()
     .sort({ "timedGameMode.bestScore": -1 })
     .forEach((user) => {
+      console.log("Getting user: " + user.username);
       timedModeRankList.push({
         username: user.username,
         email: user.email,
         bestScore: user.timedGameMode.bestScore,
+        profilePicture: user.profilePicture,
       });
-      //   timedModeRankList.push(user);
     })
     .then(() => {
       res.status(200).json(timedModeRankList);

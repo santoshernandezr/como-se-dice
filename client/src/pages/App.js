@@ -14,6 +14,7 @@ import NormalGameMode from "./NormalGameMode";
 import TimedGameMode from "./TimedGameMode";
 import ComingSoon from "./ComingSoon";
 import DailyChallengeMode from "./DailyChallengeMode";
+import Leaderboard from "./Leaderboard";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Layout from "../layouts/Layout";
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route path="/comosedice" element={<Layout />}>
         {/* Child routes of /comosedice path. */}
         <Route path="menu" element={<ComoSeDiceMenu />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="dailychallenge" element={<DailyChallengeMode />} />
         <Route path="normalgamemode" element={<NormalGameMode />} />
         <Route path="timedgamemode" element={<TimedGameMode />} />
