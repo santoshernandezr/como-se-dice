@@ -13,6 +13,7 @@ const timedModeRouter = require("./routes/timedMode");
 const dailyChallengeModeRouter = require("./routes/dailyChallengeMode");
 const usersRouter = require("./routes/users");
 const imageRouter = require("./routes/images");
+const leaderboardRouter = require("./routes/leaderboard");
 
 // This allows us to use the environment variables in our .env file: 'process.env.<KEY_VALUE>'
 require("dotenv").config();
@@ -29,6 +30,7 @@ app.use("/timedMode", timedModeRouter);
 app.use("/dailyMode", dailyChallengeModeRouter);
 app.use("/users", usersRouter);
 app.use("/images", imageRouter);
+app.use("/leaderboard", leaderboardRouter);
 
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
