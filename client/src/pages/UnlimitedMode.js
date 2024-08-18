@@ -7,15 +7,8 @@ import confetti from "canvas-confetti";
 import UserContext from "./UserContext";
 import axios from "axios";
 
-/**
- * Timed game mode page. This page will consist of the navigation bar, the users information, so their
- * avatar image, score and best score, the word they have to guess, the 1 minute count down timer, and
- * a text box in which they can input their guess.
- *
- * @returns Timed game mode page.
- */
-function TimedGameMode() {
-  const { user, updateTimedModeBestScore } = useContext(UserContext);
+function UnlimitedMode() {
+  const { user, updateUnlimitedModeBestScore } = useContext(UserContext);
 
   // Instantiate the words states.
   // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
@@ -68,9 +61,9 @@ function TimedGameMode() {
     setIndex(0);
     setScore(0);
 
-    // Reset the timer to 60 seconds.
+    // Reset the timer to 10 seconds.
     const time = new Date();
-    time.setSeconds(time.getSeconds() + 60);
+    time.setSeconds(time.getSeconds() + 10);
     restart(time);
   }
 
@@ -81,7 +74,7 @@ function TimedGameMode() {
   useEffect(() => {
     if (index < words.length) {
       setCurrentWord(words[index]);
-      document.getElementById("timedModeGuessField").value = "";
+      document.getElementById("unlimitedModeGuessField").value = "";
     }
   }, [index, words.length, words]);
 
@@ -91,14 +84,14 @@ function TimedGameMode() {
      greater than the best score hide then hide the game containers and show the decide game containers.
      */
   function updateScore() {
-    if (score > user.timedGameMode.bestScore) {
+    if (score > user.unlimitedMode.bestScore) {
       confetti();
 
-      axios.put("/timedMode/updateTimedBestScore/" + user.username, {
+      axios.put("/timedMode/updateUnlimitedBestScore/" + user.username, {
         score: score,
       });
 
-      updateTimedModeBestScore(score);
+      updateUnlimitedModeBestScore(score);
 
       document.getElementById("timedGameModeModal").showModal();
     } else {
@@ -109,7 +102,7 @@ function TimedGameMode() {
 
   // Instantiate the first timer.
   const expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60);
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 10);
 
   // Instantiate the constants used for the 'useTimer'.
   const { seconds, minutes, restart } = useTimer({
@@ -128,12 +121,17 @@ function TimedGameMode() {
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
         setScore((prevCount) => prevCount + 1);
-      }
 
-      // Always increment the index.
-      setIndex((prevCount) => prevCount + 1);
+        // Reset the timer to 10 seconds.
+        const time = new Date();
+        time.setSeconds(time.getSeconds() + 10);
+        restart(time);
+        // Increment the index only if they get it right.
+        setIndex((prevCount) => prevCount + 1);
+      }
     }
   }
+
   return (
     <div className="h-full">
       {/* Player information, such as thier user avatar, username, score, and best score. */}
@@ -162,16 +160,16 @@ function TimedGameMode() {
 
                 <div className="flex mt-2">
                   <p
-                    id="timedModeScore"
+                    id="unlimitedModeScore"
                     className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black"
                   >
                     Score: {score}
                   </p>
                   <p
-                    id="timedModeBestScore"
+                    id="unlimitedModeBestScore"
                     className="inline-flex items-center px-4 py-2 text-m font-medium text-center dark:text-black"
                   >
-                    Best score: {user.timedGameMode.bestScore}
+                    Best score: {user.unlimitedMode.bestScore}
                   </p>
                 </div>
               </div>
@@ -207,8 +205,8 @@ function TimedGameMode() {
 
       {/* Modal that the user will see if they get a new highscore. */}
       <HighScoreModal
-        gameMode={"timed mode"}
-        bestScore={user.timedGameMode.bestScore}
+        gameMode={"unlimited mode"}
+        bestScore={user.unlimitedMode.bestScore}
         playAgain={playAgain}
       />
 
@@ -224,7 +222,7 @@ function TimedGameMode() {
             onChange={(e) => setUserGuess(e.target.value)}
             autoComplete="one-time-code"
             type="text"
-            id="timedModeGuessField"
+            id="unlimitedModeGuessField"
             className="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-96 "
           ></input>
         </div>
@@ -234,7 +232,7 @@ function TimedGameMode() {
           <button
             style={{ display: gameContainers ? "inline" : "none" }}
             onClick={determineInput}
-            id="timedModeGuessButton"
+            id="unlimitedModeGuessButton"
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20 mt-4"
           >
@@ -243,7 +241,7 @@ function TimedGameMode() {
           <button
             style={{ display: decideGameContainers ? "inline" : "none" }}
             onClick={() => playAgain()}
-            id="timedModePlayAgainButton"
+            id="unlimitedModePlayAgainButton"
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
@@ -255,4 +253,4 @@ function TimedGameMode() {
   );
 }
 
-export default TimedGameMode;
+export default UnlimitedMode;

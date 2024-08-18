@@ -12,10 +12,11 @@ import MainMenu from "./MainMenu";
 import ComoSeDiceMenu from "./ComoSeDiceMenu";
 import NormalGameMode from "./NormalGameMode";
 import TimedGameMode from "./TimedGameMode";
-import ComingSoon from "./ComingSoon";
 import DailyChallengeMode from "./DailyChallengeMode";
+import UnlimitedMode from "./UnlimitedMode";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import ComingSoon from "./ComingSoon";
 import Layout from "../layouts/Layout";
 
 const router = createBrowserRouter(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
         <Route path="dailychallenge" element={<DailyChallengeMode />} />
         <Route path="normalgamemode" element={<NormalGameMode />} />
         <Route path="timedgamemode" element={<TimedGameMode />} />
+        <Route path="unlimitedgamemode" element={<UnlimitedMode />} />
         <Route path="comingSoon" element={<ComingSoon />} />
       </Route>
     </Route>
@@ -69,11 +71,26 @@ function App() {
     });
   };
 
+  const updateUnlimitedModeBestScore = (value) => {
+    setUser({
+      ...user,
+      unlimitedMode: {
+        bestScore: value,
+      },
+    });
+  };
+
   return (
     // Wrapping the Router Provider by the User Context Provider so that all the routes have access to the user context.
     <UserContext.Provider
       // Passing in the user context and other methods related to the user, so they are available to the routes.
-      value={{ user, login, logout, updateTimedModeBestScore }}
+      value={{
+        user,
+        login,
+        logout,
+        updateTimedModeBestScore,
+        updateUnlimitedModeBestScore,
+      }}
     >
       <RouterProvider router={router} />
     </UserContext.Provider>
