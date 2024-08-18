@@ -9,7 +9,7 @@ import { NavLink } from 'react-router-dom';
  * 
  * @returns High score modal for timed mode.
  */
-export default function HighScoreModal({bestScore, playAgain}) {
+export default function HighScoreModal({gameMode, bestScore, playAgain}) {
   return (
     <div>
         {/* 
@@ -20,7 +20,7 @@ export default function HighScoreModal({bestScore, playAgain}) {
             <div className="modal-box max-h-full max-w-full">
 
                 <div className="max-w-l p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">New high score</h5>
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">New { gameMode} high score</h5>
 
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">pollo.io</p>
                     <p id="userOficialHighScore" className="mb-3 font-normal text-gray-700 dark:text-gray-400">New High Score: {bestScore} </p>
