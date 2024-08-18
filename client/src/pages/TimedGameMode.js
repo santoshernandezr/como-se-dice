@@ -36,22 +36,23 @@ function TimedGameMode() {
      - 'decideGameContainers' will be the state of the deciding game containers. These are the containers that will be shown when the user is done playing
        the game. Such as 'timeUpContainer' and 'playAgainButton'.
     */
+       const MyShake = () => (
+        <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
+        <h2
+          id="nextWordContainer"
+          className="w-1/4 flex justify-center text-center"
+          style={{ display: gameContainers ? "inline" : "none" }}
+        >
+          ¿Cómo Se Dice&nbsp;
+          <p className="font-bold">
+            {currentWord.spanish}({currentWord.type})?
+          </p>
+        </h2>
+      </Shake>
+       )
   const [gameContainers, setGameContainers] = useState(true);
   const [decideGameContainers, setDecideGameContainers] = useState(false);
-  const MyShake = () => {
-    <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
-    <h2
-      id="nextWordContainer"
-      className="w-1/4 flex justify-center text-center"
-      style={{ display: gameContainers ? "inline" : "none" }}
-    >
-      ¿Cómo Se Dice&nbsp;
-      <p className="font-bold">
-        {currentWord.spanish}({currentWord.type})?
-      </p>
-    </h2>
-  </Shake>
-  }
+
   // Asyn method that calls server to get random words for the game.
   async function fetchWords() {
     axios.get("/words/normalGameWords").then((response) => {
@@ -148,6 +149,8 @@ function TimedGameMode() {
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
         setScore((prevCount) => prevCount + 1);
+      } else{
+        setShake(true);
       }
 
       // Always increment the index.
