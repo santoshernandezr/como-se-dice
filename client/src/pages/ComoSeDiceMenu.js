@@ -1,6 +1,7 @@
 import "../css/App.css";
 import SinglePlayer from "../components/cards/SinglePlayerCard.jsx";
 import DailyChallenge from "../components/cards/DailyChallengeCard.jsx";
+import ComingSoonCard from "../components/cards/ComingSoonCard.jsx";
 
 /**
  * Como se dice menu page.
@@ -21,11 +22,10 @@ function ComoSeDiceMenu() {
               body="Play cómo se dice alone"
             />
 
-            <DailyChallenge
-              destination="/comosedice/comingsoon"
+            <ComingSoonCard
               title="Multiplayer"
               body="Start a room to play against friends!"
-            />
+            ></ComingSoonCard>
 
             <DailyChallenge
               destination="/comosedice/dailychallenge"
@@ -33,11 +33,10 @@ function ComoSeDiceMenu() {
               body="Get as many words right in the shortest time and see where you stack up against the world 🌐! "
             />
 
-            <DailyChallenge
-              destination="/comosedice/comingsoon"
+            <ComingSoonCard
               title="Join Multiplayer Room"
               body="Room code"
-            />
+            ></ComingSoonCard>
           </div>
         </div>
       </div>

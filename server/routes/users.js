@@ -14,38 +14,6 @@ connectToDb((err) => {
 });
 
 /**
- * Endpoint that will try and get the user from the database. If the user exists, we check the password
- * and if it matches, then we login succesfully. If the user exists, but the password does not match then
- * we send a 403 denying them acces with a message that the password does not match. If the user doesn't
- * exist, we send back a 404 indicating that the user doesn't exist.
- */
-usersRouter.post("/signin", (req, res) => {
-  db.collection("Users")
-    .findOne({ email: req.body.email })
-    .then((user) => {
-      if (user != null) {
-        /*
-         Using the bcrypt .compare method to compare the hashed pasword that's in the database with the
-         password (converted into hash password) the user tried using when logging in.
-        */
-        bcrypt.compare(req.body.password, user.password, (error, response) => {
-          if (error) {
-            console.log("Error: " + error);
-          }
-
-          if (response) {
-            res.status(200).json({ msg: "Login successful", player: user });
-          } else {
-            res.status(403).json({ msg: "Password did not match" });
-          }
-        });
-      } else {
-        res.status(404).json({ msg: "User does not exist" });
-      }
-    });
-});
-
-/**
  * Endpoint that will add the new user object with their details to the database.
  */
 usersRouter.put("/signup", async (req, res) => {

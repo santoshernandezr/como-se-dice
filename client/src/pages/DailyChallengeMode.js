@@ -1,6 +1,7 @@
 import "../css/App.css";
 import DailyChallengeGame from "../components/dailyChallenge/DailyChallengeGame.jsx";
 import DailyChallengeComplete from "../components/dailyChallenge/DailyChallengeComplete.jsx";
+import Loading from "../layouts/Loading.js";
 import UserContext from "./UserContext";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
@@ -21,7 +22,7 @@ function DailyChallengeMode() {
    that indicates whether the user has completed the daily challenge of the day.
    */
   const [history, setHistory] = useState();
-  const [completed, setCompleted] = useState();
+  const [completed, setCompleted] = useState(null);
 
   /*
    useEffect that will ONLY render ONCE and will get the users daily challenge information, their daily
@@ -37,10 +38,14 @@ function DailyChallengeMode() {
   }, []);
 
   /*
-   Check if the user completed the daily challenge. If they have, render the 'DailyChallengeComplete' component
+   Check if the 'completed' state is null, if it is null that means the daily challenge information has not come back yet,
+   so we render the 'Loading' component indicating we're retreiving the information. If the 'complete' state is not null,
+   we check value to determine if the user completed the daily challenge. If they have, render the 'DailyChallengeComplete' component
    otherwise render the 'DailyChallengeGame' component.
    */
-  return completed ? (
+  return completed == null ? (
+    <Loading message={"Loading Daily Challenge information"}></Loading>
+  ) : completed ? (
     <DailyChallengeComplete userHistory={history}></DailyChallengeComplete>
   ) : (
     <DailyChallengeGame></DailyChallengeGame>
