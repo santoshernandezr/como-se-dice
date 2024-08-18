@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import UserContext from "./UserContext.js";
 import axios from "axios";
@@ -11,10 +11,28 @@ import axios from "axios";
 function SignIn() {
   // Login method that will set the user context to the user we retreive from the database.
   const { login } = useContext(UserContext);
+  // Method that will allow us to navigate to other pages.
   const navigate = useNavigate();
 
   // Instantiate the state that will be used for the email and password.
   const [form, setForm] = useState({ email: "", password: "" });
+
+  axios.defaults.withCredentials = true;
+  // UseEffect that's ONLY ran ONCE when the layout is rendered to verify the user has a valid session.
+  useEffect(() => {
+    // Call the endpoint that checks if the user has a valid session going on.
+    axios
+      .get("/signedIn")
+      .then((response) => {
+        // If the user has a valid session, then re-set the user context with 'response.data.user'.
+        if (response.data.valid) {
+          navigate("/comosedice/menu");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // Function that will be called when a field changes and update the forms correct values state.
   const handleChange = (e) => {
@@ -27,18 +45,19 @@ function SignIn() {
   // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
   const [alert, setAlert] = useState({ alertState: false, message: "" });
 
+  axios.defaults.withCredentials = true;
   // Method that will make the post call to the backend to get see if we can register the user.
   async function ValidateNewUser(e) {
     // This prevents the eventHandler from refershing the page. We don't want the page to refresh until the game is finished.
     e.preventDefault();
 
     axios
-      .post("/users/signin", form)
+      .post("/signin", form)
       .then((response) => {
         // Check if the status was successful.
         if (response.status === 200) {
           navigate("/comosedice/menu");
-          login(response.data.player);
+          login(response.data.user);
         }
       })
       .catch((error) => {
