@@ -117,17 +117,34 @@ function UnlimitedMode() {
 
     // Check that the users guess is Alphanumeric
     if (isAlphanumeric(userGuess)) {
+      let stopWatchTime = document.getElementById("stopTime").textContent;
+      let number = Number(stopWatchTime.substring(3, 5));
+      console.log("number" + number);
+
       // Check if the users guess is correct. If so, increment the score.
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
         setScore((prevCount) => prevCount + 1);
 
-        // Reset the timer to 10 seconds.
-        const time = new Date();
-        time.setSeconds(time.getSeconds() + 10);
-        restart(time);
+        if (number < 10) {
+          let timeInc = number + 1;
+          console.log("Less than 10");
+          // Reset the timer to 10 seconds.
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + timeInc);
+          restart(time);
+        }
+
         // Increment the index only if they get it right.
         setIndex((prevCount) => prevCount + 1);
+      } else {
+        if (number > 0) {
+          let timeDec = number - 1;
+          // Reset the timer to 10 seconds.
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + timeDec);
+          restart(time);
+        }
       }
     }
   }
@@ -152,7 +169,7 @@ function UnlimitedMode() {
 
                 {/* The count down timer. */}
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: "30px" }}>
+                  <div id="stopTime" style={{ fontSize: "30px" }}>
                     <span>{String(minutes).padStart(2, "0")}</span>:
                     <span>{String(seconds).padStart(2, "0")}</span>
                   </div>
