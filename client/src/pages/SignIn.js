@@ -45,6 +45,7 @@ function SignIn() {
     });
   };
 
+  // Method that will make  apost call to the backend to make a guest user object so the user can continue as guest.
   async function continueAsGuest(e) {
     e.preventDefault();
 
@@ -170,7 +171,10 @@ function SignIn() {
                   </NavLink>
                 </p>
 
-                <button className="text-sm font-light text-gray-500 dark:text-gray-400">
+                <button
+                  onClick={continueAsGuest}
+                  className="text-sm font-light text-gray-500 dark:text-gray-400"
+                >
                   <p className="text-sm text-blue-600 font-medium text-primary-600 hover:underline dark:text-primary-500">
                     Continue as guest
                   </p>
