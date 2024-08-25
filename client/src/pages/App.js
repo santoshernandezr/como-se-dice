@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { useState } from "react";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 
 // These are all the pages that will be used for the game. All the files that are in ./pages should be here as well.
 import MainMenu from "./MainMenu";

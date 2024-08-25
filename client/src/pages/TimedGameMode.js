@@ -4,7 +4,7 @@ import { useTimer } from "react-timer-hook";
 import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 import axios from "axios";
 
 /**

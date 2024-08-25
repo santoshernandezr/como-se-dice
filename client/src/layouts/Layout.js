@@ -4,7 +4,7 @@ import NavigationBar from "../components/common/NavigationBar";
 import Footer from "../components/common/Footer";
 import Loading from "./Loading";
 import { Outlet, useNavigate } from "react-router-dom";
-import UserContext from "../pages/UserContext";
+import UserContext from "../context/UserContext";
 import axios from "axios";
 
 /**

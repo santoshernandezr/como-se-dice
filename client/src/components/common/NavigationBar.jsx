@@ -1,5 +1,5 @@
 import '../../css/App.css';
-import UserContext from "../../pages/UserContext";
+import UserContext from "../../context/UserContext";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import axios from 'axios';

@@ -2,7 +2,7 @@ import "../css/App.css";
 import DailyChallengeGame from "../components/dailyChallenge/DailyChallengeGame.jsx";
 import DailyChallengeComplete from "../components/dailyChallenge/DailyChallengeComplete.jsx";
 import Loading from "../layouts/Loading.js";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
