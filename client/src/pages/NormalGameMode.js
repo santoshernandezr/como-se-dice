@@ -4,6 +4,7 @@ import { isAlphanumeric } from "../typescript/HelperFunctions.ts";
 import confetti from "canvas-confetti";
 import PlayerInfo from "../components/common/PlayerInfo.jsx";
 import axios from "axios";
+import { Shake } from 'reshake';
 
 /**
  * Normal game mode page. This page will consist of the navigation bar, the users information, so their
@@ -23,7 +24,21 @@ function NormalGameMode() {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [index, setIndex] = useState(0);
-
+  const [shake, setShake] = useState(false);
+  const MyShake = () => (
+    <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
+    <h2
+          id="nextWordContainer"
+          className="w-1/4 flex justify-center text-center"
+          style={{ display: gameContainers ? "inline" : "none" }}
+        >
+          ¿Cómo Se Dice&nbsp;
+          <p className="font-bold">
+            {currentWord.spanish}({currentWord.type})?
+          </p>
+        </h2>
+    </Shake>
+  )
   /* 
     Instantiate two states, 'gameContainers' and 'decideGameContainers'.
     - 'gameContainers' will be the state of the game containers. These are the containers that will be shown when the user is playing the games. Such as
@@ -84,7 +99,12 @@ function NormalGameMode() {
       setDecideGameContainers(true);
     }
   }, [score, lives]);
-
+  /* function shakes the word that is being guessed to give the user feedback. */
+  useEffect(() => {
+    setTimeout(() => {
+      setShake(false);
+    }, 150);
+  }, [shake]);
   /*
      Function that will determine if the users guess was correct or not.
      */
@@ -100,6 +120,10 @@ function NormalGameMode() {
         setScore((prevCount) => prevCount + 1);
       } else {
         // If they users guess is incorrect, decrement the lives and increment the index.
+        setShake(true);
+
+
+
         setLives((prevCount) => prevCount - 1);
       }
       setIndex((prevCount) => prevCount + 1);
@@ -116,16 +140,8 @@ function NormalGameMode() {
         The second container, 'decidingContainer', contains the win or lose message the user will see at the end of the game.
         */}
       <div className="flex justify-center">
-        <h2
-          id="nextWordContainer"
-          className="w-1/4 flex justify-center text-center"
-          style={{ display: gameContainers ? "inline" : "none" }}
-        >
-          ¿Cómo Se Dice&nbsp;
-          <p className="font-bold">
-            {currentWord.spanish}({currentWord.type})?
-          </p>
-        </h2>
+        <MyShake>
+        </MyShake>
         <h2
           id="decidingContainer"
           className="w-1/4 flex justify-center text-center"

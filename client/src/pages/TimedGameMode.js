@@ -6,7 +6,7 @@ import HighScoreModal from "../components/modals/HighScoreModal.jsx";
 import confetti from "canvas-confetti";
 import UserContext from "./UserContext";
 import axios from "axios";
-
+import { Shake } from 'reshake';
 /**
  * Timed game mode page. This page will consist of the navigation bar, the users information, so their
  * avatar image, score and best score, the word they have to guess, the 1 minute count down timer, and
@@ -15,6 +15,7 @@ import axios from "axios";
  * @returns Timed game mode page.
  */
 function TimedGameMode() {
+  
   const { user, updateTimedModeBestScore } = useContext(UserContext);
 
   // Instantiate the words states.
@@ -26,6 +27,7 @@ function TimedGameMode() {
   const [userGuess, setUserGuess] = useState("");
   const [score, setScore] = useState(0);
   const [index, setIndex] = useState(0);
+  const [shake, setShake] = useState(false);
 
   /* 
      Instantiate two states, 'gameContainers' and 'decideGameContainers'.
@@ -34,6 +36,20 @@ function TimedGameMode() {
      - 'decideGameContainers' will be the state of the deciding game containers. These are the containers that will be shown when the user is done playing
        the game. Such as 'timeUpContainer' and 'playAgainButton'.
     */
+       const MyShake = () => (
+        <Shake h={30} v={0} r={3} active={shake} fixed={true} interval>
+        <h2
+          id="nextWordContainer"
+          className="w-1/4 flex justify-center text-center"
+          style={{ display: gameContainers ? "inline" : "none" }}
+        >
+          ¿Cómo Se Dice&nbsp;
+          <p className="font-bold">
+            {currentWord.spanish}({currentWord.type})?
+          </p>
+        </h2>
+      </Shake>
+       )
   const [gameContainers, setGameContainers] = useState(true);
   const [decideGameContainers, setDecideGameContainers] = useState(false);
 
@@ -43,7 +59,12 @@ function TimedGameMode() {
       setWords(response.data);
     });
   }
-
+  /* function shakes the word that is being guessed to give the user feedback. */
+  useEffect(() => {
+    setTimeout(() => {
+      setShake(false);
+    }, 150);
+  }, [shake]);
   // Async method that will be called when the react component first renders and will only render ONCE, due to the empty [].
   useEffect(() => {
     fetchWords();
@@ -128,6 +149,8 @@ function TimedGameMode() {
       if (userGuess.toLowerCase() === currentWord.english.toLowerCase()) {
         confetti();
         setScore((prevCount) => prevCount + 1);
+      } else{
+        setShake(true);
       }
 
       // Always increment the index.
@@ -186,16 +209,7 @@ function TimedGameMode() {
         The second container, 'timeUpContainer', contains the time up message the user will see at the end of the game if they lose.
         */}
       <div className="flex justify-center">
-        <h2
-          id="nextWordContainer"
-          className="w-1/4 flex justify-center text-center"
-          style={{ display: gameContainers ? "inline" : "none" }}
-        >
-          ¿Cómo Se Dice&nbsp;
-          <p className="font-bold">
-            {currentWord.spanish}({currentWord.type})?
-          </p>
-        </h2>
+      <MyShake></MyShake>
         <h2
           id="timeUpContainer"
           className="w-1/4 flex justify-center text-center"
