@@ -20,6 +20,7 @@ const {
   createCronDatetime,
   formatDate,
   POSTOptions,
+  createGuestUser,
 } = require("./helpers/helperFunctions");
 
 // Get a connection to the database.
@@ -116,6 +117,16 @@ app.post("/signin", (req, res) => {
         res.status(404).json({ msg: "User does not exist" });
       }
     });
+});
+
+/**
+ * Endpoint to get the guest user object and create a session with the guest user object.
+ */
+app.get("/guest", (req, res) => {
+  const guestUser = createGuestUser();
+
+  req.session.user = guestUser;
+  res.status(200).json({ Login: true, user: req.session.user });
 });
 
 /**

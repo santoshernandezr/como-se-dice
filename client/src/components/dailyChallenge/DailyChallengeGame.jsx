@@ -3,7 +3,7 @@ import { useStopwatch } from "react-timer-hook";
 import { isAlphanumeric } from "../../typescript/HelperFunctions.ts";
 import DailyChallengeModal from "../modals/DailyChallengeModal.jsx";
 import confetti from "canvas-confetti";
-import UserContext from "../../pages/UserContext";
+import UserContext from "../../context/UserContext";
 import axios from "axios";
 import { Shake } from 'reshake';
 /**

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import UserContext from "../../pages/UserContext";
+import UserContext from "../../context/UserContext";
 
 /**
  * Component responsible for the creation of the modal that the user will get when they finish playing the

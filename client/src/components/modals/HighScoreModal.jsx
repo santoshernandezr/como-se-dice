@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom';
+import UserContext from "../../context/UserContext";
+
 
 /**
  * Component that is responsible for the creation of the modal that will appear if the user gets a new highscore.
@@ -10,6 +12,8 @@ import { NavLink } from 'react-router-dom';
  * @returns High score modal for timed mode.
  */
 export default function HighScoreModal({bestScore, playAgain}) {
+    const { user, isGuest } = useContext(UserContext);
+
   return (
     <div>
         {/* 
@@ -22,8 +26,19 @@ export default function HighScoreModal({bestScore, playAgain}) {
                 <div className="max-w-l p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">New high score</h5>
 
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">pollo.io</p>
-                    <p id="userOficialHighScore" className="mb-3 font-normal text-gray-700 dark:text-gray-400">New High Score: {bestScore} </p>
+                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-200">{ user.username }</p>
+                    <p id="userOficialHighScore" className="mb-3 font-normal text-gray-700 dark:text-gray-200">New High Score: { bestScore} </p>
+                    { isGuest ? 
+                        <p className="mb-3 text-sm font-light text-gray-500 dark:text-gray-400">
+                            To save your score and compete against others on the leaderboards {" "}
+                            <NavLink
+                            to="/signup"
+                            className="font-normal text-blue-600 text-primary-600 hover:underline dark:text-primary-500"
+                            >
+                            create an account
+                            </NavLink> 
+                            {" "} today 😃 !
+                        </p>: null}
 
                     <div className="justify-center items-center flex space-x-28">
                         <NavLink to="/comosedice/menu" className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

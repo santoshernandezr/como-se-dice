@@ -13,7 +13,7 @@ function MainMenu() {
   return (
     <div>
       <header className="App-header">
-        <h1>¿Cómo se dice?</h1>
+        <h1>¿Cómo se dice? Beta</h1>
         <p id="challengeMessage">
           Challenge your language skills with our word game!
         </p>

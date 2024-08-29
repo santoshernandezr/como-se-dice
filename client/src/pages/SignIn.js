@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import UserContext from "./UserContext.js";
+import UserContext from "../context/UserContext.js";
 import axios from "axios";
 
 /**
@@ -10,12 +10,15 @@ import axios from "axios";
  */
 function SignIn() {
   // Login method that will set the user context to the user we retreive from the database.
-  const { login } = useContext(UserContext);
+  const { login, guest } = useContext(UserContext);
   // Method that will allow us to navigate to other pages.
   const navigate = useNavigate();
 
   // Instantiate the state that will be used for the email and password.
   const [form, setForm] = useState({ email: "", password: "" });
+
+  // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
+  const [alert, setAlert] = useState({ alertState: false, message: "" });
 
   axios.defaults.withCredentials = true;
   // UseEffect that's ONLY ran ONCE when the layout is rendered to verify the user has a valid session.
@@ -42,8 +45,18 @@ function SignIn() {
     });
   };
 
-  // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
-  const [alert, setAlert] = useState({ alertState: false, message: "" });
+  // Method that will make  apost call to the backend to make a guest user object so the user can continue as guest.
+  async function continueAsGuest(e) {
+    e.preventDefault();
+
+    axios.get("/guest").then((response) => {
+      if (response.status === 200) {
+        navigate("/comosedice/menu");
+        login(response.data.user);
+        guest();
+      }
+    });
+  }
 
   axios.defaults.withCredentials = true;
   // Method that will make the post call to the backend to get see if we can register the user.
@@ -158,6 +171,15 @@ function SignIn() {
                     Sign up
                   </NavLink>
                 </p>
+
+                <button
+                  onClick={continueAsGuest}
+                  className="text-sm font-light text-gray-500 dark:text-gray-400"
+                >
+                  <p className="text-sm text-blue-600 font-medium text-primary-600 hover:underline dark:text-primary-500">
+                    Continue as guest
+                  </p>
+                </button>
               </form>
             </div>
           </div>

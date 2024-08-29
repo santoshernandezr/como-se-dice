@@ -2,7 +2,7 @@ import "../css/App.css";
 import DailyChallengeGame from "../components/dailyChallenge/DailyChallengeGame.jsx";
 import DailyChallengeComplete from "../components/dailyChallenge/DailyChallengeComplete.jsx";
 import Loading from "../layouts/Loading.js";
-import UserContext from "./UserContext";
+import UserContext from "../context/UserContext";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
@@ -15,7 +15,7 @@ import axios from "axios";
  */
 function DailyChallengeMode() {
   // Getting the user context.
-  const { user } = useContext(UserContext);
+  const { user, isGuest } = useContext(UserContext);
 
   /*
    Instantiate the history and completed state where we'll store the history and the boolean
@@ -29,12 +29,15 @@ function DailyChallengeMode() {
    challenge history and the boolean indicating whether they have completed the daily challenge of the day.
    */
   useEffect(() => {
-    axios
-      .get("/dailyMode/getUserDailyInfo/" + user.username)
-      .then((response) => {
-        setHistory(response.data.history);
-        setCompleted(response.data.completed);
-      });
+    if (!isGuest) {
+      axios
+        .get("/dailyMode/getUserDailyInfo/" + user.username)
+        .then((response) => {
+          setHistory(response.data.history);
+          setCompleted(response.data.completed);
+        });
+    }
+    setCompleted(false);
   }, []);
 
   /*
