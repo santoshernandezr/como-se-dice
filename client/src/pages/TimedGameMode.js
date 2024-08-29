@@ -15,7 +15,7 @@ import axios from "axios";
  * @returns Timed game mode page.
  */
 function TimedGameMode() {
-  const { user, updateTimedModeBestScore } = useContext(UserContext);
+  const { user, isGuest, updateTimedModeBestScore } = useContext(UserContext);
 
   // Instantiate the words states.
   // Words will contain the words used during the game and the current word will hold the current word the user needs to guess.
@@ -93,10 +93,16 @@ function TimedGameMode() {
   function updateScore() {
     if (score > user.timedGameMode.bestScore) {
       confetti();
+      console.log("Guest value: " + isGuest);
 
-      axios.put("/timedMode/updateBestScore/" + user.username, {
-        score: score,
-      });
+      if (!isGuest) {
+        console.log("Not a guest, calling to update database");
+        axios.put("/timedMode/updateBestScore/" + user.username, {
+          score: score,
+        });
+      }
+
+      console.log("Guest user, database is not called.");
 
       updateTimedModeBestScore(score);
 
@@ -109,7 +115,7 @@ function TimedGameMode() {
 
   // Instantiate the first timer.
   const expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 60);
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 30);
 
   // Instantiate the constants used for the 'useTimer'.
   const { seconds, minutes, restart } = useTimer({

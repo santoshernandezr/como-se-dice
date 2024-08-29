@@ -17,7 +17,7 @@ export default function NavigationBar() {
     // Instantiate the 'open' state that will help us determine if the dropdown is open or not.
     const [open, setOpen] = useState(false);
     // Getting the user context and the function to log the user out.
-    const { user, logout } = useContext(UserContext);
+    const { user, isGuest, logout } = useContext(UserContext);
 
     /*
      Function that will call the 'logout' endpoint to log the user out, meaning it will terminate the session that
@@ -59,7 +59,10 @@ export default function NavigationBar() {
                             {/* Drop down items. */}
                             <ul className="py-2" aria-labelledby="user-menu-button">
                                 <li>
-                                    <button onClick={() => {loggingUserOut()}} className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button>
+                                    {!isGuest ? 
+                                        <button onClick={() => {loggingUserOut()}} className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button> : 
+                                        <NavLink to="/signup" className="w-full block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Create account</NavLink>
+                                    }
                                 </li>
                             </ul>
                         </div>

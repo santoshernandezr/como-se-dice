@@ -10,7 +10,7 @@ import axios from "axios";
  */
 function SignIn() {
   // Login method that will set the user context to the user we retreive from the database.
-  const { login } = useContext(UserContext);
+  const { login, guest } = useContext(UserContext);
   // Method that will allow us to navigate to other pages.
   const navigate = useNavigate();
 
@@ -53,6 +53,7 @@ function SignIn() {
       if (response.status === 200) {
         navigate("/comosedice/menu");
         login(response.data.user);
+        guest();
       }
     });
   }
