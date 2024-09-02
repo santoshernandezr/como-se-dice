@@ -108,6 +108,9 @@ app.post("/signin", (req, res) => {
 
             // Set the session, named user, to the user we got from the database.
             req.session.user = user;
+            console.log("Session cookie: " + req.session.user.name);
+            console.log("Added new session for " + req.session.user.username);
+
             res.status(200).json({ Login: true, user: req.session.user });
           } else {
             res.status(403).json({ msg: "Password did not match" });
@@ -126,6 +129,7 @@ app.get("/guest", (req, res) => {
   const guestUser = createGuestUser();
 
   req.session.user = guestUser;
+  console.log("Guest user session: " + req.session.user.name);
   res.status(200).json({ Login: true, user: req.session.user });
 });
 

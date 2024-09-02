@@ -19,7 +19,7 @@ import axios from "axios";
  */
 function Layout() {
   // Importing the 'login' method to set the user context once we verify the user has a session going on.
-  const { login } = useContext(UserContext);
+  const { login, setGuest } = useContext(UserContext);
   const [loggedIn, setLoggedIn] = useState(false);
 
   // Method that will allow us to navigate to other pages.
@@ -34,13 +34,17 @@ function Layout() {
       .then((response) => {
         // If the user has a valid session, then re-set the user context with 'response.data.user'.
         if (response.data.valid) {
+          // Check if the session is from a guest, if so, set 'isGuest' to true so we know it's a guest that is playing.
+          if (response.data.user.name === "Guest") {
+            setGuest(true);
+          }
           login(response.data.user);
           setLoggedIn(true);
         }
         // If the user DOES NOT have a valid session, then navigate to the signed in page.
         else {
           setLoggedIn(false);
-          navigate("/signin");
+          navigate("/");
         }
       })
       .catch((err) => {

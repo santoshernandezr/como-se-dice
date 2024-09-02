@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ProfilePictureGridModal from "../components/common/profiilePictureGrid.jsx";
-import user from "../images/user.png";
+import userProfilePicture from "../images/user.png";
+import UserContext from "../context/UserContext.js";
 import axios from "axios";
 
 /**
@@ -12,6 +13,8 @@ import axios from "axios";
  * @returns Component that handles the user signing up.
  */
 function SignUp() {
+  const { user, isGuest } = useContext(UserContext);
+
   // Method that will allow us to navigate to other pages.
   const navigate = useNavigate();
 
@@ -20,6 +23,10 @@ function SignUp() {
 
   // Use effect that ONLY renders ONCE. Will retrieve the images from the database and add them to the 'pictureList' state.
   useEffect(() => {
+    if (!isGuest && user !== null) {
+      navigate("/comosedice/menu");
+    }
+
     axios.get("/images/getAllImages").then((response) => {
       setPictureList(response.data);
     });
@@ -31,7 +38,7 @@ function SignUp() {
     username: "",
     email: "",
     password: "",
-    profilePicture: user,
+    profilePicture: userProfilePicture,
   });
 
   // Function that will be called when a field changes and update the forms correct values state.

@@ -61,9 +61,8 @@ function App() {
     setIsGuest(false);
   };
 
-  const guest = () => {
-    console.log("Setting isGuest to true");
-    setIsGuest(true);
+  const setGuest = (value) => {
+    setIsGuest(value);
   };
 
   // Updating the users timed game mode score when they're logged in.
@@ -85,7 +84,7 @@ function App() {
         isGuest,
         login,
         logout,
-        guest,
+        setGuest,
         updateTimedModeBestScore,
       }}
     >

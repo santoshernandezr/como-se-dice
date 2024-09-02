@@ -10,7 +10,7 @@ import axios from "axios";
  */
 function SignIn() {
   // Login method that will set the user context to the user we retreive from the database.
-  const { login, guest } = useContext(UserContext);
+  const { user, login, setGuest, isGuest } = useContext(UserContext);
   // Method that will allow us to navigate to other pages.
   const navigate = useNavigate();
 
@@ -20,21 +20,11 @@ function SignIn() {
   // Instantiate the alert state, which will be used to show the user if their email and password do not match or if the user they are trying doesn't exist.
   const [alert, setAlert] = useState({ alertState: false, message: "" });
 
-  axios.defaults.withCredentials = true;
-  // UseEffect that's ONLY ran ONCE when the layout is rendered to verify the user has a valid session.
+  // UseEffect that's ONLY ran ONCE when the layout is rendered. Only people without an account or logged out will have access to this.
   useEffect(() => {
-    // Call the endpoint that checks if the user has a valid session going on.
-    axios
-      .get("/signedIn")
-      .then((response) => {
-        // If the user has a valid session, then re-set the user context with 'response.data.user'.
-        if (response.data.valid) {
-          navigate("/comosedice/menu");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!isGuest && user !== null) {
+      navigate("/comosedice/menu");
+    }
   }, []);
 
   // Function that will be called when a field changes and update the forms correct values state.
@@ -44,19 +34,6 @@ function SignIn() {
       [e.target.name]: e.target.value,
     });
   };
-
-  // Method that will make  apost call to the backend to make a guest user object so the user can continue as guest.
-  async function continueAsGuest(e) {
-    e.preventDefault();
-
-    axios.get("/guest").then((response) => {
-      if (response.status === 200) {
-        navigate("/comosedice/menu");
-        login(response.data.user);
-        guest();
-      }
-    });
-  }
 
   axios.defaults.withCredentials = true;
   // Method that will make the post call to the backend to get see if we can register the user.
@@ -70,6 +47,7 @@ function SignIn() {
         // Check if the status was successful.
         if (response.status === 200) {
           navigate("/comosedice/menu");
+          setGuest(false);
           login(response.data.user);
         }
       })
@@ -171,15 +149,6 @@ function SignIn() {
                     Sign up
                   </NavLink>
                 </p>
-
-                <button
-                  onClick={continueAsGuest}
-                  className="text-sm font-light text-gray-500 dark:text-gray-400"
-                >
-                  <p className="text-sm text-blue-600 font-medium text-primary-600 hover:underline dark:text-primary-500">
-                    Continue as guest
-                  </p>
-                </button>
               </form>
             </div>
           </div>

@@ -56,15 +56,21 @@ export default function NavigationBar() {
                                 <span className="block text-sm text-gray-900 dark:text-white"> {user.username} </span>
                                 <span className="block text-sm  text-gray-500 truncate dark:text-gray-400"> {user.email} </span>
                             </div>
-                            {/* Drop down items. */}
-                            <ul className="py-2" aria-labelledby="user-menu-button">
-                                <li>
-                                    {!isGuest ? 
-                                        <button onClick={() => {loggingUserOut()}} className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button> : 
-                                        <NavLink to="/signup" className="w-full block px-6 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Create account</NavLink>
-                                    }
-                                </li>
-                            </ul>
+
+                            {/* 
+                                Drop down items. 
+                                If it's a guest it will show a login and sign up button. If it is a player it will show a sign out button.
+                            */}
+                            {!isGuest ? 
+                                 <ul className="py-2" aria-labelledby="user-menu-button">
+                                    <li><button onClick={() => {loggingUserOut()}} className="w-full block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button></li>
+                                 </ul> : 
+                                 
+                                 <ul className="py-2" aria-labelledby="user-menu-button">
+                                    <li><NavLink to="/signin" className="w-full block px-14 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">login</NavLink></li>
+                                    <li><NavLink to="/signup" className="w-full block px-12 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign up</NavLink></li>
+                                 </ul>
+                            }
                         </div>
                     </div>
 
