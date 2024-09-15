@@ -18,11 +18,11 @@ export default function SinglePlayerCard({title, body}) {
             {/* The button that will trigger the modal. */}
             <div className="h-full flex items-center justify-center">
                 <button onClick={() => document.getElementById("chooseGameModeModal").showModal()} className="flex items-center justify-center h-full w-full">
-                    <h2 className='text-xl'>
+                    <h2 className='text-sm sm:text-base md:text-lg lg:text-xl'>
                         {title}
                         <span> &rarr;</span>
                     
-                        <p>
+                        <p className="text-xs sm:text-sm md:text-base lg:text-lg mt-2">
                             {body}
                         </p>
                     </h2>
