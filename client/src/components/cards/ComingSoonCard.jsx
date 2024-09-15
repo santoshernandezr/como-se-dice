@@ -9,13 +9,12 @@ import { Tooltip } from 'react-tooltip'
  */
 function ComingSoonCard({title, body}) {
   return (
-    <div className="h-[23vh] border-solid border border-sky-500 rounded-lg shadow-2xl grayscale-0">
+    <div className="h-[23vh]  border-solid border border-sky-500 rounded-lg shadow-2xl grayscale-0">
         {/* This is the <a> tag that will have the tags for the tooltip, id, content (message), and how long the message will show. */}
         <a data-tooltip-id="my-tooltip" data-tooltip-content="Coming in ¿cómo se dice? 2.0" data-tooltip-delay-hide={300}>
             <div className="flex items-center justify-center h-full w-full">
                 <div className="flex items-center justify-center h-full w-full text-center">
-                    <h2 className='text-xl text-gray-400'>
-                            {title}
+                <h2 className='text-sm sm:text-base md:text-lg lg:text-xl text-gray-400'>                            {title}
                             <span> &rarr;</span>
                         
                             <p>

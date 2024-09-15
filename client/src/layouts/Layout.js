@@ -1,7 +1,6 @@
 import "../css/App.css";
 import React, { useContext, useEffect, useState } from "react";
 import NavigationBar from "../components/common/NavigationBar";
-import Footer from "../components/common/Footer";
 import Loading from "./Loading";
 import { Outlet, useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
@@ -56,7 +55,7 @@ function Layout() {
         <Outlet></Outlet>
       </main>
 
-      <Footer />
+      
     </div>
   ) : (
     <div>
