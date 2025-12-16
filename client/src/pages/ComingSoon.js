@@ -1,5 +1,6 @@
 import "../css/App.css";
 import workInProgressImage from "../images/work-in-progress.png";
+import Footer from "../components/common/Footer";
 
 /**
  * Coming soon page. Will show this page whenever a page is in progress.
@@ -17,6 +18,7 @@ function ComingSoon() {
           alt=""
         ></img>
       </div>
+      <Footer />
     </div>
   );
 }
